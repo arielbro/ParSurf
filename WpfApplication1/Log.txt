@@ -1,0 +1,5 @@
+﻿(Started on 01/08/14)
+Replaced Transform3DGroup with Transform3D (concatenating transformations via matrix multiplication) for performance issues.
+(Left off and restarted in 28/08/14)
+Alik has suggested that we try projecting 4D shapes as 3D+color for the missing axis (each triangle has a gradient color, determined by its
+vertices). Also, I'm keen on adding 3D+time eventually.

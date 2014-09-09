@@ -1,0 +1,12 @@
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf.csprojResolveAssemblyReference.cache
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\MainWindow.baml
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\MainWindow.g.cs
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\App.g.cs
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf - Parametric Surface Visualization_MarkupCompile.cache
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf - Parametric Surface Visualization.g.resources
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf.FormulaInputForm.resources
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf.InputNumberForm.resources
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf.Properties.Resources.resources
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf.csproj.GenerateResource.Cache
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf - Parametric Surface Visualization.exe
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\bin\Release\ParSurf - Parametric Surface Visualization.exe.config

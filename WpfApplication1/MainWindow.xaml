@@ -1,0 +1,36 @@
+﻿<Window x:Class="ParSurf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ParSurf - Parallel Coordinates Surface Visualization" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        WindowState="Maximized"
+        Width="1000" Height="500" Name="mainWindow">
+    <!--MouseWheel="Grid_MouseWheel"-->
+    <Grid Name="grid">
+        <Menu Height="27" HorizontalAlignment="Stretch" Name="menu1" VerticalAlignment="Top" Margin="0,0,0,0">
+            <MenuItem Name ="MenuItem_parametric_shape" Header="parametric shape" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="7,5,8,1">
+                <MenuItem Name="MenuItem_new" Header="new" IsCheckable="True" Checked="graphicSettingsNew_Click"  VerticalAlignment="Center"/>
+                <Separator />
+                <MenuItem Name="MenuItem_plane" IsCheckable="True" Checked="parametric_select_item_checked" Header="Plane"/>
+                <MenuItem Name="MenuItem_cylinder" IsCheckable="True" Checked="parametric_select_item_checked" Header="Cylinder"/>
+                <MenuItem Name="MenuItem_cone" IsCheckable="True" Checked="parametric_select_item_checked" Header="Cone"/>
+                <MenuItem Name="MenuItem_torus" IsCheckable="True" Checked="parametric_select_item_checked" Header="Torus" />
+                <MenuItem Name="MenuItem_sphere" IsCheckable="True" Checked="parametric_select_item_checked" Header="Sphere"/>
+                <MenuItem Name="MenuItem_mobius" IsCheckable="True" Checked="parametric_select_item_checked" Header="Mobius Strip"/>
+                <MenuItem Name="MenuItem_figure_8" IsCheckable="True" Checked="parametric_select_item_checked" Header="Klein bottle figure 8 immersion"/>
+                <MenuItem Name="MenuItem_bottle" IsCheckable="True" Checked="parametric_select_item_checked" Header="Klein bottle standard immersion"/>
+                <MenuItem Name="MenuItem_sin" IsCheckable="True" Checked="parametric_select_item_checked" Header="Sinusoidal waves"/>
+                <Separator />
+                <MenuItem Header="modify" VerticalAlignment="Center"/>
+            </MenuItem>
+            <MenuItem Header="point cloud" Padding="7,5,8,1"/>
+            <MenuItem Header="graphic settings" Padding="7,5,8,1">
+                <MenuItem Name="pointSizeMenuItem" Header="point size" Click="graphicSettingsMenuItem_Click" Padding="7,5,8,1"/>
+                <MenuItem Name="parallelResoltuionMenuItem" Header="parallel coordinates resolution" Click="graphicSettingsMenuItem_Click" Padding="7,5,8,1"/>
+                <MenuItem Name="renderResolutionMenuItem" Header="3d rendering resolution" Click="graphicSettingsMenuItem_Click" Padding="7,5,8,1"/>
+            </MenuItem>
+            <MenuItem Header="help" Padding="7,5,8,1"/>
+        </Menu>
+        <TabControl HorizontalAlignment="Stretch" Margin="0,25,0,0" Name="tabControl1" VerticalAlignment="Stretch">
+        </TabControl>
+    </Grid>
+</Window>

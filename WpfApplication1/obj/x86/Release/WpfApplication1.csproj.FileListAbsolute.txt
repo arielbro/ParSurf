@@ -1,0 +1,21 @@
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\bin\Release\NCalc.dll
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\bin\Release\W3b.Sine.dll
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\WpfApplication1.csprojResolveAssemblyReference.cache
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\MainWindow.baml
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\MainWindow.g.cs
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\App.g.cs
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\WpfApplication1.csproj.GenerateResource.Cache
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\bin\Release\ParSurf - Parametric Surface Visualization.exe.config
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\bin\Release\ParSurf - Parametric Surface Visualization.exe.manifest
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\bin\Release\ParSurf - Parametric Surface Visualization.application
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\bin\Release\ParSurf - Parametric Surface Visualization.exe
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\bin\Release\ParSurf - Parametric Surface Visualization.pdb
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf - Parametric Surface Visualization_MarkupCompile.cache
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf - Parametric Surface Visualization.g.resources
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf.Properties.Resources.resources
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf - Parametric Surface Visualization.exe.manifest
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf - Parametric Surface Visualization.application
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf - Parametric Surface Visualization.exe
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf - Parametric Surface Visualization.pdb
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf.FormulaInputForm.resources
+C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Release\ParSurf.InputNumberForm.resources
