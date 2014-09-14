@@ -6,28 +6,29 @@
       xmlns:src="clr-namespace:ParSurf"
       mc:Ignorable="d" 
 	  Title="Page4D"
-      Width="1000" Height="500"
+      Width="980" Height="432"
       SizeChanged="Window_SizeChanged">
     <Grid Name="grid">
         <Border Name="viewportsBorder"
         BorderThickness="5"
+        
         BorderBrush="Black"
         HorizontalAlignment="Right"
         Background="White"
-        Width="492" Margin="0,0,0,-8">
+        Width="490" Margin="0,0,0,0">
             <Grid>
                 <Border Name="viewport1Border"
-        BorderThickness="5"
+        BorderThickness="2"
         BorderBrush="Black"
         HorizontalAlignment="Left"
         VerticalAlignment="Top"
         Background="White"
-        Width="250" Height="250" Margin="0,0,0,-8"
+        Width="245" Height="216" Margin="0,0,0,0"
         MouseDown="border_MouseDown"
         MouseMove="viewportBorder_MouseMove"
         MouseUp="viewportBorder_MouseUp"
         MouseWheel="border_MouseWheel">
-                    <Viewport3D Name="viewport1" ClipToBounds="True" Margin="0,0,0,-8" HorizontalAlignment="Stretch" >
+                    <Viewport3D Name="viewport1" ClipToBounds="True" Margin="0,0,0,0" HorizontalAlignment="Stretch" >
                         <Viewport3D.Camera>
                             <PerspectiveCamera x:Name="camera1" FarPlaneDistance="200" LookDirection="-0.25,-0.25,-1" UpDirection="0,1,0" NearPlaneDistance="0.5" Position="3,3,12" FieldOfView="70" />
                         </Viewport3D.Camera>
@@ -42,17 +43,17 @@
                     </Viewport3D>
                 </Border>
                 <Border Name="viewport2Border"
-        BorderThickness="5"
+        BorderThickness="2"
         BorderBrush="Black"
         HorizontalAlignment="Right"
         VerticalAlignment="Top"
         Background="White"
-        Width="250" Height="250" Margin="0,0,0,-8"
+        Width="245" Height="216" Margin="0,0,0,0"
         MouseDown="border_MouseDown"
         MouseMove="viewportBorder_MouseMove"
         MouseUp="viewportBorder_MouseUp"
                         MouseWheel="border_MouseWheel">
-                    <Viewport3D Name="viewport2" ClipToBounds="True" Margin="0,0,0,-8" HorizontalAlignment="Stretch" >
+                    <Viewport3D Name="viewport2" ClipToBounds="True" Margin="0,0,0,0" HorizontalAlignment="Stretch" >
                         <Viewport3D.Camera>
                             <PerspectiveCamera x:Name="camera2" FarPlaneDistance="200" LookDirection="-0.25,-0.25,-1" UpDirection="0,1,0" NearPlaneDistance="0.5" Position="3,3,12" FieldOfView="70" />
                         </Viewport3D.Camera>
@@ -67,17 +68,17 @@
                     </Viewport3D>
                 </Border>
                 <Border Name="viewport3Border"
-        BorderThickness="5"
+        BorderThickness="2"
         BorderBrush="Black"
         HorizontalAlignment="Left"
         VerticalAlignment="Bottom"
         Background="White"
-        Width="250" Height="250" Margin="0,0,0,-8"
+        Width="245" Height="216" Margin="0,0,0,0"
         MouseDown="border_MouseDown"
         MouseMove="viewportBorder_MouseMove"
         MouseUp="viewportBorder_MouseUp"
                         MouseWheel="border_MouseWheel">
-                    <Viewport3D Name="viewport3" ClipToBounds="True" Margin="0,0,0,-8" HorizontalAlignment="Stretch" >
+                    <Viewport3D Name="viewport3" ClipToBounds="True" Margin="0,0,0,0" HorizontalAlignment="Stretch" >
                         <Viewport3D.Camera>
                             <PerspectiveCamera x:Name="camera3" FarPlaneDistance="200" LookDirection="-0.25,-0.25,-1" UpDirection="0,1,0" NearPlaneDistance="0.5" Position="3,3,12" FieldOfView="70" />
                         </Viewport3D.Camera>
@@ -92,17 +93,17 @@
                     </Viewport3D>
                 </Border>
                 <Border Name="viewport4Border"
-        BorderThickness="5"
+        BorderThickness="2"
         BorderBrush="Black"
         HorizontalAlignment="Right"
         VerticalAlignment="Bottom"
         Background="White"
-        Width="250" Height="250" Margin="0,0,0,-8"
+        Width="245" Height="216" Margin="0,0,0,0"
         MouseDown="border_MouseDown"
         MouseMove="viewportBorder_MouseMove"
         MouseUp="viewportBorder_MouseUp"
                         MouseWheel="border_MouseWheel">
-                    <Viewport3D Name="viewport4" ClipToBounds="True" Margin="0,0,0,-8" HorizontalAlignment="Stretch" >
+                    <Viewport3D Name="viewport4" ClipToBounds="True" Margin="0,0,0,0" HorizontalAlignment="Stretch" >
                         <Viewport3D.Camera>
                             <PerspectiveCamera x:Name="camera4" FarPlaneDistance="200" LookDirection="-0.25,-0.25,-1" UpDirection="0,1,0" NearPlaneDistance="0.5" Position="3,3,12" FieldOfView="70" />
                         </Viewport3D.Camera>
@@ -121,7 +122,7 @@
         <Border Name="canvasBorder"
         BorderThickness="5"
         HorizontalAlignment="Left"
-        Width="480" Margin="0,0,0,-8"
+        Width="490"  Margin="0,0,0,0"
         BorderBrush="Black"
                 MouseDown="border_MouseDown"
         MouseMove="canvasBorder_MouseMove"

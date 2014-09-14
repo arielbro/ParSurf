@@ -58,12 +58,22 @@ namespace ParSurf
         }
         protected void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            double widthFactor = e.NewSize.Width / e.PreviousSize.Width;
-            double heightFactor = e.NewSize.Height / e.PreviousSize.Height;
+            double widthFactor = 1;
+            double heightFactor = 1;
+            if (e.PreviousSize.Width != 0)
+            {
+                widthFactor = e.NewSize.Width / e.PreviousSize.Width;
+                heightFactor = e.NewSize.Height / e.PreviousSize.Height;
+            }
+            else
+            {
+                widthFactor = e.NewSize.Width / 980;
+                heightFactor = e.NewSize.Height / 432;
+            }
             foreach (Viewport3D viewport in viewports)
             {
-                viewport.Width *= widthFactor;
-                viewport.Height *= heightFactor;
+                ((Border)viewport.Parent).Width *= widthFactor;
+                ((Border)viewport.Parent).Height *= heightFactor;
             }
             canvas.Width *= widthFactor;
             canvas.Height *= heightFactor;

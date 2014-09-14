@@ -22,10 +22,9 @@ using System.Diagnostics;
 using NCalc;
 using System.IO;
 using ParSurf;
-using ParSurf;
-
 namespace ParSurf
 {
+    
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -47,13 +46,16 @@ namespace ParSurf
         public MainWindow()
         {
             InitializeComponent();
-            TabItem x = new TabItem();
-            x.Header = "new tab";
+            
+            CloseableTabItem x = new CloseableTabItem();
+            TextBlock Temp = new TextBlock { Text = "Tab!" };
+            Temp.Name = "hi";
+            x.SetHeader(Temp);
             Frame frame = new Frame();
             ParametricSurface surface = new ParametricSurface();
             
             surface.coordinates = ParametricSurface.flatTorus;
-            frame.Content = new Page4D(surface.triangulate(50,50),surface.triangulate(300,300));
+            frame.Content = new Page4D(surface.triangulate(5,5),surface.triangulate(30,30));
 
             //surface.coordinates = ParametricSurface.cusp6D;
             //frame.Content = new PageND(surface.triangulate(30, 30), surface.triangulate(150, 150), 6);
@@ -62,8 +64,37 @@ namespace ParSurf
             //frame.Content = new Page3D(surface.triangulate(30, 30), surface.triangulate(200, 200));
             x.Content = frame;
             tabControl1.Items.Add(x);
-        }
+            //CloseableTabItem y = new CloseableTabItem();
+            //y.SetHeader(new TextBlock { Text = "Tab!112111111111111111111111111111123" });
+            //y.Content = frame;
+            //tabControl1.Items.Add(y);
+            //CloseableTabItem z = new CloseableTabItem();
+            //z.SetHeader(new TextBlock { Text = "Tab!3333333333333456" });
+            //z.Content = frame;
+            //tabControl1.Items.Add(z);
+            //CloseableTabItem w = new CloseableTabItem();
+            //w.SetHeader(new TextBlock { Text = "Tab!75555555555555555555555555555555555555555589" });
+            //w.Content = frame;
+            //tabControl1.Items.Add(w);
+            //TabItem x1 = new TabItem();
+            //x1.Header = "new tab";
+            //Frame frame1 = new Frame();
+            //ParametricSurface surface1 = new ParametricSurface();
 
+            //surface1.coordinates = ParametricSurface.flatTorus;
+            //frame1.Content = new Page4D(surface1.triangulate(5, 5), surface1.triangulate(30, 30));
+
+            ////surface.coordinates = ParametricSurface.cusp6D;
+            ////frame.Content = new PageND(surface.triangulate(30, 30), surface.triangulate(150, 150), 6);
+
+            ////surface.coordinates = ParametricSurface.flatTorus;
+            ////frame.Content = new Page3D(surface.triangulate(30, 30), surface.triangulate(200, 200));
+            //x1.Content = frame1;
+            //tabControl1.Items.Add(x1);
+        }
+        private void closeTab(object source, RoutedEventArgs args)
+        {
+        }
         private void parametric_select_item_checked(object sender, RoutedEventArgs e)
         {
             //uncheck others (create a mutually exclusive choice scenario)
@@ -229,6 +260,27 @@ namespace ParSurf
                                                         currentTransform);
                 viewPortGraphics.generate_3d_axes(renderResolution);
                 //canvasGraphics.reDraw();
+            }
+        }
+
+        private void mainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double widthFactor = 1;
+            double heightFactor = 1;
+            if (e.PreviousSize.Width != 0)
+            {
+                widthFactor = e.NewSize.Width / e.PreviousSize.Width;
+                heightFactor = e.NewSize.Height / e.PreviousSize.Height;
+            }
+            else
+            {
+                widthFactor = e.NewSize.Width / 1000;
+                heightFactor = e.NewSize.Height / 500;
+            }
+            foreach (ContentControl tab in tabControl1.Items)
+            {
+                ((Page)((ContentControl)tab.Content).Content).Width *= widthFactor;
+                ((Page)((ContentControl)tab.Content).Content).Height *= heightFactor;
             }
         }
     }

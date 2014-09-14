@@ -93,6 +93,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CloseableTabItem.cs" />
+    <Compile Include="CustomTabControl.cs" />
     <Compile Include="PageND.xaml.cs">
       <DependentUpon>PageND.xaml</DependentUpon>
     </Compile>
@@ -102,6 +104,11 @@
     </Compile>
     <Compile Include="Page3D.xaml.cs">
       <DependentUpon>Page3D.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScrollableTabPanel.cs" />
+    <Compile Include="ScrollBarConverters.cs" />
+    <Compile Include="TabCloseButton.xaml.cs">
+      <DependentUpon>TabCloseButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewPortGraphics.cs" />
     <Compile Include="CanvasGraphics.cs" />
@@ -140,6 +147,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Page3D.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TabCloseButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -200,6 +215,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Log.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
