@@ -26,3 +26,34 @@ C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfAppli
 C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Debug\Page4D.baml
 C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Debug\PageND.g.cs
 C:\Users\arielbro\Documents\Visual Studio 2010\Projects\WpfApplication1\WpfApplication1\obj\x86\Debug\PageND.baml
+C:\ParSurf\ParSurf\WpfApplication1\bin\Debug\ParSurf - Parametric Surface Visualization.exe.config
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\ParSurf - Parametric Surface Visualization.exe
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\ParSurf - Parametric Surface Visualization.pdb
+C:\ParSurf\ParSurf\WpfApplication1\bin\Debug\ParSurf - Parametric Surface Visualization.exe.manifest
+C:\ParSurf\ParSurf\WpfApplication1\bin\Debug\ParSurf - Parametric Surface Visualization.application
+C:\ParSurf\ParSurf\WpfApplication1\bin\Debug\ParSurf - Parametric Surface Visualization.exe
+C:\ParSurf\ParSurf\WpfApplication1\bin\Debug\ParSurf - Parametric Surface Visualization.pdb
+C:\ParSurf\ParSurf\WpfApplication1\bin\Debug\W3b.Sine.dll
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\ParSurf.csprojResolveAssemblyReference.cache
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\MainWindow.baml
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\PageND.g.cs
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\MainWindow.g.cs
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\Page4D.g.cs
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\Page3D.g.cs
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\App.g.cs
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\GeneratedInternalTypeHelper.g.cs
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\ParSurf - Parametric Surface Visualization_MarkupCompile.cache
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\ParSurf - Parametric Surface Visualization_MarkupCompile.lref
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\PageND.baml
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\Page4D.baml
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\Page3D.baml
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\ParSurf - Parametric Surface Visualization.g.resources
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\ParSurf.FormulaInputForm.resources
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\ParSurf.InputNumberForm.resources
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\ParSurf.Properties.Resources.resources
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\ParSurf.csproj.GenerateResource.Cache
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\ParSurf - Parametric Surface Visualization.exe.manifest
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\ParSurf - Parametric Surface Visualization.application
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\Themes\Generic.baml
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\TabCloseButton.baml
+C:\ParSurf\ParSurf\WpfApplication1\obj\x86\Debug\TabCloseButton.g.cs
