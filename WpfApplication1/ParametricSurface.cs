@@ -18,17 +18,23 @@ using System.Windows.Media.Animation;
 
 namespace ParSurf
 {
-    class ParametricSurface
+    [Serializable()]
+    public class ParametricSurface
     {
+        private string Name;
         private double[] urange;
         private double[] vrange;
         private Boolean uclosed;
         private Boolean vclosed;
-        public delegate double[] CoordinatesFunction(double u, double v);
+        public delegate double[] CoordinatesFunction(double u, double v, Dictionary<string, double> parameters);
         public CoordinatesFunction coordinates;
+        public Dictionary<string, double> parameters;
 
-        public ParametricSurface(double[] urange, double[] vrange, Boolean uclosed = false, Boolean vclosed = false)
+        public ParametricSurface(string Name, CoordinatesFunction coordinates, double[] urange, double[] vrange, Dictionary<String,double> parameters = null, Boolean uclosed = false, Boolean vclosed = false)
         {
+            this.coordinates = coordinates;
+            this.parameters = parameters;
+            this.Name = Name;
             this.urange = urange;
             this.vrange = vrange;
             this.uclosed = uclosed;
@@ -41,7 +47,7 @@ namespace ParSurf
             this.uclosed = uclosed;
             this.vclosed = vclosed;
         }
-
+        
         public IList<double[][]> triangulate(int usteps = 100, int vsteps = 100)
         {
             //// create a mesh points in a snake scale like pattern - 
@@ -62,10 +68,10 @@ namespace ParSurf
                     double vup = vrange[0] + ((vstep + 1) / vsteps * (vrange[1] - vrange[0])) % (vrange[1] - vrange[0] + epsilon);
                     double vdown = vrange[0] + ((vstep - 1) / vsteps * (vrange[1] - vrange[0])) % (vrange[1] - vrange[0] + epsilon);
 
-                    double[] point1 = coordinates(u1, v);
-                    double[] point2 = coordinates(u2, v);
-                    double[] pointUpperRight = coordinates(u2, vup);
-                    double[] pointLowerLeft = coordinates(u1, vdown);
+                    double[] point1 = coordinates(u1, v, parameters);
+                    double[] point2 = coordinates(u2, v, parameters);
+                    double[] pointUpperRight = coordinates(u2, vup, parameters);
+                    double[] pointLowerLeft = coordinates(u1, vdown, parameters);
                     if (vclosed || vup > v)
                         triangles.Add(new double[][] { point1, point2, pointUpperRight });
                     if (vclosed || vdown < v)
@@ -97,11 +103,11 @@ namespace ParSurf
             double z = r * Math.Sin(phi);
             return new double[] { x, y, z };
         }
-        public static double[] spherePoint(double theta, double phi)
+        public static double[] spherePoint(double theta, double phi, Dictionary<string, double> parameters)
         {
             theta = Math.PI * theta;
             phi = 2 * Math.PI * phi;
-            const double r = 1;
+            double r = parameters["radius"];
             double x = r * Math.Cos(phi)*Math.Sin(theta);
             double y = r * Math.Sin(phi)*Math.Sin(theta);
             double z = r * Math.Cos(theta);
@@ -152,7 +158,7 @@ namespace ParSurf
         }
         public static CoordinatesFunction xTimesSineReciporal(double xExponent = 1, double numberOfPeriods = 4)
         {
-            CoordinatesFunction cordFunc = (theta, phi) =>
+            CoordinatesFunction cordFunc = (theta, phi, parameters) =>
             {
                 theta = (theta - 0.5) * 2 * Math.PI * numberOfPeriods;
                 phi = (phi - 0.5) * 2 * Math.PI * numberOfPeriods;
@@ -242,13 +248,13 @@ namespace ParSurf
             double s = v * Math.Sin(u);
             return new double[] { x, y, z, w, t, s};
         }
-        public static double[] flatTorus(double theta, double phi)
+        public static double[] flatTorus(double theta, double phi, Dictionary<string,double> param)
         {
             //flat torus - https://en.wikipedia.org/wiki/Torus#Flat_torus
             theta = 2 * Math.PI * (theta);
             phi = 2 * Math.PI * (phi);
-            const double R = 1;
-            const double P = 3;
+            double R = param["radius1"];
+            double P = param["radius2"];
             double x = R * Math.Cos(theta);
             double y = R * Math.Sin(theta);
             double z = P * Math.Cos(phi);
@@ -312,7 +318,7 @@ namespace ParSurf
             //for the parametric representation of a circle in 3d along an axis:
             //http://math.stackexchange.com/questions/73237/parametric-equation-of-a-circle-in-3d-space
 
-            CoordinatesFunction cordFunc = (theta, phi) =>
+            CoordinatesFunction cordFunc =  (theta, phi, parameters) =>
             {
                 theta = -2 * Math.PI * theta;
                 phi = 2 * Math.PI * phi;
@@ -334,7 +340,7 @@ namespace ParSurf
             double z = 0;
             return new double[] { x, y, z };
         }
-        public static double[] xAxis(double l, double phi)
+        public static double[] xAxis(double l, double phi, Dictionary<string,double> parameters)
         {
             phi = 2 * Math.PI * phi;
             double length = 7;
@@ -353,7 +359,7 @@ namespace ParSurf
 
             return new double[]{ x, y, z };
         }
-        public static double[] yAxis (double l, double phi)
+        public static double[] yAxis(double l, double phi, Dictionary<string, double> parameters)
             {
 
                 phi = 2 * Math.PI * phi;
@@ -374,7 +380,7 @@ namespace ParSurf
                 return new double[]{ x, y, z };
 
             }
-        public static double[] zAxis(double l, double phi)
+        public static double[] zAxis(double l, double phi, Dictionary<string, double> parameters)
             {
                 phi = 2 * Math.PI * phi;
                 double length = 7;

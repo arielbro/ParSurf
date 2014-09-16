@@ -23,14 +23,13 @@ namespace ParSurf.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection Setting {
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public string Setting {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["Setting"]));
-            }
-            set {
-                this["Setting"] = value;
+                return ((string)(this["Setting"]));
             }
         }
     }

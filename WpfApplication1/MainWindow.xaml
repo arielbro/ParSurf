@@ -420,7 +420,7 @@
             </Style.Resources>
 
             <!-- This will help us bind to the Header of a TabItem -->
-            <Setter Property="Header" Value="{Binding Value}" />
+            <Setter Property="Header" Value="{Binding Path=Value}" />
             <!-- 
             In order for MenuItems to support the IsEnabled state of a TabItem,
             we simply bind the IsEnabled property of the MenuItem to that of the
@@ -434,6 +434,7 @@
             efficiently allow to pick the selected TabItem from the Menu
             with a simple two-way binding.
          -->
+            
             <Setter Property="IsCheckable" Value="{Binding Path=IsEnabled}" />
             <Setter Property="IsChecked" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
             <Setter Property="Foreground" Value="{StaticResource MenuItem_ForegroundBrush}"/>
@@ -774,8 +775,12 @@
     <!--MouseWheel="Grid_MouseWheel"-->
     <Grid Name="grid">
         <Menu Height="27" HorizontalAlignment="Stretch" Name="menu1" VerticalAlignment="Top" Margin="0,0,0,0">
-            <MenuItem Name ="MenuItem_parametric_shape" Header="parametric shape" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="7,5,8,1">
-                <MenuItem Name="MenuItem_new" Header="new" IsCheckable="True" Checked="graphicSettingsNew_Click"  VerticalAlignment="Center"/>
+            <MenuItem Name ="MenuItem_new_shape" Header="New Shape" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="7,5,8,1">
+                <MenuItem Name="MenuItem_newPointCloud" Header="Point cloud" IsCheckable="True" Checked="graphicSettingsNew_Click"  VerticalAlignment="Center"/>
+                <MenuItem Name="MenuItem_newImplicitEquation" Header="Implicit equation" IsCheckable="True" Checked="graphicSettingsNew_Click"  VerticalAlignment="Center"/>
+                <MenuItem Name="MenuItem_newParametricSurface" Header="Parametric Surface" IsCheckable="True" Checked="graphicSettingsNew_Click"  VerticalAlignment="Center"/>
+
+
                 <Separator />
                 <MenuItem Name="MenuItem_plane" IsCheckable="True" Checked="parametric_select_item_checked" Header="Plane"/>
                 <MenuItem Name="MenuItem_cylinder" IsCheckable="True" Checked="parametric_select_item_checked" Header="Cylinder"/>
@@ -797,6 +802,7 @@
             </MenuItem>
             <MenuItem Header="help" Padding="7,5,8,1"/>
         </Menu>
+        
         <DockPanel>
             <TabControl SelectedIndex="0" HorizontalAlignment="Stretch" Margin="0,25,0,0" Name="tabControl1" VerticalAlignment="Stretch" >
             </TabControl>

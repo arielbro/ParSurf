@@ -95,6 +95,7 @@
     </ApplicationDefinition>
     <Compile Include="CloseableTabItem.cs" />
     <Compile Include="CustomTabControl.cs" />
+    <Compile Include="InverseBooleanConverter.cs" />
     <Compile Include="PageND.xaml.cs">
       <DependentUpon>PageND.xaml</DependentUpon>
     </Compile>

@@ -8,7 +8,13 @@ namespace ParSurf
 {
     public class CloseableTabItem : TabItem
     {
-        public string Value;
+        public string Value
+            {
+    get { return (string)GetValue(myTextProperty); }
+    set { SetValue(myTextProperty, value); }
+}
+                public static readonly DependencyProperty myTextProperty =
+    DependencyProperty.Register("myText", typeof(string), typeof(MainWindow), new PropertyMetadata(null));
         public CloseableTabItem() : base()
         {
             this.SetResourceReference(StyleProperty, typeof(TabItem));
