@@ -47,16 +47,21 @@ namespace ParSurf
         public MainWindow()
         {
             InitializeComponent();
+            //List<ParametricSurface> surfaces = new List<ParametricSurface>();
+            //ParametricSurface surface = new ParametricSurface("Flat Torus", ParametricSurface.spherePoint, new double[] { 0, 1 }, new double[] { 0, 1 }, new Dictionary<string, double>() { { "radius", 1 } });
+            //surfaces.Add(surface);
+            //using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
+            //{
+            //    BinaryFormatter bin = new BinaryFormatter();
+            //    bin.Serialize(stream, surfaces);
+            //}
             List<ParametricSurface> surfaces = new List<ParametricSurface>();
-            ParametricSurface surface = new ParametricSurface("Flat Torus",ParametricSurface.spherePoint,new double[] { 0, 1 },new double[] { 0, 1 }, new Dictionary<string,double>(){{"radius", 1}});
-            surfaces.Add(surface);
-            using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
+            using (Stream stream = File.Open("Surfaces.bin", FileMode.OpenOrCreate))
             {
                 BinaryFormatter bin = new BinaryFormatter();
-                bin.Serialize(stream, surfaces);
+                surfaces = (List<ParametricSurface>)bin.Deserialize(stream);
             }
-            
-
+            ParametricSurface surface = surfaces[0];
 
             CloseableTabItem x = new CloseableTabItem();
             x.SetHeader(new TextBlock { Text = "Tab!" });
