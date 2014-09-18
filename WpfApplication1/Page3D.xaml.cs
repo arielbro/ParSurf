@@ -19,10 +19,23 @@ namespace ParSurf
     /// </summary>
     public partial class Page3D : GraphicsPage
     {
-        public Page3D(IList<double[][]> parallelTriangles, IList<double[][]> renderTriangles)
+        public Page3D(ParametricSurface surface)
             : base(GraphicModes.R3, 3)
         {
             InitializeComponent();
+            InputNumberForm parameterDialog = new InputNumberForm(surface.parameters);
+            if (parameterDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                // Read the contents of testDialog's TextBox.
+                surface.parameters = parameterDialog.result;
+            }
+            else
+            {
+                
+            }
+            
+            parallelTriangles = surface.triangulate(5, 5);
+            renderTriangles = surface.triangulate(5, 5);
             canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 3, parallelTriangles);
             canvasManager.reDraw(currentTransform);
             viewports = new Viewport3D[] { viewport };
@@ -35,6 +48,14 @@ namespace ParSurf
             base.canvas = this.canvas;
             base.canvasBorder = this.canvasBorder;
             base.viewportsBorder = this.viewportBorder;
+            intializeSizes();
+        }
+        public void intializeSizes()
+        {
+            canvasBorder.Height = this.ActualHeight;
+            canvasBorder.Width = this.ActualWidth / 2;
+            viewportBorder.Height = this.ActualHeight;
+            viewportBorder.Width = this.ActualWidth / 2;
         }
     }
 }

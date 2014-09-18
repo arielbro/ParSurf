@@ -1,6 +1,6 @@
 ﻿namespace ParSurf
 {
-    partial class InputNumberForm
+    partial class ParametersInputForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,22 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.SuspendLayout();
-            // 
-            // InputNumberForm
-            // 
-            this.AllowDrop = true;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 127);
-            this.Name = "InputNumberForm";
-            this.Text = "parameter input";
-            this.Load += new System.EventHandler(this.InputNumberForm_Load);
-            this.ResumeLayout(false);
-
+            this.Text = "ParametersInputForm";
         }
 
         #endregion
-
     }
 }

@@ -11,29 +11,66 @@ namespace ParSurf
 {
     public partial class FormulaInputForm : Form
     {
-        public String XFormula;
-        public String YFormula;
-        public String ZFormula;
-
+        public List<String> formulas;
+        public List<String> ranges;
+        public string[] urange;
+        public string[] trange;
+        public string name;
+        //int dimension = 3;
         public FormulaInputForm()
         {
             InitializeComponent();
         }
-        private void InputNumberForm_Load(object sender, EventArgs e)
-        {
-        }
+    
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            XFormula = XTextBox.Text;
-            YFormula = YTextBox.Text;
-            ZFormula = ZTextBox.Text;
+            formulas = new List<String>();
+            for (int i = 1; i < dimension + 1; i++)
+            {
+                formulas.Add((this.Controls.Find("DimForm" + i, false))[0].Text);
+            }
+            urange = new string[]{textBox1.Text, textBox2.Text};
+            trange = new string[] { textBox4.Text, textBox3.Text };
+            name = textBoxName.Text;
         }
-        public void setFormulas(String[] formulas)
+        public void setFormulas(String[] formula)
         {
-            XTextBox.Text = formulas[0];
-            YTextBox.Text = formulas[1];
-            ZTextBox.Text = formulas[2];
+            DimForm1.Text = formula[0];
+            DimForm2.Text = formula[1];
+            DimForm3.Text = formula[2];
+            for (int i = 3; i < formula.Length; i++)
+            {
+                button3_Click(new object(), new EventArgs());
+                ((this.Controls.Find("DimForm" + (i + 1), false))[0]).Text = formula[i];
+            }
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            dimension++;
+            foreach (Control item in this.Controls)
+            {
+                if (item.Location.Y > 122+((dimension-4)*29))
+                    item.Location = new Point(item.Location.X,item.Location.Y+29);
+            }
+            Label axislabel = new Label();
+            axislabel.Size = AxisLabel1.Size;
+            axislabel.Font = AxisLabel1.Font;
+            axislabel.Text = "X" + dimension+"(u,t):";
+            axislabel.AutoSize = true;
+            axislabel.Location = new Point(12, 64 + ((dimension - 1) * 29));
+            axislabel.Name = "AxisLabel" + dimension;
+            this.Controls.Add(axislabel);
+            TextBox dimform = new TextBox();
+            dimform.Location = new Point(70, 64 + ((dimension - 1) * 29));
+            dimform.Size = DimForm1.Size;
+            dimform.Font = DimForm1.Font;
+            dimform.Name = "DimForm" + dimension;
+            this.Controls.Add(dimform);
+            dimform.BringToFront();
+            this.Height += 29;
+        }
+
     }
 }

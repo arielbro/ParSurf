@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -38,73 +39,53 @@ namespace ParSurf
         private List<Point3D[]> parallelTriangles;
         double pointSize = 1;
         ParametricSurface shape;
-        String[] previousFormulae;
+        string[] previousFormulae;
         private CanvasGraphics canvasGraphics;
         private ViewPortGraphics viewPortGraphics;
         private double xCoordinateRange;
         private double yCoordinateRange;
-
+        private List<ParametricSurface> surfaces;
         public MainWindow()
         {
             InitializeComponent();
             //List<ParametricSurface> surfaces = new List<ParametricSurface>();
-            //ParametricSurface surface = new ParametricSurface("Flat Torus", ParametricSurface.spherePoint, new double[] { 0, 1 }, new double[] { 0, 1 }, new Dictionary<string, double>() { { "radius", 1 } });
+            //ParametricSurface surface = new ParametricSurface("Flat Torus", 3, ParametricSurface.spherePoint, new double[] { 0, 1 }, new double[] { 0, 1 }, new Dictionary<string, double>() { { "radius", 1 } });
             //surfaces.Add(surface);
             //using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
             //{
             //    BinaryFormatter bin = new BinaryFormatter();
             //    bin.Serialize(stream, surfaces);
             //}
-            List<ParametricSurface> surfaces = new List<ParametricSurface>();
             using (Stream stream = File.Open("Surfaces.bin", FileMode.OpenOrCreate))
             {
                 BinaryFormatter bin = new BinaryFormatter();
                 surfaces = (List<ParametricSurface>)bin.Deserialize(stream);
             }
             ParametricSurface surface = surfaces[0];
-
+            for (int i = 0; i < surfaces.Count; i++)
+            {
+                MenuItem item = new MenuItem();
+                item.Header = surfaces[i].Name;
+                item.Name = "MenuItem_" + i.ToString();
+                item.Click += parametric_select_item_checked;
+                MenuItem_savedParametricSurface.Items.Add(item);
+            }
+            
             CloseableTabItem x = new CloseableTabItem();
             x.SetHeader(new TextBlock { Text = "Tab!" });
             Frame frame = new Frame();
             ParametricSurface surface1 = new ParametricSurface();
-            
             surface1.coordinates = ParametricSurface.flatTorus;
-            frame.Content = new Page3D(surface.triangulate(5,5),surface.triangulate(30,30));
-
-            //surface.coordinates = ParametricSurface.cusp6D;
-            //frame.Content = new PageND(surface.triangulate(30, 30), surface.triangulate(150, 150), 6);
-
-            //surface.coordinates = ParametricSurface.flatTorus;
-            //frame.Content = new Page3D(surface.triangulate(30, 30), surface.triangulate(200, 200));
+            frame.Content = new Page3D(surface);
             x.Content = frame;
             tabControl1.Items.Add(x);
-            //CloseableTabItem y = new CloseableTabItem();
-            //y.SetHeader(new TextBlock { Text = "Tab!112111111111111111111111111111123" });
-            //y.Content = frame;
-            //tabControl1.Items.Add(y);
-            //CloseableTabItem z = new CloseableTabItem();
-            //z.SetHeader(new TextBlock { Text = "Tab!3333333333333456" });
-            //z.Content = frame;
-            //tabControl1.Items.Add(z);
-            //CloseableTabItem w = new CloseableTabItem();
-            //w.SetHeader(new TextBlock { Text = "Tab!75555555555555555555555555555555555555555589" });
-            //w.Content = frame;
-            //tabControl1.Items.Add(w);
             
             CloseableTabItem x1 = new CloseableTabItem();
             x1.SetHeader(new TextBlock { Text = "Tab!1231412412431312" });
-            
             Frame frame1 = new Frame();
             ParametricSurface surface2 = new ParametricSurface();
-
             surface2.coordinates = ParametricSurface.flatTorus;
-            frame1.Content = new Page3D(surface.triangulate(5, 5), surface.triangulate(30, 30));
-
-            //surface.coordinates = ParametricSurface.cusp6D;
-            //frame.Content = new PageND(surface.triangulate(30, 30), surface.triangulate(150, 150), 6);
-
-            //surface.coordinates = ParametricSurface.flatTorus;
-            //frame.Content = new Page3D(surface.triangulate(30, 30), surface.triangulate(200, 200));
+            frame1.Content = new Page3D(surface);
             x1.Content = frame1;
             tabControl1.Items.Add(x1);
         }
@@ -113,84 +94,63 @@ namespace ParSurf
         }
         private void parametric_select_item_checked(object sender, RoutedEventArgs e)
         {
-        //    //uncheck others (create a mutually exclusive choice scenario)
-        //    foreach (Control item in MenuItem_parametric_shape.Items)
-        //    {
-        //        if (!(item is MenuItem))
-        //            continue;
-        //        MenuItem menuItem = item as MenuItem;
-        //        if (menuItem.IsCheckable && menuItem != sender)
-        //            menuItem.IsChecked = false;
-        //    }
-
-        //    //resets current viewport/canvas
-        //    viewPortGraphics.reset();
-        //    canvasGraphics.clearCanvasPoints();
-        //    canvasGraphics.clearAxes();
-
-        //    //load the appropriate shape (WARNING: UGLY CODING AHEAD)
-        //    shape = new ParametricSurface(false, false);
-        //    if (sender == MenuItem_plane)
-        //        shape.coordinates = ParametricSurface.plane;
-        //    else if (sender == MenuItem_mobius)
-        //        shape.coordinates = ParametricSurface.mobiusPoint;
-        //    else if (sender == MenuItem_bottle)
-        //        shape.coordinates = ParametricSurface.kleinBottlePoint;
-        //    else if (sender == MenuItem_figure_8)
-        //        shape.coordinates = ParametricSurface.kleinBottleFigureEigthPoint;
-        //    else if (sender == MenuItem_cone)
-        //        shape.coordinates = ParametricSurface.conePoint;
-        //    else if (sender == MenuItem_cylinder)
-        //        shape.coordinates = ParametricSurface.cylinderPoint;
-        //    else if (sender == MenuItem_sin)
-        //        shape.coordinates = ParametricSurface.sinWaves;
-        //    else if (sender == MenuItem_torus)
-        //        shape.coordinates = ParametricSurface.torusPoint;
-        //    else if (sender == MenuItem_torus)
-        //        shape.coordinates = ParametricSurface.spherePoint;
-        //    else throw new Exception("menu parametric shape selection does not make sense");
-        //    //parallelTriangles = shape.triangulate(parallelResolution,parallelResolution);
-        //    //renderTriangles = shape.triangulate(renderResolution, renderResolution);
-        //    //viewPortGraphics.generate_viewport_object(renderTriangles);
-        //    //viewPortGraphics.generate_3d_axes(renderResolution);
+            CloseableTabItem newtab = new CloseableTabItem();
+            string x =((MenuItem)sender).Name.Replace("MenuItem_", "");
+            ParametricSurface surface = surfaces[int.Parse(((MenuItem)sender).Name.Replace("MenuItem_", ""))];
+            newtab.SetHeader(new TextBlock { Text = surface.Name });
+            Frame frame = new Frame();
+            switch(surface.dimension){
+                case 3:
+                    frame.Content = new Page3D(surface);
+                    break;
+                case 4:
+                    frame.Content = new Page4D(surface.triangulate(5, 5), surface.triangulate(30, 30));
+                    break;
+                default:
+                    frame.Content = new PageND(surface.triangulate(5, 5), surface.triangulate(30, 30), surface.dimension);
+                    break;
+            }
+            newtab.Content = frame;
+            tabControl1.Items.Add(newtab);
+            newtab.IsSelected = true;            
         }
         private void graphicSettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            InputNumberForm form = new InputNumberForm();
-            System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
-            if (formStatus == System.Windows.Forms.DialogResult.OK)
-            {
-                if (sender == pointSizeMenuItem)
-                {
-                    if (Double.IsNaN(form.result) || form.result <= 0)
-                    {
-                        MessageBox.Show("Input for parameter must be a positive double");
-                        return;
-                    }
-                    pointSize = form.result;
-                    //canvasGraphics.reDraw(); 
-                    return;
-                }
-                else if (Double.IsNaN(form.result) || form.result <= 0 ||
-                       Convert.ToInt32(form.result) != form.result)
-                {
-                    MessageBox.Show("Input for parameter must be a positive integer");
-                    return;
-                }
-                else if (sender == renderResolutionMenuItem)
-                    renderResolution = Convert.ToInt32(form.result);
-                else if (sender == parallelResoltuionMenuItem)
-                    parallelResolution = Convert.ToInt32(form.result);
+            //InputNumberForm form = new InputNumberForm();
+            //System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
+            //if (formStatus == System.Windows.Forms.DialogResult.OK)
+            //{
+            //    if (sender == pointSizeMenuItem)
+            //    {
+            //        if (Double.IsNaN(form.result) || form.result <= 0)
+            //        {
+            //            MessageBox.Show("Input for parameter must be a positive double");
+            //            return;
+            //        }
+            //        pointSize = form.result;
+            //        //canvasGraphics.reDraw(); 
+            //        return;
+            //    }
+            //    else if (Double.IsNaN(form.result) || form.result <= 0 ||
+            //           Convert.ToInt32(form.result) != form.result)
+            //    {
+            //        MessageBox.Show("Input for parameter must be a positive integer");
+            //        return;
+            //    }
+            //    else if (sender == renderResolutionMenuItem)
+            //        renderResolution = Convert.ToInt32(form.result);
+            //    else if (sender == parallelResoltuionMenuItem)
+            //        parallelResolution = Convert.ToInt32(form.result);
 
-                //resets current viewport
-                Transform3D currentTransform = viewPortGraphics.getCurrentTransform();
-                viewPortGraphics.reset();
-                //regenerate shapes (keeping original transformations)
-                viewPortGraphics.generate_viewport_object(shape.triangulate(renderResolution,renderResolution),
-                                                        currentTransform);
-                viewPortGraphics.generate_3d_axes(renderResolution);
-                //canvasGraphics.reDraw();
-            }
+            //    //resets current viewport
+            //    Transform3D currentTransform = viewPortGraphics.getCurrentTransform();
+            //    viewPortGraphics.reset();
+            //    //regenerate shapes (keeping original transformations)
+            //    viewPortGraphics.generate_viewport_object(shape.triangulate(renderResolution,renderResolution),
+            //                                            currentTransform);
+            //    viewPortGraphics.generate_3d_axes(renderResolution);
+            //    //canvasGraphics.reDraw();
+            //}
         }
         private void graphicSettingsNew_Click(object sender, RoutedEventArgs e)
         {
@@ -202,21 +162,38 @@ namespace ParSurf
             System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
             if (formStatus == System.Windows.Forms.DialogResult.OK)
             {
-                NCalc.Expression xExp = new NCalc.Expression(form.XFormula);
-                NCalc.Expression yExp = new NCalc.Expression(form.YFormula);
-                NCalc.Expression zExp = new NCalc.Expression(form.ZFormula);
-
+                List<NCalc.Expression> expressions = new List<NCalc.Expression>();
+                Dictionary<string, double> expParams = new Dictionary<string, double>();
+                foreach (String exp in form.formulas)
+                {
+                    MatchCollection mc = Regex.Matches(exp, @"\$([A-Za-z0-9_]+)");
+                    foreach (Match m in mc)
+                    {
+                        string temp = m.ToString().Replace("$", "");
+                        if(!expParams.ContainsKey(temp))
+                            expParams.Add(temp, 0);
+                    }
+                    exp.Replace("$", "");
+                    expressions.Add(new NCalc.Expression(exp));
+                }
+                
                 //test the input expressions
-                foreach (NCalc.Expression exp in new NCalc.Expression[] { xExp, yExp, zExp })
+                foreach (NCalc.Expression exp in expressions)
                 {
                     exp.Parameters.Add("u", 0);
                     exp.Parameters.Add("t", 0);
+                    exp.Parameters.Add("Pi", Math.PI);
+                    foreach (KeyValuePair<string, double> param in expParams)
+                    {
+                        exp.Parameters.Add(param.Key, param.Value);
+                    }
                 }
                 try
                 {
-                    double xTest = Convert.ToDouble(xExp.Evaluate());
-                    double yTest = Convert.ToDouble(yExp.Evaluate());
-                    double zTest = Convert.ToDouble(zExp.Evaluate());
+                    foreach (NCalc.Expression exp in expressions)
+                    {
+                        double Test = Convert.ToDouble(exp.Evaluate());
+                    }
                 }
                 catch
                 {
@@ -229,35 +206,50 @@ namespace ParSurf
                     return;
                 }
                 //clear parameters after test
-                foreach (NCalc.Expression exp in new NCalc.Expression[] { xExp, yExp, zExp })
+                foreach (NCalc.Expression exp in expressions)
                 {
                     exp.Parameters.Remove("u");
                     exp.Parameters.Remove("t");
+                    exp.Parameters.Remove("Pi");
+                    foreach (KeyValuePair<string, double> param in expParams)
+                    {
+                        exp.Parameters.Remove(param.Key);
+                    }
                 }
                 //save formulae to memory, after validating
-                previousFormulae = new String[] { form.XFormula, form.YFormula, form.ZFormula };
-
+                previousFormulae = (new List<String>(form.formulas)).ToArray();
                 //create delegate coordinates function
                 ParametricSurface.CoordinatesFunction cordFunc = (u, t, parameters) =>
                 {
-                    foreach (NCalc.Expression exp in new NCalc.Expression[] { xExp, yExp, zExp })
+                    foreach (NCalc.Expression exp in expressions)
                     {
+                        exp.Parameters.Add("Pi", Math.PI);
                         exp.Parameters.Add("u", u);
                         exp.Parameters.Add("t", t);
+                        foreach (KeyValuePair<string,double> param in parameters)
+                        {
+                            exp.Parameters.Add(param.Key, param.Value);
+                        }
                     }
-                    double x = Convert.ToDouble(xExp.Evaluate());
-                    double y = Convert.ToDouble(yExp.Evaluate());
-                    double z = Convert.ToDouble(zExp.Evaluate());
-                    foreach (NCalc.Expression exp in new NCalc.Expression[] { xExp, yExp, zExp })
+                    List<Double> result = new List<double>();
+                    foreach (NCalc.Expression exp in expressions)
+                        result.Add(Convert.ToDouble(exp.Evaluate()));
+                    foreach (NCalc.Expression exp in expressions)
                     {
+                        exp.Parameters.Remove("Pi");
                         exp.Parameters.Remove("u");
                         exp.Parameters.Remove("t");
+                        foreach (KeyValuePair<string, double> param in parameters)
+                        {
+                            exp.Parameters.Remove(param.Key);
+                        }
                     }
-                    return new double[]{x, y, z};
+                    return result.ToArray();
                 };
-                shape = new ParametricSurface(false, false);
-                shape.coordinates = cordFunc;
-
+                double[] urange = new double[] { Convert.ToDouble((new NCalc.Expression(form.urange[0])).Evaluate()), Convert.ToDouble((new NCalc.Expression(form.urange[1])).Evaluate()) };
+                double[] trange = new double[] { Convert.ToDouble((new NCalc.Expression(form.trange[0])).Evaluate()), Convert.ToDouble((new NCalc.Expression(form.trange[1])).Evaluate()) };
+                shape = new ParametricSurface(form.Name, form.dimension, cordFunc, urange, trange, expParams, false, false);
+                
                 //uncheck all shapes items (including new, no point in it checked)
                 //foreach (Control item in MenuItem_parametric_shape.Items)
                 //{
@@ -269,13 +261,24 @@ namespace ParSurf
                 //}
 
                 //resets current viewport
-                Transform3D currentTransform = viewPortGraphics.getCurrentTransform();
-                viewPortGraphics.reset();
-                //regenerate shapes (keeping original transformations)
-                viewPortGraphics.generate_viewport_object(shape.triangulate(renderResolution, renderResolution),
-                                                        currentTransform);
-                viewPortGraphics.generate_3d_axes(renderResolution);
-                //canvasGraphics.reDraw();
+                CloseableTabItem newtab = new CloseableTabItem();
+                newtab.SetHeader(new TextBlock { Text = shape.Name });
+                Frame frame = new Frame();
+                switch(form.dimension){
+                    case 3:
+                        frame.Content = new Page3D(shape);
+                        break;
+                    case 4:
+                        frame.Content = new Page4D(shape.triangulate(5, 5), shape.triangulate(30, 30));
+                        break;
+                    default:
+                        frame.Content = new PageND(shape.triangulate(5, 5), shape.triangulate(30, 30), shape.dimension);
+                        break;
+                }
+                newtab.Content = frame;
+                tabControl1.Items.Add(newtab);
+                newtab.IsSelected = true;   
+
             }
         }
 
@@ -298,6 +301,31 @@ namespace ParSurf
                 ((Page)((ContentControl)tab.Content).Content).Width *= widthFactor;
                 ((Page)((ContentControl)tab.Content).Content).Height *= heightFactor;
             }
+        }
+
+        private void Save_Parametric_Surface_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Save_Transformation_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Load_Transformation_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Save_Tab_State_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Load_Tab_State_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -40,6 +40,8 @@ namespace ParSurf
         protected Point[] viewportsmLastPos;
         protected Point canvasmLastPos;
         protected double[][] currentTransform;
+        protected IList<double[][]> renderTriangles;
+        protected IList<double[][]> parallelTriangles;
 
         public GraphicsPage()
         {

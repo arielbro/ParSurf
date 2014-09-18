@@ -6,7 +6,9 @@
       xmlns:src="clr-namespace:ParSurf"
       mc:Ignorable="d" 
 	  Title="Page3D"
-      Width="1000" Height="500"
+                  VerticalAlignment="Stretch"
+                  HorizontalAlignment="Stretch"
+      
       SizeChanged="Window_SizeChanged">
     <Grid Name="grid">
         <Border Name="viewportBorder"

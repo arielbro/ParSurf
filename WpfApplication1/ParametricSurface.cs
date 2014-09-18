@@ -21,7 +21,8 @@ namespace ParSurf
     [Serializable()]
     public class ParametricSurface
     {
-        private string Name;
+        public int dimension;
+        public string Name;
         private double[] urange;
         private double[] vrange;
         private Boolean uclosed;
@@ -30,8 +31,9 @@ namespace ParSurf
         public CoordinatesFunction coordinates;
         public Dictionary<string, double> parameters;
 
-        public ParametricSurface(string Name, CoordinatesFunction coordinates, double[] urange, double[] vrange, Dictionary<String,double> parameters = null, Boolean uclosed = false, Boolean vclosed = false)
+        public ParametricSurface(string Name, int dimension, CoordinatesFunction coordinates, double[] urange, double[] vrange, Dictionary<String,double> parameters = null, Boolean uclosed = false, Boolean vclosed = false)
         {
+            this.dimension = dimension;
             this.coordinates = coordinates;
             this.parameters = parameters;
             this.Name = Name;

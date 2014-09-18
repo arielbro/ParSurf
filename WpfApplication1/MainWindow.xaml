@@ -7,7 +7,9 @@
         xmlns:local="clr-namespace:ParSurf"
         
         SizeChanged="mainWindow_SizeChanged"
-        Width="1000" Height="500" Name="mainWindow">
+        VerticalAlignment="Stretch"
+        HorizontalAlignment="Stretch"
+         Name="mainWindow">
     <Window.Resources>
         <local:ScrollbarOnFarRightConverter x:Key="scrollbarOnFarRightConverter"/>
         <local:ScrollbarOnFarLeftConverter x:Key="scrollbarOnFarLeftConverter"/>
@@ -388,6 +390,7 @@
                                 <Setter TargetName="ButtonBorder" Property="Background" 
                                 Value="{StaticResource LineButtonHoverBrush}" />
                             </Trigger>
+                            
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -774,33 +777,29 @@
     </Window.Resources>
     <!--MouseWheel="Grid_MouseWheel"-->
     <Grid Name="grid">
-        <Menu Height="27" HorizontalAlignment="Stretch" Name="menu1" VerticalAlignment="Top" Margin="0,0,0,0">
-            <MenuItem Name ="MenuItem_new_shape" Header="New Shape" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="7,5,8,1">
-                <MenuItem Name="MenuItem_newPointCloud" Header="Point cloud" IsCheckable="True" Checked="graphicSettingsNew_Click"  VerticalAlignment="Center"/>
-                <MenuItem Name="MenuItem_newImplicitEquation" Header="Implicit equation" IsCheckable="True" Checked="graphicSettingsNew_Click"  VerticalAlignment="Center"/>
-                <MenuItem Name="MenuItem_newParametricSurface" Header="Parametric Surface" IsCheckable="True" Checked="graphicSettingsNew_Click"  VerticalAlignment="Center"/>
+        <Menu Height="23" HorizontalAlignment="Stretch" Name="menu1" VerticalAlignment="Top" Margin="0,0,0,0">
+            <MenuItem Name ="MenuItem_new_shape" Header="New Shape" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <MenuItem Name="MenuItem_PointCloud" Header="Point cloud" VerticalAlignment="Center"/>
+                <MenuItem Name="MenuItem_ImplicitEquation" Header="Implicit equation" VerticalAlignment="Center"/>
+                <MenuItem Name="MenuItem_ParametricSurface" Header="Parametric Surface" Click="graphicSettingsNew_Click" VerticalAlignment="Center">
+                    <MenuItem Name="MenuItem_newParametricSurface" Header="New Parametric Surface" VerticalAlignment="Center"/>
+                    <MenuItem Name="MenuItem_savedParametricSurface" Header="Saved Parametric Surfaces" VerticalAlignment="Center"/>
 
-
-                <Separator />
-                <MenuItem Name="MenuItem_plane" IsCheckable="True" Checked="parametric_select_item_checked" Header="Plane"/>
-                <MenuItem Name="MenuItem_cylinder" IsCheckable="True" Checked="parametric_select_item_checked" Header="Cylinder"/>
-                <MenuItem Name="MenuItem_cone" IsCheckable="True" Checked="parametric_select_item_checked" Header="Cone"/>
-                <MenuItem Name="MenuItem_torus" IsCheckable="True" Checked="parametric_select_item_checked" Header="Torus" />
-                <MenuItem Name="MenuItem_sphere" IsCheckable="True" Checked="parametric_select_item_checked" Header="Sphere"/>
-                <MenuItem Name="MenuItem_mobius" IsCheckable="True" Checked="parametric_select_item_checked" Header="Mobius Strip"/>
-                <MenuItem Name="MenuItem_figure_8" IsCheckable="True" Checked="parametric_select_item_checked" Header="Klein bottle figure 8 immersion"/>
-                <MenuItem Name="MenuItem_bottle" IsCheckable="True" Checked="parametric_select_item_checked" Header="Klein bottle standard immersion"/>
-                <MenuItem Name="MenuItem_sin" IsCheckable="True" Checked="parametric_select_item_checked" Header="Sinusoidal waves"/>
-                <Separator />
-                <MenuItem Header="modify" VerticalAlignment="Center"/>
+                </MenuItem>
             </MenuItem>
-            <MenuItem Header="point cloud" Padding="7,5,8,1"/>
-            <MenuItem Header="graphic settings" Padding="7,5,8,1">
-                <MenuItem Name="pointSizeMenuItem" Header="point size" Click="graphicSettingsMenuItem_Click" Padding="7,5,8,1"/>
-                <MenuItem Name="parallelResoltuionMenuItem" Header="parallel coordinates resolution" Click="graphicSettingsMenuItem_Click" Padding="7,5,8,1"/>
-                <MenuItem Name="renderResolutionMenuItem" Header="3d rendering resolution" Click="graphicSettingsMenuItem_Click" Padding="7,5,8,1"/>
+            <MenuItem Header="Save and Load">
+                <MenuItem Name="Save_Parametric_Surface" Header="Save Parametric Surface" Click="Save_Parametric_Surface_Click"/>
+                <MenuItem Name="Save_Tab_State" Header="Save Tab State" Click="Save_Tab_State_Click"/>
+                <MenuItem Name="Load_Tab_State" Header="Load Tab State" Click="Load_Tab_State_Click"/>
             </MenuItem>
-            <MenuItem Header="help" Padding="7,5,8,1"/>
+            <MenuItem Header="graphic settings">
+                <MenuItem Name="pointSizeMenuItem" Header="point size" Click="graphicSettingsMenuItem_Click"/>
+                <MenuItem Name="parallelResoltuionMenuItem" Header="parallel coordinates resolution" Click="graphicSettingsMenuItem_Click"/>
+                <MenuItem Name="renderResolutionMenuItem" Header="3d rendering resolution" Click="graphicSettingsMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="help">
+                <MenuItem Header="help"/>
+            </MenuItem>
         </Menu>
         
         <DockPanel>

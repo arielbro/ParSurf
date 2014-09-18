@@ -106,11 +106,18 @@
     <Compile Include="Page3D.xaml.cs">
       <DependentUpon>Page3D.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ParametersInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ParametersInputForm.Designer.cs">
+      <DependentUpon>ParametersInputForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ScrollableTabPanel.cs" />
     <Compile Include="ScrollBarConverters.cs" />
     <Compile Include="TabCloseButton.xaml.cs">
       <DependentUpon>TabCloseButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TriangulationLibrary.cs" />
     <Compile Include="ViewPortGraphics.cs" />
     <Compile Include="CanvasGraphics.cs" />
     <Compile Include="FormulaInputForm.cs">
