@@ -26,7 +26,7 @@ using ParSurf;
 using System.Runtime.Serialization.Formatters.Binary;
 namespace ParSurf
 {
-    
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -56,47 +56,43 @@ namespace ParSurf
             //    BinaryFormatter bin = new BinaryFormatter();
             //    bin.Serialize(stream, surfaces);
             //}
-            using (Stream stream = File.Open("Surfaces.bin", FileMode.OpenOrCreate))
+            if (File.Exists("Surfaces.bin"))
             {
-                BinaryFormatter bin = new BinaryFormatter();
-                surfaces = (List<ParametricSurface>)bin.Deserialize(stream);
+                using (Stream stream = File.Open("Surfaces.bin", FileMode.Open))
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+                    surfaces = (List<ParametricSurface>)bin.Deserialize(stream);
+                }
             }
-            ParametricSurface surface = surfaces[0];
+            else
+            {
+                using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
+                {
+                    surfaces = new List<ParametricSurface>();
+                    BinaryFormatter bin = new BinaryFormatter();
+                    bin.Serialize(stream, surfaces);
+                }
+
+            }
             for (int i = 0; i < surfaces.Count; i++)
             {
                 MenuItem item = new MenuItem();
-                item.Header = surfaces[i].Name;
+                item.Header = surfaces[i].name;
                 item.Name = "MenuItem_" + i.ToString();
                 item.Click += parametric_select_item_checked;
                 MenuItem_savedParametricSurface.Items.Add(item);
             }
-            
-            CloseableTabItem x = new CloseableTabItem();
-            x.SetHeader(new TextBlock { Text = "Tab!" });
-            Frame frame = new Frame();
-            ParametricSurface surface1 = new ParametricSurface();
-            surface1.coordinates = ParametricSurface.flatTorus;
-            frame.Content = new Page3D(surface);
-            x.Content = frame;
-            tabControl1.Items.Add(x);
-            
-            CloseableTabItem x1 = new CloseableTabItem();
-            x1.SetHeader(new TextBlock { Text = "Tab!1231412412431312" });
-            Frame frame1 = new Frame();
-            ParametricSurface surface2 = new ParametricSurface();
-            surface2.coordinates = ParametricSurface.flatTorus;
-            frame1.Content = new Page3D(surface);
-            x1.Content = frame1;
-            tabControl1.Items.Add(x1);
+
         }
         private void parametric_select_item_checked(object sender, RoutedEventArgs e)
         {
             CloseableTabItem newtab = new CloseableTabItem();
-            string x =((MenuItem)sender).Name.Replace("MenuItem_", "");
+            string x = ((MenuItem)sender).Name.Replace("MenuItem_", "");
             ParametricSurface surface = surfaces[int.Parse(((MenuItem)sender).Name.Replace("MenuItem_", ""))];
-            newtab.SetHeader(new TextBlock { Text = surface.Name });
+            newtab.SetHeader(new TextBlock { Text = surface.name });
             Frame frame = new Frame();
-            switch(surface.dimension){
+            switch (surface.dimension)
+            {
                 case 3:
                     frame.Content = new Page3D(surface);
                     break;
@@ -109,14 +105,14 @@ namespace ParSurf
             }
             newtab.Content = frame;
             tabControl1.Items.Add(newtab);
-            newtab.IsSelected = true;            
+            newtab.IsSelected = true;
         }
         private void graphicSettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<string, double> dict = new Dictionary<string, double>();
             switch (((MenuItem)sender).Name)
             {
-                case("pointSizeMenuItem"):
+                case ("pointSizeMenuItem"):
                     dict.Add("Point Size", 0);
                     break;
                 case ("renderResolutionMenuItem"):
@@ -127,7 +123,8 @@ namespace ParSurf
                     break;
             }
             TabItem tab = new TabItem();
-            foreach (TabItem temp in this.tabControl1.Items){
+            foreach (TabItem temp in this.tabControl1.Items)
+            {
                 if (temp.IsEnabled) { tab = temp; break; }
             }
             InputNumberForm form = new InputNumberForm(dict);
@@ -194,7 +191,7 @@ namespace ParSurf
                     foreach (Match m in mc)
                     {
                         string temp = m.ToString().Replace("$", "");
-                        if(!expParams.ContainsKey(temp))
+                        if (!expParams.ContainsKey(temp))
                             expParams.Add(temp, 0);
                     }
                     exp.Replace("$", "");
@@ -203,7 +200,7 @@ namespace ParSurf
                     else
                         expressions.Add(new NCalc.Expression("0"));
                 }
-                
+
                 //test the input expressions
                 foreach (NCalc.Expression exp in expressions)
                 {
@@ -253,7 +250,7 @@ namespace ParSurf
                         exp.Parameters.Add("Pi", Math.PI);
                         exp.Parameters.Add("u", u);
                         exp.Parameters.Add("t", t);
-                        foreach (KeyValuePair<string,double> param in parameters)
+                        foreach (KeyValuePair<string, double> param in parameters)
                         {
                             exp.Parameters.Add(param.Key, param.Value);
                         }
@@ -273,15 +270,15 @@ namespace ParSurf
                     }
                     return result.ToArray();
                 };
-                NCalc.Expression[] ranges = {new NCalc.Expression(form.urange[0]),new NCalc.Expression(form.urange[1]),new NCalc.Expression(form.trange[0]),new NCalc.Expression(form.trange[1])};
+                NCalc.Expression[] ranges = { new NCalc.Expression(form.urange[0]), new NCalc.Expression(form.urange[1]), new NCalc.Expression(form.trange[0]), new NCalc.Expression(form.trange[1]) };
                 for (int i = 0; i < 4; i++)
                 {
                     ranges[i].Parameters.Add("Pi", Math.PI);
                 }
                 double[] urange = new double[] { Convert.ToDouble(ranges[0].Evaluate()), Convert.ToDouble(ranges[1].Evaluate()) };
                 double[] trange = new double[] { Convert.ToDouble(ranges[2].Evaluate()), Convert.ToDouble(ranges[3].Evaluate()) };
-                shape = new ParametricSurface(form.name, form.dimension, cordFunc, urange, trange, expParams, false, false);
-                
+                shape = new ParametricSurface(form.name, form.dimension, cordFunc, urange, trange, expParams);
+
                 //uncheck all shapes items (including new, no point in it checked)
                 //foreach (Control item in MenuItem_parametric_shape.Items)
                 //{
@@ -294,9 +291,10 @@ namespace ParSurf
 
                 //resets current viewport
                 CloseableTabItem newtab = new CloseableTabItem();
-                newtab.SetHeader(new TextBlock { Text = shape.Name });
+                newtab.SetHeader(new TextBlock { Text = shape.name });
                 Frame frame = new Frame();
-                switch(form.dimension){
+                switch (form.dimension)
+                {
                     case 3:
                         frame.Content = new Page3D(shape);
                         break;
@@ -309,7 +307,7 @@ namespace ParSurf
                 }
                 newtab.Content = frame;
                 tabControl1.Items.Add(newtab);
-                newtab.IsSelected = true;   
+                newtab.IsSelected = true;
 
             }
         }
@@ -362,7 +360,7 @@ namespace ParSurf
 
         private void Save_Tab_State_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void Load_Tab_State_Click(object sender, RoutedEventArgs e)

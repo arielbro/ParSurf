@@ -93,6 +93,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Surface.cs" />
     <Compile Include="CloseableTabItem.cs" />
     <Compile Include="CustomTabControl.cs" />
     <Compile Include="InverseBooleanConverter.cs" />
@@ -145,7 +146,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ParallelCoordinates.cs" />
-    <Compile Include="ParametricSurface.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
