@@ -23,13 +23,39 @@ namespace ParSurf.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public string Setting {
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int parallelResolution {
             get {
-                return ((string)(this["Setting"]));
+                return ((int)(this["parallelResolution"]));
+            }
+            set {
+                this["parallelResolution"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int renderResolution {
+            get {
+                return ((int)(this["renderResolution"]));
+            }
+            set {
+                this["renderResolution"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public double pointSize {
+            get {
+                return ((double)(this["pointSize"]));
+            }
+            set {
+                this["pointSize"] = value;
             }
         }
     }

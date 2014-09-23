@@ -33,8 +33,8 @@ namespace ParSurf
     public partial class MainWindow : Window
     {
 
-        private int parallelResolution = 10;
-        private int renderResolution = 150;
+        public int parallelResolution = 10;
+        public int renderResolution = 150;
         private List<Point3D[]> renderTriangles;
         private List<Point3D[]> parallelTriangles;
         double pointSize = 1;
@@ -89,9 +89,6 @@ namespace ParSurf
             x1.Content = frame1;
             tabControl1.Items.Add(x1);
         }
-        private void closeTab(object source, RoutedEventArgs args)
-        {
-        }
         private void parametric_select_item_checked(object sender, RoutedEventArgs e)
         {
             CloseableTabItem newtab = new CloseableTabItem();
@@ -104,10 +101,10 @@ namespace ParSurf
                     frame.Content = new Page3D(surface);
                     break;
                 case 4:
-                    frame.Content = new Page4D(surface.triangulate(5, 5), surface.triangulate(30, 30));
+                    frame.Content = new Page4D(surface);
                     break;
                 default:
-                    frame.Content = new PageND(surface.triangulate(5, 5), surface.triangulate(30, 30), surface.dimension);
+                    frame.Content = new PageND(surface, surface.dimension);
                     break;
             }
             newtab.Content = frame;
@@ -116,32 +113,59 @@ namespace ParSurf
         }
         private void graphicSettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            //InputNumberForm form = new InputNumberForm();
-            //System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
-            //if (formStatus == System.Windows.Forms.DialogResult.OK)
-            //{
-            //    if (sender == pointSizeMenuItem)
-            //    {
-            //        if (Double.IsNaN(form.result) || form.result <= 0)
-            //        {
-            //            MessageBox.Show("Input for parameter must be a positive double");
-            //            return;
-            //        }
-            //        pointSize = form.result;
-            //        //canvasGraphics.reDraw(); 
-            //        return;
-            //    }
-            //    else if (Double.IsNaN(form.result) || form.result <= 0 ||
-            //           Convert.ToInt32(form.result) != form.result)
-            //    {
-            //        MessageBox.Show("Input for parameter must be a positive integer");
-            //        return;
-            //    }
-            //    else if (sender == renderResolutionMenuItem)
-            //        renderResolution = Convert.ToInt32(form.result);
-            //    else if (sender == parallelResoltuionMenuItem)
-            //        parallelResolution = Convert.ToInt32(form.result);
+            Dictionary<string, double> dict = new Dictionary<string, double>();
+            switch (((MenuItem)sender).Name)
+            {
+                case("pointSizeMenuItem"):
+                    dict.Add("Point Size", 0);
+                    break;
+                case ("renderResolutionMenuItem"):
+                    dict.Add("Render Resolution", 0);
+                    break;
+                case ("parallelResoltuionMenuItem"):
+                    dict.Add("Parallel Resolution", 0);
+                    break;
+            }
+            TabItem tab = new TabItem();
+            foreach (TabItem temp in this.tabControl1.Items){
+                if (temp.IsEnabled) { tab = temp; break; }
+            }
+            InputNumberForm form = new InputNumberForm(dict);
+            System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
+            if (formStatus == System.Windows.Forms.DialogResult.OK)
+            {
+                if (sender == pointSizeMenuItem)
+                {
+                    if (Double.IsNaN(form.result["Point Size"]) || form.result["Point Size"] <= 0)
+                    {
+                        MessageBox.Show("Input for parameter must be a positive double");
+                        return;
+                    }
+                    ((GraphicsPage)((Frame)tab.Content).Content).renderResolution = Convert.ToInt32(form.result["Point Size"]);
+                    Properties.Settings.Default.pointSize = form.result["Point Size"];
+                    //canvasGraphics.reDraw(); 
+                    return;
+                }
+                //    else if (Double.IsNaN(form.result) || form.result <= 0 ||
+                //           Convert.ToInt32(form.result) != form.result)
+                //    {
+                //        MessageBox.Show("Input for parameter must be a positive integer");
+                //        return;
+                //    }
+                else if (sender == renderResolutionMenuItem)
+                {
+                    ((GraphicsPage)((Frame)tab.Content).Content).renderResolution = Convert.ToInt32(form.result["Render Resolution"]);
+                    Properties.Settings.Default.renderResolution = Convert.ToInt32(form.result["Render Resolution"]);
+                    ((GraphicsPage)((Frame)tab.Content).Content).reRender(0);
+                }
+                else if (sender == parallelResoltuionMenuItem)
+                {
+                    ((GraphicsPage)((Frame)tab.Content).Content).renderResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
+                    Properties.Settings.Default.parallelResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
+                }
 
+            }
+            Properties.Settings.Default.Save();
             //    //resets current viewport
             //    Transform3D currentTransform = viewPortGraphics.getCurrentTransform();
             //    viewPortGraphics.reset();
@@ -152,7 +176,7 @@ namespace ParSurf
             //    //canvasGraphics.reDraw();
             //}
         }
-        private void graphicSettingsNew_Click(object sender, RoutedEventArgs e)
+        private void newParametricSurface_Click(object sender, RoutedEventArgs e)
         {
             FormulaInputForm form = new FormulaInputForm();
             if (previousFormulae != null)
@@ -174,7 +198,10 @@ namespace ParSurf
                             expParams.Add(temp, 0);
                     }
                     exp.Replace("$", "");
-                    expressions.Add(new NCalc.Expression(exp));
+                    if (exp != "")
+                        expressions.Add(new NCalc.Expression(exp));
+                    else
+                        expressions.Add(new NCalc.Expression("0"));
                 }
                 
                 //test the input expressions
@@ -246,9 +273,14 @@ namespace ParSurf
                     }
                     return result.ToArray();
                 };
-                double[] urange = new double[] { Convert.ToDouble((new NCalc.Expression(form.urange[0])).Evaluate()), Convert.ToDouble((new NCalc.Expression(form.urange[1])).Evaluate()) };
-                double[] trange = new double[] { Convert.ToDouble((new NCalc.Expression(form.trange[0])).Evaluate()), Convert.ToDouble((new NCalc.Expression(form.trange[1])).Evaluate()) };
-                shape = new ParametricSurface(form.Name, form.dimension, cordFunc, urange, trange, expParams, false, false);
+                NCalc.Expression[] ranges = {new NCalc.Expression(form.urange[0]),new NCalc.Expression(form.urange[1]),new NCalc.Expression(form.trange[0]),new NCalc.Expression(form.trange[1])};
+                for (int i = 0; i < 4; i++)
+                {
+                    ranges[i].Parameters.Add("Pi", Math.PI);
+                }
+                double[] urange = new double[] { Convert.ToDouble(ranges[0].Evaluate()), Convert.ToDouble(ranges[1].Evaluate()) };
+                double[] trange = new double[] { Convert.ToDouble(ranges[2].Evaluate()), Convert.ToDouble(ranges[3].Evaluate()) };
+                shape = new ParametricSurface(form.name, form.dimension, cordFunc, urange, trange, expParams, false, false);
                 
                 //uncheck all shapes items (including new, no point in it checked)
                 //foreach (Control item in MenuItem_parametric_shape.Items)
@@ -269,10 +301,10 @@ namespace ParSurf
                         frame.Content = new Page3D(shape);
                         break;
                     case 4:
-                        frame.Content = new Page4D(shape.triangulate(5, 5), shape.triangulate(30, 30));
+                        frame.Content = new Page4D(shape);
                         break;
                     default:
-                        frame.Content = new PageND(shape.triangulate(5, 5), shape.triangulate(30, 30), shape.dimension);
+                        frame.Content = new PageND(shape, shape.dimension);
                         break;
                 }
                 newtab.Content = frame;
@@ -310,7 +342,17 @@ namespace ParSurf
 
         private void Save_Transformation_Click(object sender, RoutedEventArgs e)
         {
-
+            TabItem tab = new TabItem();
+            foreach (TabItem temp in this.tabControl1.Items)
+            {
+                if (temp.IsEnabled) { tab = temp; break; }
+            }
+            surfaces.Add(((GraphicsPage)((Frame)tab.Content).Content).surface);
+            using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
+            {
+                BinaryFormatter bin = new BinaryFormatter();
+                bin.Serialize(stream, surfaces);
+            }
         }
 
         private void Load_Transformation_Click(object sender, RoutedEventArgs e)
@@ -320,7 +362,7 @@ namespace ParSurf
 
         private void Save_Tab_State_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void Load_Tab_State_Click(object sender, RoutedEventArgs e)

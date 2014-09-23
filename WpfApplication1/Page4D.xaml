@@ -6,7 +6,8 @@
       xmlns:src="clr-namespace:ParSurf"
       mc:Ignorable="d" 
 	  Title="Page4D"
-      Width="980" Height="432"
+                              VerticalAlignment="Stretch"
+                  HorizontalAlignment="Stretch"
       SizeChanged="Window_SizeChanged">
     <Grid Name="grid">
         <Border Name="viewportsBorder"

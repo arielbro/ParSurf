@@ -19,12 +19,13 @@ namespace ParSurf
     /// </summary>
     public partial class PageND : GraphicsPage
     {
-        private IList<double[][]> renderTriangles;
-
-        public PageND(IList<double[][]> parallelTriangles, IList<double[][]> renderTriangles, int dimension)
-            : base(GraphicModes.Rn, dimension)
+       
+        public PageND(ParametricSurface surface, int dimension)
+            : base(GraphicModes.Rn, dimension, surface)
         {
             InitializeComponent();
+            parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
+            renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution);
             canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, dimension, parallelTriangles);
             canvasManager.reDraw(currentTransform);
             viewports = new Viewport3D[] { viewport };
@@ -39,6 +40,7 @@ namespace ParSurf
             base.canvasBorder = this.canvasBorder;
             base.viewportsBorder = this.viewportBorder;
             this.renderTriangles = renderTriangles;
+            intializeSizes();
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
@@ -73,5 +75,39 @@ namespace ParSurf
             viewportManagers[0].generate_viewport_object(ViewPortGraphics.projectNDTrianglesTo3D(renderTriangles, currentAxes),
                                                          ViewPortGraphics.convertNDTransformTo3D(currentTransform, currentAxes));
         }
+        public override void reRender(int who = 2)
+        {
+            switch (who)
+            {
+                case 0:
+                    {
+                        System.Windows.Media.Media3D.Transform3D trans = viewportManagers[0].getCurrentTransform();
+                        viewportManagers[0].reset();
+                        viewportManagers[0].generate_3d_axes(100);
+                        renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution);
+                        viewportManagers[0].generate_viewport_object(renderTriangles);
+                        viewportManagers[0].performTransform(ViewPortGraphics.convertNDTransformTo3D(currentTransform,currentAxes));
+                        break;
+                    }
+                case 1:
+                    {
+                        break;
+                    }
+                default:
+                    {
+                        this.reRender(0);
+                        this.reRender(1);
+                        break;
+                    }
+            }
+        }
+        public void intializeSizes()
+        {
+            canvasBorder.Height = this.ActualHeight;
+            canvasBorder.Width = this.ActualWidth / 2;
+            viewportBorder.Height = this.ActualHeight;
+            viewportBorder.Width = this.ActualWidth / 2;
+        }
+
     }
 }

@@ -19,10 +19,12 @@ namespace ParSurf
     /// </summary>
     public partial class Page4D : GraphicsPage
     {
-        public Page4D(IList<double [][]> paralleltriangles, IList<double[][]> renderTriangles) : base(GraphicModes.R4, 4)
+        public Page4D(ParametricSurface surface) : base(GraphicModes.R4, 4, surface)
         {
             InitializeComponent();
-            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, paralleltriangles);
+            parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
+            renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution);
+            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles);
             canvasManager.reDraw(currentTransform);
             viewports = new Viewport3D[] { viewport1, viewport2, viewport3, viewport4 };
             viewportManagers = new ViewPortGraphics[] { new ViewPortGraphics(viewport1), new ViewPortGraphics(viewport2),
@@ -38,7 +40,49 @@ namespace ParSurf
             base.canvas = this.canvas;
             base.canvasBorder = this.canvasBorder;
             base.viewportsBorder = this.viewportsBorder;
-        }
+            intializeSizes();
 
+        }
+        public override void reRender(int who = 2)
+        {
+            switch (who)
+            {
+                case 0:
+                    {
+                        System.Windows.Media.Media3D.Transform3D trans = viewportManagers[0].getCurrentTransform();
+                        for (int i = 0; i < 4; i++)
+                        {
+                            viewportManagers[i].reset();
+                            viewportManagers[i].generate_3d_axes(100);
+                            renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution);
+                            viewportManagers[i].generate_viewport_object(ViewPortGraphics.project4DTrianglesTo3D(renderTriangles, i));
+                            viewportManagers[i].performTransform(ViewPortGraphics.convert4DTransformTo3D(currentTransform,i));
+                        }
+                        break;
+                    }
+                case 1:
+                    {
+                        break;
+                    }
+                default:
+                    {
+                        this.reRender(0);
+                        this.reRender(1);
+                        break;
+                    }
+            }
+        }
+        public void intializeSizes()
+        {
+            canvasBorder.Height = this.ActualHeight;
+            canvasBorder.Width = this.ActualWidth / 2;
+            viewportsBorder.Height = this.ActualHeight;
+            viewportsBorder.Width = this.ActualWidth / 2;
+            foreach (Border bord in ((Grid)viewportsBorder.Child).Children)
+            {
+                bord.Height = this.ActualHeight / 2;
+                bord.Width = this.ActualWidth / 4;
+            }            
+        }
     }
 }

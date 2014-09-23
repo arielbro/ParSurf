@@ -31,8 +31,8 @@ namespace ParSurf
                 newlabel.Name = "label" + i;
                 newtextbox.Text = param.Value.ToString();
                 newtextbox.Name = "textbox" + i;
-                newlabel.SetBounds(9, 20+i*56, 372, 13);
-                newtextbox.SetBounds(12, 36+i*56, 372, 20);
+                newlabel.SetBounds(9, 18+i*56, 12, 13);
+                newtextbox.SetBounds(12, 36+i*56, 200, 20);
                 newlabel.AutoSize = true;
                 newtextbox.Anchor = newtextbox.Anchor | AnchorStyles.Right;
                 this.Controls.AddRange(new Control[] { newlabel, newtextbox });
@@ -44,11 +44,11 @@ namespace ParSurf
             buttonCancel.Text = "Cancel";
             buttonOk.DialogResult = DialogResult.OK;
             buttonCancel.DialogResult = DialogResult.Cancel;
-            buttonOk.SetBounds(228, i*56, 75, 23);
-            buttonCancel.SetBounds(309, i*56, 75, 23);
+            buttonOk.SetBounds(28, 10+i*56, 75, 23);
+            buttonCancel.SetBounds(109, 10+i*56, 75, 23);
             buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-
+            this.Size = new Size(250,(i+1)*56+30); 
             this.Controls.AddRange(new Control[] { buttonOk, buttonCancel });
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -69,11 +69,6 @@ namespace ParSurf
             {
                 result.Add(this.Controls.Find("label" + i,false)[0].Text.Replace(":",""), Convert.ToDouble(this.Controls.Find("textbox" + i,false)[0].Text));
             }
-        }
-
-        private void inputTextBox_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

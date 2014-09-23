@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using System.Windows.Media.Media3D;
 namespace ParSurf
 {
     /// <summary>
@@ -20,22 +20,11 @@ namespace ParSurf
     public partial class Page3D : GraphicsPage
     {
         public Page3D(ParametricSurface surface)
-            : base(GraphicModes.R3, 3)
+            : base(GraphicModes.R3, 3,surface)
         {
             InitializeComponent();
-            InputNumberForm parameterDialog = new InputNumberForm(surface.parameters);
-            if (parameterDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                // Read the contents of testDialog's TextBox.
-                surface.parameters = parameterDialog.result;
-            }
-            else
-            {
-                
-            }
-            
-            parallelTriangles = surface.triangulate(5, 5);
-            renderTriangles = surface.triangulate(5, 5);
+            parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
+            renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution);
             canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 3, parallelTriangles);
             canvasManager.reDraw(currentTransform);
             viewports = new Viewport3D[] { viewport };
@@ -49,6 +38,33 @@ namespace ParSurf
             base.canvasBorder = this.canvasBorder;
             base.viewportsBorder = this.viewportBorder;
             intializeSizes();
+        }
+        // reRendering objects after settings change. who = 0 vieport, who = 1 canvas, who = 2 both.
+        public override void reRender(int who = 2)
+        {
+            switch(who)
+            {
+                case 0:
+                    {
+                        Transform3D trans = viewportManagers[0].getCurrentTransform();
+                        viewportManagers[0].reset();
+                        viewportManagers[0].generate_3d_axes(100);
+                        renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution);
+                        viewportManagers[0].generate_viewport_object(renderTriangles);
+                        viewportManagers[0].performTransform(trans);
+                        break;
+                    }
+                case 1:
+                    {
+                        break;
+                    }
+                default:
+                    {
+                        this.reRender(0);
+                        this.reRender(1);
+                        break;
+                    }
+            }
         }
         public void intializeSizes()
         {

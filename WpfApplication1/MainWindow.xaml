@@ -781,8 +781,8 @@
             <MenuItem Name ="MenuItem_new_shape" Header="New Shape" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <MenuItem Name="MenuItem_PointCloud" Header="Point cloud" VerticalAlignment="Center"/>
                 <MenuItem Name="MenuItem_ImplicitEquation" Header="Implicit equation" VerticalAlignment="Center"/>
-                <MenuItem Name="MenuItem_ParametricSurface" Header="Parametric Surface" Click="graphicSettingsNew_Click" VerticalAlignment="Center">
-                    <MenuItem Name="MenuItem_newParametricSurface" Header="New Parametric Surface" VerticalAlignment="Center"/>
+                <MenuItem Name="MenuItem_ParametricSurface" Header="Parametric Surface" VerticalAlignment="Center">
+                    <MenuItem Name="MenuItem_newParametricSurface" Header="New Parametric Surface" Click="newParametricSurface_Click" VerticalAlignment="Center"/>
                     <MenuItem Name="MenuItem_savedParametricSurface" Header="Saved Parametric Surfaces" VerticalAlignment="Center"/>
 
                 </MenuItem>
@@ -792,10 +792,10 @@
                 <MenuItem Name="Save_Tab_State" Header="Save Tab State" Click="Save_Tab_State_Click"/>
                 <MenuItem Name="Load_Tab_State" Header="Load Tab State" Click="Load_Tab_State_Click"/>
             </MenuItem>
-            <MenuItem Header="graphic settings">
-                <MenuItem Name="pointSizeMenuItem" Header="point size" Click="graphicSettingsMenuItem_Click"/>
-                <MenuItem Name="parallelResoltuionMenuItem" Header="parallel coordinates resolution" Click="graphicSettingsMenuItem_Click"/>
-                <MenuItem Name="renderResolutionMenuItem" Header="3d rendering resolution" Click="graphicSettingsMenuItem_Click"/>
+            <MenuItem Header="Settings">
+                <MenuItem Name="pointSizeMenuItem" Header="Point size" Click="graphicSettingsMenuItem_Click"/>
+                <MenuItem Name="parallelResoltuionMenuItem" Header="Parallel coordinates resolution" Click="graphicSettingsMenuItem_Click"/>
+                <MenuItem Name="renderResolutionMenuItem" Header="3D Rendering resolution" Click="graphicSettingsMenuItem_Click"/>
             </MenuItem>
             <MenuItem Header="help">
                 <MenuItem Header="help"/>

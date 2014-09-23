@@ -22,7 +22,9 @@ namespace ParSurf
         protected double yCoordinateRange = 10;
         protected double xCoordinateRange = 10;
         protected double mouseMoveEpsilon = 0.9;
-
+        public int parallelResolution;
+        public int renderResolution;
+        public double pointSize;
         private GraphicModes mode;
         protected ViewPortGraphics[] viewportManagers;
         protected CanvasGraphics canvasManager;
@@ -32,7 +34,7 @@ namespace ParSurf
         protected Border canvasBorder;
         protected int dimension;
         protected int[] currentAxes;
-
+        public ParametricSurface surface;
         protected bool[] viewportsmDown;
         protected bool canvasmDown = false;
         private MouseButtonEventArgs lastMouseButtonState;
@@ -46,7 +48,7 @@ namespace ParSurf
         public GraphicsPage()
         {
         }
-        public GraphicsPage(GraphicModes mode, int dimension)
+        public GraphicsPage(GraphicModes mode, int dimension, ParametricSurface surface)
         {
             currentTransform = new double[dimension + 1][]; //affine transformations! 
             for (int i = 0; i < dimension + 1; i++)
@@ -54,9 +56,17 @@ namespace ParSurf
                 currentTransform[i] = new double[dimension + 1];
                 currentTransform[i][i] = 1; //identity
             }
-
             this.mode = mode;
             this.dimension = dimension;
+            this.surface = surface;
+            if (surface.parameters.Count != 0)
+            {
+                InputNumberForm parameterDialog = new InputNumberForm(surface.parameters);
+                if (parameterDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    surface.parameters = parameterDialog.result;
+                }
+            }
         }
         protected void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -317,6 +327,6 @@ namespace ParSurf
             }
             return res;
         }
-
+        public virtual void reRender(int who = 2) { }
     }
 }
