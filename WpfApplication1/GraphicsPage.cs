@@ -17,7 +17,7 @@ namespace ParSurf
 {
     public enum GraphicModes { R3, R4, Rn }; //R3time at the future?
 
-    public partial class GraphicsPage : Page
+    public abstract class GraphicsPage : Page
     {
         protected double yCoordinateRange = 10;
         protected double xCoordinateRange = 10;
@@ -84,8 +84,8 @@ namespace ParSurf
             }
             foreach (Viewport3D viewport in viewports)
             {
-                ((Border)viewport.Parent).Width *= widthFactor;
-                ((Border)viewport.Parent).Height *= heightFactor;
+                ((Border)viewport.Parent).Width = this.ActualWidth / 4;
+                ((Border)viewport.Parent).Height = this.ActualHeight / 2;
             }
             canvas.Width *= widthFactor;
             canvas.Height *= heightFactor;
@@ -327,6 +327,6 @@ namespace ParSurf
             }
             return res;
         }
-        public virtual void reRender(int who = 2) { }
+        public abstract void reRender(int who = 2);
     }
 }

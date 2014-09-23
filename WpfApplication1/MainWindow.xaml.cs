@@ -40,6 +40,9 @@ namespace ParSurf
         double pointSize = 1;
         ParametricSurface shape;
         string[] previousFormulae;
+        string previousFormulaeName;
+        string[] previousFormulaeURanges;
+        string[] previousFormulaeTRanges;
         private CanvasGraphics canvasGraphics;
         private ViewPortGraphics viewPortGraphics;
         private double xCoordinateRange;
@@ -181,11 +184,16 @@ namespace ParSurf
             FormulaInputForm form = new FormulaInputForm();
             if (previousFormulae != null)
             {
-                form.setFormulas(previousFormulae);
+                form.setFormulas(previousFormulae,previousFormulaeName,previousFormulaeURanges,previousFormulaeTRanges);
             }
-            System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
-            if (formStatus == System.Windows.Forms.DialogResult.OK)
+            
+            System.Windows.Forms.DialogResult formStatus;// = form.ShowDialog();
+            while ((formStatus = form.ShowDialog()) == System.Windows.Forms.DialogResult.OK)
             {
+                previousFormulae = (new List<String>(form.formulas)).ToArray();
+                previousFormulaeName = form.name;
+                previousFormulaeURanges = form.urange;
+                previousFormulaeTRanges = form.trange;
                 List<NCalc.Expression> expressions = new List<NCalc.Expression>();
                 Dictionary<string, double> expParams = new Dictionary<string, double>();
                 foreach (String exp in form.formulas)
@@ -230,7 +238,7 @@ namespace ParSurf
                     //MessageBox.Show("The following coordinate formulae contain errors:" + errors);
                     MessageBox.Show("The formulae entered are not valid");
                     //MenuItem_new.IsChecked = false;
-                    return;
+                    continue;
                 }
                 //clear parameters after test
                 foreach (NCalc.Expression exp in expressions)
@@ -244,7 +252,7 @@ namespace ParSurf
                     }
                 }
                 //save formulae to memory, after validating
-                previousFormulae = (new List<String>(form.formulas)).ToArray();
+                
                 //create delegate coordinates function
                 ParametricSurface.CoordinatesFunction cordFunc = (u, t, parameters) =>
                 {
@@ -309,8 +317,8 @@ namespace ParSurf
                 }
                 newtab.Content = frame;
                 tabControl1.Items.Add(newtab);
-                newtab.IsSelected = true;   
-
+                newtab.IsSelected = true;
+                break;
             }
         }
 
