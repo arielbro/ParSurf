@@ -82,16 +82,20 @@ namespace ParSurf
                 widthFactor = e.NewSize.Width / 980;
                 heightFactor = e.NewSize.Height / 432;
             }
-            foreach (Viewport3D viewport in viewports)
+            if (surface.dimension == 4)
             {
-                ((Border)viewport.Parent).Width = this.ActualWidth / 4;
-                ((Border)viewport.Parent).Height = this.ActualHeight / 2;
+                foreach (Viewport3D viewport in viewports)
+                {
+                    ((Border)viewport.Parent).Width = this.ActualWidth / 4;
+                    ((Border)viewport.Parent).Height = this.ActualHeight / 2;
+                }
             }
             canvas.Width *= widthFactor;
             canvas.Height *= heightFactor;
-            canvasBorder.Width = this.ActualWidth / 2;
+            canvasBorder.BorderThickness = new Thickness(5,5,0,5);
+            canvasBorder.Width = Math.Ceiling(this.ActualWidth / 2);
             canvasBorder.Height = this.ActualHeight;
-            viewportsBorder.Width = this.ActualWidth / 2;
+            viewportsBorder.Width = Math.Floor(this.ActualWidth / 2);
             viewportsBorder.Height = this.ActualHeight;
         }
         protected void border_MouseWheel(object sender, MouseWheelEventArgs e)

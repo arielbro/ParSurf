@@ -74,6 +74,10 @@ namespace ParSurf
         }
         public void intializeSizes()
         {
+            viewport1Border.BorderThickness = new Thickness(0, 0, 2, 2);
+            viewport2Border.BorderThickness = new Thickness(2, 0, 0, 2);
+            viewport3Border.BorderThickness = new Thickness(0, 2, 2, 0);
+            viewport4Border.BorderThickness = new Thickness(2, 2, 0, 0);
             canvasBorder.Height = this.ActualHeight;
             canvasBorder.Width = this.ActualWidth / 2;
             viewportsBorder.Height = this.ActualHeight;

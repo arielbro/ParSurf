@@ -37,6 +37,7 @@ namespace ParSurf
         public ParametricSurface(string name, int dimension, CoordinatesFunction coordinates, 
                                 double[] urange, double[] vrange, Dictionary<String, double> parameters = null) : base(name, dimension)
         {
+            this.dimension = dimension;
             this.coordinates = coordinates;
             this.parameters = parameters;
             this.urange = urange;
