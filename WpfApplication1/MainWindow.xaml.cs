@@ -200,7 +200,7 @@ namespace ParSurf
                     {
                         string temp = m.ToString().Replace("$", "");
                         if (!expParams.ContainsKey(temp))
-                            expParams.Add(temp, 0);
+                            expParams.Add(temp, Double.NaN);
                     }
                     exp.Replace("$", "");
                     if (exp != "")
@@ -217,7 +217,7 @@ namespace ParSurf
                     exp.Parameters.Add("Pi", Math.PI);
                     foreach (KeyValuePair<string, double> param in expParams)
                     {
-                        exp.Parameters.Add(param.Key, param.Value);
+                        exp.Parameters.Add(param.Key, 0);
                     }
                 }
                 try

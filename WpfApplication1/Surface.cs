@@ -24,8 +24,6 @@ namespace ParSurf
     [Serializable()]
     public class ParametricSurface : Surface
     {
-        public int dimension;
-        public string name;
         private double[] urange;
         private double[] vrange;
         private Boolean uclosed;
@@ -37,7 +35,6 @@ namespace ParSurf
         public ParametricSurface(string name, int dimension, CoordinatesFunction coordinates, 
                                 double[] urange, double[] vrange, Dictionary<String, double> parameters = null) : base(name, dimension)
         {
-            this.dimension = dimension;
             this.coordinates = coordinates;
             this.parameters = parameters;
             this.urange = urange;
