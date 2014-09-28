@@ -61,10 +61,18 @@ namespace ParSurf
             this.surface = surface;
             if (surface.parameters.Count != 0)
             {
-                InputNumberForm parameterDialog = new InputNumberForm(surface.parameters);
-                if (parameterDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                bool temp = false;
+                foreach (KeyValuePair<string, double> param in surface.parameters)
                 {
-                    surface.parameters = parameterDialog.result;
+                    if (param.Value == double.NaN) temp = true;
+                }
+                if (temp)
+                {
+                    InputNumberForm parameterDialog = new InputNumberForm(surface.parameters);
+                    if (parameterDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        surface.parameters = parameterDialog.result;
+                    }
                 }
             }
         }
