@@ -51,6 +51,7 @@ namespace ParSurf
         public MainWindow()
         {
             InitializeComponent();
+            Cursor = Cursors.AppStarting;
             //List<ParametricSurface> surfaces = new List<ParametricSurface>();
             //ParametricSurface surface = new ParametricSurface("Flat Torus", 3, ParametricSurface.spherePoint, new double[] { 0, 1 }, new double[] { 0, 1 }, new Dictionary<string, double>() { { "radius", 1 } });
             //surfaces.Add(surface);
@@ -85,10 +86,11 @@ namespace ParSurf
                 item.Click += parametric_select_item_checked;
                 MenuItem_savedParametricSurface.Items.Add(item);
             }
-
+            Cursor = Cursors.Arrow;
         }
         private void parametric_select_item_checked(object sender, RoutedEventArgs e)
         {
+            Mouse.OverrideCursor = Cursors.Wait;
             CloseableTabItem newtab = new CloseableTabItem();
             Surface surface = surfaces[int.Parse(((MenuItem)sender).Name.Replace("MenuItem_", ""))];
             newtab.SetHeader(new TextBlock { Text = surface.name });
@@ -108,6 +110,8 @@ namespace ParSurf
             newtab.Content = frame;
             tabControl1.Items.Add(newtab);
             newtab.IsSelected = true;
+            //force rendering of canvas before releasing mouse
+            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle, null);
         }
         private void graphicSettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -271,7 +275,7 @@ namespace ParSurf
                 //        menuItem.IsChecked = false;
                 //}
 
-                //resets current viewport
+                Mouse.OverrideCursor = Cursors.Wait;
                 CloseableTabItem newtab = new CloseableTabItem();
                 newtab.SetHeader(new TextBlock { Text = shape.name });
                 Frame frame = new Frame();
@@ -292,6 +296,8 @@ namespace ParSurf
                 newtab.IsSelected = true;
                 break;
             }
+            //force rendering of canvas before releasing mouse
+            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle, null);
         }
         private void mainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {

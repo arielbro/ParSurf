@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using ParSurf;
 using System.Windows.Threading;
 using System.Windows.Media.Animation;
+using System.Windows.Input;
 
 namespace ParSurf
 {
@@ -28,7 +29,8 @@ namespace ParSurf
         private IList<double[][]> triangles;
         private int dimension;
 
-        public CanvasGraphics(Canvas canvas, double xCoordinateRange, double yCoordinateRange, int dimension, IList<double[][]> triangles)
+        public CanvasGraphics(Canvas canvas, double xCoordinateRange, double yCoordinateRange, int dimension, 
+                                IList<double[][]> triangles)
         {
             this.canvas = canvas;
             this.xCoordinateRange = xCoordinateRange;
@@ -201,6 +203,12 @@ namespace ParSurf
             if (e.Error != null)
                 throw e.Error;
 
+            bool isWaitTriggered = false;
+            if (Mouse.OverrideCursor != Cursors.Wait)
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                isWaitTriggered = true;
+            }
             Object[] resultData = e.Result as Object[];
             DrawingImage[] drawingImages = resultData[0] as DrawingImage[];
             Point[] drawingsStartingPoints = resultData[1] as Point[];
@@ -223,8 +231,11 @@ namespace ParSurf
                 Canvas.SetTop(ellipsesImages[i], drawingsStartingPoints[i].Y);
                 Canvas.SetLeft(ellipsesImages[i], drawingsStartingPoints[i].X);
             }
-            //refresh canvas
-            canvas.Dispatcher.Invoke(new Action(delegate { }), DispatcherPriority.Render);
+            if (isWaitTriggered)
+            {//wait for canvas to finish drawing and then release the mouse. If called without Triggering wait, some other 
+             //part of the code is already forcing finishing, so no need to here.
+                canvas.Dispatcher.Invoke(new Action(delegate { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.Render);
+            }
         }
         private double[] applyTransformToPoint(double[] point, double[][] transform)
         {

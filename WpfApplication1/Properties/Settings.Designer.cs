@@ -25,7 +25,7 @@ namespace ParSurf.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
         public int parallelResolution {
             get {
                 return ((int)(this["parallelResolution"]));
