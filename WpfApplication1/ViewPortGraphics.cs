@@ -23,11 +23,10 @@ namespace ParSurf
         {
             ParametricSurface[] axes = new ParametricSurface[3];
             MeshGeometry3D AxisMesh = new MeshGeometry3D();
-            ParametricSurface.CoordinatesFunction[] axesFunctions = new ParametricSurface.CoordinatesFunction[]{
-                                                                ParametricSurface.xAxis,ParametricSurface.yAxis,ParametricSurface.zAxis};
+
             for (int i = 0; i < 3; i++)
             {
-                axes[i] = new ParametricSurface(null, 3, axesFunctions[i],new double[]{0,1},new double[]{0,1});
+                axes[i] = ParametricSurface.getAxis(i);
             }
             int triangleIndexAxis = 0;
             for (int i = 0; i < 3; i++)

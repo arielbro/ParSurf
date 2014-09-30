@@ -25,7 +25,11 @@ namespace ParSurf
             int i = 0;
             foreach (KeyValuePair<string, double> param in parameters)
             {
+<<<<<<< HEAD
                 if (Double.IsNaN(param.Value) || change)
+=======
+                if (Double.IsNaN(param.Value))
+>>>>>>> 0e5982d228ef223ab4c829ffcf80bfc60d71265a
                 {
                     Label newlabel = new Label();
                     TextBox newtextbox = new TextBox();

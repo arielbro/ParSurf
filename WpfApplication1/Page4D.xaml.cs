@@ -19,7 +19,7 @@ namespace ParSurf
     /// </summary>
     public partial class Page4D : GraphicsPage
     {
-        public Page4D(ParametricSurface surface) : base(GraphicModes.R4, 4, surface)
+        public Page4D(Surface surface) : base(GraphicModes.R4, 4, surface)
         {
             InitializeComponent();
             parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
@@ -45,7 +45,7 @@ namespace ParSurf
         }
         public override void reRender(int who = 2)
         {
-            switch (who)
+            switch (who) //What is this switch??? It seems all redundant.
             {
                 case 0:
                     {

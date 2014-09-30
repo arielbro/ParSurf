@@ -55,12 +55,12 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
-            this.label4.Location = new System.Drawing.Point(12, 44);
+            this.label4.Location = new System.Drawing.Point(10, 38);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(572, 17);
             this.label4.TabIndex = 18;
             this.label4.Text = "Enter the parametric equation for a surface, using a separate formula for each co" +
-                "ordinate";
+    "ordinate";
             // 
             // AxisLabel3
             // 
@@ -68,9 +68,9 @@
             this.AxisLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.AxisLabel3.Location = new System.Drawing.Point(13, 122);
             this.AxisLabel3.Name = "AxisLabel3";
-            this.AxisLabel3.Size = new System.Drawing.Size(61, 20);
+            this.AxisLabel3.Size = new System.Drawing.Size(63, 20);
             this.AxisLabel3.TabIndex = 17;
-            this.AxisLabel3.Text = "X3(u,t):";
+            this.AxisLabel3.Text = "X3(u,v):";
             this.AxisLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // AxisLabel2
@@ -79,9 +79,9 @@
             this.AxisLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.AxisLabel2.Location = new System.Drawing.Point(13, 93);
             this.AxisLabel2.Name = "AxisLabel2";
-            this.AxisLabel2.Size = new System.Drawing.Size(61, 20);
+            this.AxisLabel2.Size = new System.Drawing.Size(63, 20);
             this.AxisLabel2.TabIndex = 15;
-            this.AxisLabel2.Text = "X2(u,t):";
+            this.AxisLabel2.Text = "X2(u,v):";
             this.AxisLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // AxisLabel1
@@ -90,15 +90,15 @@
             this.AxisLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.AxisLabel1.Location = new System.Drawing.Point(13, 64);
             this.AxisLabel1.Name = "AxisLabel1";
-            this.AxisLabel1.Size = new System.Drawing.Size(61, 20);
+            this.AxisLabel1.Size = new System.Drawing.Size(63, 20);
             this.AxisLabel1.TabIndex = 13;
-            this.AxisLabel1.Text = "X1(u,t):";
+            this.AxisLabel1.Text = "X1(u,v):";
             this.AxisLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(292, 228);
+            this.button2.Location = new System.Drawing.Point(293, 228);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(106, 32);
             this.button2.TabIndex = 4;
@@ -108,9 +108,9 @@
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(196, 228);
+            this.button1.Location = new System.Drawing.Point(180, 228);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(90, 32);
+            this.button1.Size = new System.Drawing.Size(107, 32);
             this.button1.TabIndex = 3;
             this.button1.Text = "Confirm";
             this.button1.UseVisualStyleBackColor = true;
@@ -152,9 +152,9 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(196, 151);
+            this.button3.Location = new System.Drawing.Point(180, 151);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(90, 32);
+            this.button3.Size = new System.Drawing.Size(106, 32);
             this.button3.TabIndex = 22;
             this.button3.Text = "Add Dimension";
             this.button3.UseVisualStyleBackColor = true;
@@ -254,7 +254,6 @@
             this.ClientSize = new System.Drawing.Size(589, 272);
             this.Controls.Add(this.textBoxName);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button4);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.textBox3);
@@ -271,8 +270,9 @@
             this.Controls.Add(this.AxisLabel3);
             this.Controls.Add(this.AxisLabel2);
             this.Controls.Add(this.AxisLabel1);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.button2);
             this.Name = "FormulaInputForm";
             this.Text = "parametric surface equation input";
             this.ResumeLayout(false);

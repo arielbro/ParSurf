@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="parallelResolution" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
+      <Value Profile="(Default)">30</Value>
     </Setting>
     <Setting Name="renderResolution" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
+      <Value Profile="(Default)">150</Value>
     </Setting>
     <Setting Name="pointSize" Type="System.Double" Scope="User">
       <Value Profile="(Default)">3</Value>

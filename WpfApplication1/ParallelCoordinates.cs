@@ -234,6 +234,10 @@ namespace ParSurf
             double offset = axesCoordinates[0];//Alfred's formula is obtained for axes with X1=0.
             foreach (double[][] triangle in triangles)
             {
+                if (triangle == null)
+                {//encountered during scaling via the viewport, for some reason. investigate at some point...
+                    continue;
+                }
                 Point[] originalPoints = new Point[dimension - 2];
                 Point[] transposedPoints = new Point[dimension - 2];
                 double[][] coefficients = planeCoefficientsFromTriangleRn(triangle, dimension);          

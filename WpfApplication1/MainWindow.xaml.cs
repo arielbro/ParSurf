@@ -33,7 +33,7 @@ namespace ParSurf
     public partial class MainWindow : Window
     {
 
-        public int parallelResolution = 10;
+        public int parallelResolution = 30;
         public int renderResolution = 150;
         private List<Point3D[]> renderTriangles;
         private List<Point3D[]> parallelTriangles;
@@ -42,12 +42,12 @@ namespace ParSurf
         string[] previousFormulae;
         string previousFormulaeName;
         string[] previousFormulaeURanges;
-        string[] previousFormulaeTRanges;
+        string[] previousFormulaevranges;
         private CanvasGraphics canvasGraphics;
         private ViewPortGraphics viewPortGraphics;
         private double xCoordinateRange;
         private double yCoordinateRange;
-        private List<ParametricSurface> surfaces;
+        private List<Surface> surfaces;
         public MainWindow()
         {
             InitializeComponent();
@@ -64,14 +64,14 @@ namespace ParSurf
                 using (Stream stream = File.Open("Surfaces.bin", FileMode.Open))
                 {
                     BinaryFormatter bin = new BinaryFormatter();
-                    surfaces = (List<ParametricSurface>)bin.Deserialize(stream);
+                    surfaces = (List<Surface>)bin.Deserialize(stream);
                 }
             }
             else
             {
                 using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
                 {
-                    surfaces = new List<ParametricSurface>();
+                    surfaces = new List<Surface>();
                     BinaryFormatter bin = new BinaryFormatter();
                     bin.Serialize(stream, surfaces);
                 }
@@ -90,8 +90,7 @@ namespace ParSurf
         private void parametric_select_item_checked(object sender, RoutedEventArgs e)
         {
             CloseableTabItem newtab = new CloseableTabItem();
-            string x = ((MenuItem)sender).Name.Replace("MenuItem_", "");
-            ParametricSurface surface = surfaces[int.Parse(((MenuItem)sender).Name.Replace("MenuItem_", ""))];
+            Surface surface = surfaces[int.Parse(((MenuItem)sender).Name.Replace("MenuItem_", ""))];
             newtab.SetHeader(new TextBlock { Text = surface.name });
             Frame frame = new Frame();
             switch (surface.dimension)
@@ -188,7 +187,7 @@ namespace ParSurf
             FormulaInputForm form = new FormulaInputForm();
             if (previousFormulae != null)
             {
-                form.setFormulas(previousFormulae,previousFormulaeName,previousFormulaeURanges,previousFormulaeTRanges);
+                form.setFormulas(previousFormulae,previousFormulaeName,previousFormulaeURanges,previousFormulaevranges);
             }
             
             System.Windows.Forms.DialogResult formStatus;// = form.ShowDialog();
@@ -197,10 +196,15 @@ namespace ParSurf
                 previousFormulae = (new List<String>(form.formulas)).ToArray();
                 previousFormulaeName = form.name;
                 previousFormulaeURanges = form.urange;
-                previousFormulaeTRanges = form.trange;
+                previousFormulaevranges = form.vrange;
                 List<NCalc.Expression> expressions = new List<NCalc.Expression>();
                 Dictionary<string, double> expParams = new Dictionary<string, double>();
-                foreach (String exp in form.formulas)
+                expParams["Pi"] = Math.PI;
+                expParams["E"] = Math.E;
+                expParams["pi"] = Math.PI;
+                expParams["e"] = Math.E;
+                //find parameters in the formulae (including u/v ranges)
+                foreach (string exp in form.formulas.Union(form.urange).Union(form.vrange)) 
                 {
                     MatchCollection mc = Regex.Matches(exp, @"\$([A-Za-z0-9_]+)");
                     foreach (Match m in mc)
@@ -209,22 +213,29 @@ namespace ParSurf
                         if (!expParams.ContainsKey(temp))
                             expParams.Add(temp, Double.NaN);
                     }
-                    exp.Replace("$", "");
-                    if (exp != "")
-                        expressions.Add(new NCalc.Expression(exp));
-                    else
-                        expressions.Add(new NCalc.Expression("0"));
+                    string cleanExp = exp.Replace("$", "");
+                    expressions.Add(new NCalc.Expression(cleanExp));
                 }
-
-                //test the input expressions
+                //prepare the strings representing the formulae in the shape to be created
+                List<string> expressionStrings = new List<string>();
+                List<string> variableRangesStrings = new List<string>();
+                foreach (string exp in form.formulas)
+                {
+                    expressionStrings.Add(exp.Replace("$", ""));
+                }
+                foreach (string exp in form.urange.Concat(form.vrange))
+                {
+                    variableRangesStrings.Add(exp.Replace("$", ""));
+                }
+               
+                //test the input expressions for legality using made up parameter values
                 foreach (NCalc.Expression exp in expressions)
                 {
-                    exp.Parameters.Add("u", 0);
-                    exp.Parameters.Add("t", 0);
-                    exp.Parameters.Add("Pi", Math.PI);
+                    exp.Parameters.Add("u", 1);
+                    exp.Parameters.Add("v", 1);
                     foreach (KeyValuePair<string, double> param in expParams)
                     {
-                        exp.Parameters.Add(param.Key, 0);
+                        exp.Parameters.Add(param.Key, 1);//try to avoid devision by zero (which only *might* cause Exception)
                     }
                 }
                 try
@@ -248,51 +259,14 @@ namespace ParSurf
                 foreach (NCalc.Expression exp in expressions)
                 {
                     exp.Parameters.Remove("u");
-                    exp.Parameters.Remove("t");
-                    exp.Parameters.Remove("Pi");
+                    exp.Parameters.Remove("v");
                     foreach (KeyValuePair<string, double> param in expParams)
                     {
                         exp.Parameters.Remove(param.Key);
                     }
                 }
-                //save formulae to memory, after validating
-                
-                //create delegate coordinates function
-                ParametricSurface.CoordinatesFunction cordFunc = (u, t, parameters) =>
-                {
-                    foreach (NCalc.Expression exp in expressions)
-                    {
-                        exp.Parameters.Add("Pi", Math.PI);
-                        exp.Parameters.Add("u", u);
-                        exp.Parameters.Add("t", t);
-                        foreach (KeyValuePair<string, double> param in parameters)
-                        {
-                            exp.Parameters.Add(param.Key, param.Value);
-                        }
-                    }
-                    List<Double> result = new List<double>();
-                    foreach (NCalc.Expression exp in expressions)
-                        result.Add(Convert.ToDouble(exp.Evaluate()));
-                    foreach (NCalc.Expression exp in expressions)
-                    {
-                        exp.Parameters.Remove("Pi");
-                        exp.Parameters.Remove("u");
-                        exp.Parameters.Remove("t");
-                        foreach (KeyValuePair<string, double> param in parameters)
-                        {
-                            exp.Parameters.Remove(param.Key);
-                        }
-                    }
-                    return result.ToArray();
-                };
-                NCalc.Expression[] ranges = { new NCalc.Expression(form.urange[0]), new NCalc.Expression(form.urange[1]), new NCalc.Expression(form.trange[0]), new NCalc.Expression(form.trange[1]) };
-                for (int i = 0; i < 4; i++)
-                {
-                    ranges[i].Parameters.Add("Pi", Math.PI);
-                }
-                double[] urange = new double[] { Convert.ToDouble(ranges[0].Evaluate()), Convert.ToDouble(ranges[1].Evaluate()) };
-                double[] trange = new double[] { Convert.ToDouble(ranges[2].Evaluate()), Convert.ToDouble(ranges[3].Evaluate()) };
-                shape = new ParametricSurface(form.name, form.dimension, cordFunc, urange, trange, expParams);
+                //create shape (note parameters will be queried again, if $ style parameters exist in formulae, replaced on GraphicPage creation)
+                shape = new ParametricSurface(form.name, form.dimension, expressionStrings, variableRangesStrings, expParams);
 
                 //uncheck all shapes items (including new, no point in it checked)
                 //foreach (Control item in MenuItem_parametric_shape.Items)
@@ -326,7 +300,6 @@ namespace ParSurf
                 break;
             }
         }
-
         private void mainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             double widthFactor = 1;
@@ -347,37 +320,37 @@ namespace ParSurf
                 ((Page)((ContentControl)tab.Content).Content).Height *= heightFactor;
             }
         }
-
         private void Save_Parametric_Surface_Click(object sender, RoutedEventArgs e)
         {
             TabItem tab = new TabItem();
             foreach (TabItem temp in this.tabControl1.Items)
             {
-                if (temp.IsEnabled) { tab = temp; break; }
+                if (temp.IsSelected) { tab = temp; break; }
             }
-            surfaces.Add(((GraphicsPage)((Frame)tab.Content).Content).surface);
+            Surface newSurface = ((GraphicsPage)((Frame)tab.Content).Content).surface;
+            surfaces.Add(newSurface);
             using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
             {
                 BinaryFormatter bin = new BinaryFormatter();
                 bin.Serialize(stream, surfaces);
             }
+            MenuItem item = new MenuItem();
+            item.Header = newSurface.name;
+            item.Name = "MenuItem_" + MenuItem_savedParametricSurface.Items.Count.ToString();
+            item.Click += parametric_select_item_checked;
+            MenuItem_savedParametricSurface.Items.Add(item);
         }
-
         private void Save_Transformation_Click(object sender, RoutedEventArgs e)
         {
-            
         }
-
         private void Load_Transformation_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
         private void Save_Tab_State_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
         private void Load_Tab_State_Click(object sender, RoutedEventArgs e)
         {
 
