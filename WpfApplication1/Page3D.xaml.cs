@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
+using System.Windows.Threading;
 namespace ParSurf
 {
     /// <summary>
@@ -22,6 +23,7 @@ namespace ParSurf
         public Page3D(Surface surface)
             : base(GraphicModes.R3, 3,surface)
         {
+            Mouse.OverrideCursor = Cursors.Wait;
             InitializeComponent();
             parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
             renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution);
@@ -38,6 +40,7 @@ namespace ParSurf
             base.canvasBorder = this.canvasBorder;
             base.viewportsBorder = this.viewportBorder;
             intializeSizes();
+            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle);
         }
         // reRendering objects after settings change. who = 0 vieport, who = 1 canvas, who = 2 both.
         public override void reRender(int who = 2)

@@ -215,7 +215,16 @@ namespace ParSurf
                             expParams.Add(temp, Double.NaN);
                     }
                     string cleanExp = exp.Replace("$", "");
-                    expressions.Add(new NCalc.Expression(cleanExp));
+                    try
+                    {
+                        expressions.Add(new NCalc.Expression(cleanExp));
+                    }
+                    catch
+                    {
+                        MessageBox.Show("The formulae entered are not valid");
+                        continue;
+                    }
+
                 }
                 //prepare the strings representing the formulae in the shape to be created
                 List<string> expressionStrings = new List<string>();
@@ -253,12 +262,7 @@ namespace ParSurf
                 }
                 catch
                 {
-                    //String errors = xTest.HasValue ? "" : "X ";
-                    //errors += yTest.HasValue ? "" : "Y ";
-                    //errors += zTest.HasValue ? "" : "Z ";
-                    //MessageBox.Show("The following coordinate formulae contain errors:" + errors);
                     MessageBox.Show("The formulae entered are not valid");
-                    //MenuItem_new.IsChecked = false;
                     continue;
                 }
                 //clear parameters after test

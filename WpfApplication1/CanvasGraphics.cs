@@ -30,7 +30,6 @@ namespace ParSurf
         private int dimension;
 
         public CanvasGraphics(Canvas canvas, double xCoordinateRange, double yCoordinateRange, int dimension, IList<double[][]> triangles, double pointSize = 0.8)
-                                IList<double[][]> triangles)
         {
             this.pointSize = pointSize;
             this.canvas = canvas;
@@ -60,7 +59,7 @@ namespace ParSurf
             for (int i = canvas.Children.Count - 1; i >= 0; i--)
             {
                 if ((canvas.Children[i] is Ellipse) || (canvas.Children[i] is Image)) canvas.Children.Remove(canvas.Children[i]);
-            }
+        }
         }
         public void drawAxes()
         {
