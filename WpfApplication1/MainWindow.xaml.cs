@@ -128,9 +128,10 @@ namespace ParSurf
             TabItem tab = new TabItem();
             foreach (TabItem temp in this.tabControl1.Items)
             {
-                if (temp.IsEnabled) { tab = temp; break; }
+                if (temp.IsSelected) { tab = temp; break; }
             }
-            InputNumberForm form = new InputNumberForm(dict);
+            if (((MenuItem)sender).Name == "parametersMenuItem") dict = ((GraphicsPage)((Frame)tab.Content).Content).surface.parameters;
+            InputNumberForm form = new InputNumberForm(dict,true);
             System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
             if (formStatus == System.Windows.Forms.DialogResult.OK)
             {
@@ -143,6 +144,7 @@ namespace ParSurf
                     }
                     ((GraphicsPage)((Frame)tab.Content).Content).renderResolution = Convert.ToInt32(form.result["Point Size"]);
                     Properties.Settings.Default.pointSize = form.result["Point Size"];
+                    ((GraphicsPage)((Frame)tab.Content).Content).reRender(1);
                     //canvasGraphics.reDraw(); 
                     return;
                 }
@@ -162,8 +164,13 @@ namespace ParSurf
                 {
                     ((GraphicsPage)((Frame)tab.Content).Content).renderResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
                     Properties.Settings.Default.parallelResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
+                    ((GraphicsPage)((Frame)tab.Content).Content).reRender(1);
                 }
-
+                else if (sender == parametersMenuItem)
+                {
+                    ((GraphicsPage)((Frame)tab.Content).Content).surface.parameters = form.result;
+                    ((GraphicsPage)((Frame)tab.Content).Content).reRender(2);
+                }
             }
             Properties.Settings.Default.Save();
             //    //resets current viewport
@@ -343,11 +350,6 @@ namespace ParSurf
 
         private void Save_Parametric_Surface_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void Save_Transformation_Click(object sender, RoutedEventArgs e)
-        {
             TabItem tab = new TabItem();
             foreach (TabItem temp in this.tabControl1.Items)
             {
@@ -359,6 +361,11 @@ namespace ParSurf
                 BinaryFormatter bin = new BinaryFormatter();
                 bin.Serialize(stream, surfaces);
             }
+        }
+
+        private void Save_Transformation_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
 
         private void Load_Transformation_Click(object sender, RoutedEventArgs e)

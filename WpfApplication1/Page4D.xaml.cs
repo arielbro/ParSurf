@@ -24,7 +24,7 @@ namespace ParSurf
             InitializeComponent();
             parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
             renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution);
-            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles);
+            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, Properties.Settings.Default.pointSize);
             canvasManager.reDraw(currentTransform);
             viewports = new Viewport3D[] { viewport1, viewport2, viewport3, viewport4 };
             viewportManagers = new ViewPortGraphics[] { new ViewPortGraphics(viewport1), new ViewPortGraphics(viewport2),
@@ -62,6 +62,9 @@ namespace ParSurf
                     }
                 case 1:
                     {
+                        parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
+                        canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, Properties.Settings.Default.pointSize);
+                        canvasManager.reDraw(currentTransform);
                         break;
                     }
                 default:

@@ -17,7 +17,7 @@ namespace ParSurf
         {
             InitializeComponent();
         }
-        public InputNumberForm(Dictionary<string,double> parameters)
+        public InputNumberForm(Dictionary<string,double> parameters,bool change)
         {
             InitializeComponent();
             Button buttonOk = new Button();
@@ -25,13 +25,13 @@ namespace ParSurf
             int i = 0;
             foreach (KeyValuePair<string, double> param in parameters)
             {
-                if (param.Value == double.NaN)
+                if (Double.IsNaN(param.Value) || change)
                 {
                     Label newlabel = new Label();
                     TextBox newtextbox = new TextBox();
                     newlabel.Text = param.Key + ":";
                     newlabel.Name = "label" + i;
-                    newtextbox.Text = param.Value.ToString();
+                    newtextbox.Text = Double.IsNaN(param.Value)?"0":param.Value.ToString();
                     newtextbox.Name = "textbox" + i;
                     newlabel.SetBounds(9, 18 + i * 56, 12, 13);
                     newtextbox.SetBounds(12, 36 + i * 56, 200, 20);

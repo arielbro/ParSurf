@@ -64,11 +64,11 @@ namespace ParSurf
                 bool temp = false;
                 foreach (KeyValuePair<string, double> param in surface.parameters)
                 {
-                    if (param.Value == double.NaN) temp = true;
+                    if (Double.IsNaN(param.Value)) temp = true;
                 }
                 if (temp)
                 {
-                    InputNumberForm parameterDialog = new InputNumberForm(surface.parameters);
+                    InputNumberForm parameterDialog = new InputNumberForm(surface.parameters,false);
                     if (parameterDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
                         surface.parameters = parameterDialog.result;

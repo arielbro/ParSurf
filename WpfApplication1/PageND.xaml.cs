@@ -91,6 +91,9 @@ namespace ParSurf
                     }
                 case 1:
                     {
+                        parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
+                        canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, dimension, parallelTriangles);
+                        canvasManager.reDraw(currentTransform);
                         break;
                     }
                 default:

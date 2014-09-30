@@ -23,13 +23,14 @@ namespace ParSurf
         private BackgroundWorker bgWorker;
         private double currentCanvasScale;
         private Point currentCanvasOrigin;
-        private double pointSize = 0.8;
+        private double pointSize;
         private ParallelCoordinates parallelUniverse;
         private IList<double[][]> triangles;
         private int dimension;
 
-        public CanvasGraphics(Canvas canvas, double xCoordinateRange, double yCoordinateRange, int dimension, IList<double[][]> triangles)
+        public CanvasGraphics(Canvas canvas, double xCoordinateRange, double yCoordinateRange, int dimension, IList<double[][]> triangles, double pointSize = 0.8)
         {
+            this.pointSize = pointSize;
             this.canvas = canvas;
             this.xCoordinateRange = xCoordinateRange;
             this.yCoordinateRange = yCoordinateRange;
