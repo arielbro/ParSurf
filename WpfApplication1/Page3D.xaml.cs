@@ -19,7 +19,7 @@ namespace ParSurf
     /// </summary>
     public partial class Page3D : GraphicsPage
     {
-        public Page3D(ParametricSurface surface)
+        public Page3D(Surface surface)
             : base(GraphicModes.R3, 3,surface)
         {
             InitializeComponent();

@@ -25,7 +25,7 @@ namespace ParSurf
             int i = 0;
             foreach (KeyValuePair<string, double> param in parameters)
             {
-                if (param.Value == double.NaN)
+                if (Double.IsNaN(param.Value))
                 {
                     Label newlabel = new Label();
                     TextBox newtextbox = new TextBox();
@@ -70,7 +70,13 @@ namespace ParSurf
             result= new Dictionary<string,double>();
             for (int i = 0; i < paramNum; i++)
             {
-                result.Add(this.Controls.Find("label" + i,false)[0].Text.Replace(":",""), Convert.ToDouble(this.Controls.Find("textbox" + i,false)[0].Text));
+                //Parameters should be able to include Pi and e, so NCalc will handle the representing text
+                NCalc.Expression exp = new NCalc.Expression(this.Controls.Find("textbox" + i, false)[0].Text);
+                exp.Parameters["Pi"]=Math.PI;
+                exp.Parameters["pi"]=Math.PI;
+                exp.Parameters["e"]=Math.E;
+                exp.Parameters["E"]=Math.E;
+                result.Add(this.Controls.Find("label" + i,false)[0].Text.Replace(":",""), Convert.ToDouble(exp.Evaluate()));
             }
         }
     }

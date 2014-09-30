@@ -20,7 +20,7 @@ namespace ParSurf
     public partial class PageND : GraphicsPage
     {
        
-        public PageND(ParametricSurface surface, int dimension)
+        public PageND(Surface surface, int dimension)
             : base(GraphicModes.Rn, dimension, surface)
         {
             InitializeComponent();

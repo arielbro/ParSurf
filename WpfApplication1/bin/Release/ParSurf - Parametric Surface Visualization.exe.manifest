@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
-  <asmv1:assemblyIdentity name="ParSurf - Parametric Surface Visualization.exe" version="1.0.0.8" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="x86" type="win32" />
+  <asmv1:assemblyIdentity name="ParSurf - Parametric Surface Visualization.exe" version="1.0.0.9" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="x86" type="win32" />
   <application />
   <entryPoint>
     <assemblyIdentity name="ParSurf - Parametric Surface Visualization" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ParSurf - Parametric Surface Visualization.exe" size="44032">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ParSurf - Parametric Surface Visualization.exe" size="102400">
       <assemblyIdentity name="ParSurf - Parametric Surface Visualization" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>h2jlutEdVvQY6J2nF/IR0yPRqNk=</dsig:DigestValue>
+        <dsig:DigestValue>M1lNw7MZ/gz4kn1BCAfnFzqBWLs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -77,13 +77,13 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="ParSurf - Parametric Surface Visualization.exe.config" size="122">
+  <file name="ParSurf - Parametric Surface Visualization.exe.config" size="1087">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>9KA+JzlusaPz4TXe3oyukw98w6U=</dsig:DigestValue>
+      <dsig:DigestValue>q6A8Bt1Mo8LrJ1IA0+Rdb6xPbws=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

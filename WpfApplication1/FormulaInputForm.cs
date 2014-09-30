@@ -14,7 +14,7 @@ namespace ParSurf
         public List<String> formulas;
         //public List<String> ranges;
         public string[] urange;
-        public string[] trange;
+        public string[] vrange;
         public string name;
         //int dimension = 3;
         public FormulaInputForm()
@@ -31,16 +31,16 @@ namespace ParSurf
                 formulas.Add((this.Controls.Find("DimForm" + i, false))[0].Text);
             }
             urange = new string[]{textBox1.Text, textBox2.Text};
-            trange = new string[] { textBox3.Text, textBox4.Text };
+            vrange = new string[] { textBox3.Text, textBox4.Text };
             name = textBoxName.Text;
         }
-        public void setFormulas(String[] formula,string name,string[] urange,string[] trange)
+        public void setFormulas(String[] formula,string name,string[] urange,string[] vrange)
         {
             textBoxName.Text = name;
             textBox1.Text = urange[0];
             textBox2.Text = urange[1];
-            textBox3.Text = trange[0];
-            textBox4.Text = trange[1];
+            textBox3.Text = vrange[0];
+            textBox4.Text = vrange[1];
             DimForm1.Text = formula[0];
             DimForm2.Text = formula[1];
             DimForm3.Text = formula[2];

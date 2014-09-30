@@ -21,7 +21,7 @@ namespace ParSurf
     {
         protected double yCoordinateRange = 10;
         protected double xCoordinateRange = 10;
-        protected double mouseMoveEpsilon = 0.9;
+        protected double mouseMoveEpsilon = 0.8;
         public int parallelResolution;
         public int renderResolution;
         public double pointSize;
@@ -34,7 +34,7 @@ namespace ParSurf
         protected Border canvasBorder;
         protected int dimension;
         protected int[] currentAxes;
-        public ParametricSurface surface;
+        public Surface surface;
         protected bool[] viewportsmDown;
         protected bool canvasmDown = false;
         private MouseButtonEventArgs lastMouseButtonState;
@@ -48,7 +48,7 @@ namespace ParSurf
         public GraphicsPage()
         {
         }
-        public GraphicsPage(GraphicModes mode, int dimension, ParametricSurface surface)
+        public GraphicsPage(GraphicModes mode, int dimension, Surface surface)
         {
             currentTransform = new double[dimension + 1][]; //affine transformations! 
             for (int i = 0; i < dimension + 1; i++)
@@ -59,19 +59,23 @@ namespace ParSurf
             this.mode = mode;
             this.dimension = dimension;
             this.surface = surface;
-            if (surface.parameters.Count != 0)
+            if (surface.GetType() == typeof(ParametricSurface) && ((ParametricSurface)surface).parameters.Count != 0)
             {
                 bool temp = false;
-                foreach (KeyValuePair<string, double> param in surface.parameters)
+                foreach (KeyValuePair<string, double> param in ((ParametricSurface)surface).parameters)
                 {
-                    if (param.Value == double.NaN) temp = true;
+                    if (Double.IsNaN(param.Value)) temp = true;
                 }
                 if (temp)
                 {
-                    InputNumberForm parameterDialog = new InputNumberForm(surface.parameters);
+                    InputNumberForm parameterDialog = new InputNumberForm(((ParametricSurface)surface).parameters);
                     if (parameterDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
-                        surface.parameters = parameterDialog.result;
+                        ((ParametricSurface)surface).parameters = parameterDialog.result;
+                        ((ParametricSurface)surface).parameters["Pi"] = Math.PI;
+                        ((ParametricSurface)surface).parameters["E"] = Math.E;
+                        ((ParametricSurface)surface).parameters["pi"] = Math.PI;
+                        ((ParametricSurface)surface).parameters["e"] = Math.E;
                     }
                 }
             }
@@ -100,7 +104,7 @@ namespace ParSurf
             }
             canvas.Width *= widthFactor;
             canvas.Height *= heightFactor;
-            canvasBorder.BorderThickness = new Thickness(5,5,0,5);
+            canvasBorder.BorderThickness = new Thickness(5, 5, 0, 5);
             canvasBorder.Width = Math.Ceiling(this.ActualWidth / 2);
             canvasBorder.Height = this.ActualHeight;
             viewportsBorder.Width = Math.Floor(this.ActualWidth / 2);
@@ -210,7 +214,7 @@ namespace ParSurf
             double dy = actualPos.Y - viewportsmLastPos[mDownIndex].Y;
             //Debug.Print(dx + ", " + dy);
 
-            mouseMoveSignificant = dx > mouseMoveEpsilon || dy > mouseMoveEpsilon;
+            mouseMoveSignificant = Math.Abs(dx) > mouseMoveEpsilon || Math.Abs(dy) > mouseMoveEpsilon;
             if (mouseMoveSignificant)
             {
                 //stop whatever the current parallel worker is doing, it is obsolete anyways.
