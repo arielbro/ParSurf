@@ -12,7 +12,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
-using System.Windows.Threading;
 
 namespace ParSurf
 {
@@ -62,25 +61,27 @@ namespace ParSurf
             this.surface = surface;
             if (surface.GetType() == typeof(ParametricSurface) && ((ParametricSurface)surface).parameters.Count != 0)
             {
-                //bool temp = false;
-                //foreach (KeyValuePair<string, double> param in ((ParametricSurface)surface).parameters)
-                //{
-                //    if (Double.IsNaN(param.Value)) temp = true;
-                //}
-                //if (temp)
-                //{
-                
+                bool temp = false;
+                foreach (KeyValuePair<string, double> param in ((ParametricSurface)surface).parameters)
+                {
+                    if (Double.IsNaN(param.Value)) temp = true;
+                }
+                if (temp)
+                {
                     InputNumberForm parameterDialog = new InputNumberForm(((ParametricSurface)surface).parameters);
                     if (parameterDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
                         ((ParametricSurface)surface).parameters = parameterDialog.result;
+                        ((ParametricSurface)surface).parameters["Pi"] = Math.PI;
+                        ((ParametricSurface)surface).parameters["E"] = Math.E;
+                        ((ParametricSurface)surface).parameters["pi"] = Math.PI;
+                        ((ParametricSurface)surface).parameters["e"] = Math.E;
                     }
-                //}
+                }
             }
         }
         protected void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Mouse.OverrideCursor = Cursors.Wait;
             double widthFactor = 1;
             double heightFactor = 1;
             if (e.PreviousSize.Width != 0)
@@ -108,8 +109,6 @@ namespace ParSurf
             canvasBorder.Height = this.ActualHeight;
             viewportsBorder.Width = Math.Floor(this.ActualWidth / 2);
             viewportsBorder.Height = this.ActualHeight;
-            //force rendering to complete before releasing the mouse
-            Dispatcher.BeginInvoke(new Action(()=>{Mouse.OverrideCursor = Cursors.Arrow;}),DispatcherPriority.ApplicationIdle);
         }
         protected void border_MouseWheel(object sender, MouseWheelEventArgs e)
         {

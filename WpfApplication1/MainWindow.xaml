@@ -437,7 +437,6 @@
             efficiently allow to pick the selected TabItem from the Menu
             with a simple two-way binding.
          -->
-            
             <Setter Property="IsCheckable" Value="{Binding Path=IsEnabled}" />
             <Setter Property="IsChecked" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
             <Setter Property="Foreground" Value="{StaticResource MenuItem_ForegroundBrush}"/>
@@ -796,6 +795,7 @@
                 <MenuItem Name="pointSizeMenuItem" Header="Point size" Click="graphicSettingsMenuItem_Click"/>
                 <MenuItem Name="parallelResoltuionMenuItem" Header="Parallel coordinates resolution" Click="graphicSettingsMenuItem_Click"/>
                 <MenuItem Name="renderResolutionMenuItem" Header="3D Rendering resolution" Click="graphicSettingsMenuItem_Click"/>
+                <MenuItem Name="parametersMenuItem" Header="Change shape parameters" Click="graphicSettingsMenuItem_Click"/>
             </MenuItem>
             <MenuItem Header="help">
                 <MenuItem Header="help"/>
@@ -804,6 +804,7 @@
         
         <DockPanel>
             <TabControl SelectedIndex="0" HorizontalAlignment="Stretch" Margin="0,25,0,0" Name="tabControl1" VerticalAlignment="Stretch" >
+             
             </TabControl>
         </DockPanel>
 
