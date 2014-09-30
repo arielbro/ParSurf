@@ -52,18 +52,19 @@ namespace ParSurf
                 for (int i = 0; i < dimension; i++)
                 {
                     formulae[i] = new NCalc.Expression(formulaeStrings[i]);
+                    foreach (string parameter in parameters.Keys)
+                        formulae[i].Parameters[parameter] = parameters[parameter];
+                    foreach (KeyValuePair<string, double> param in Surface.mathConsts)
+                    {
+                        formulae[i].Parameters.Add(param.Key, param.Value);
+                    }
+
                 }
             }
             for (int i = 0; i < dimension; i++)
             {
                 formulae[i].Parameters["u"] = u;
                 formulae[i].Parameters["v"] = v;
-                foreach (string parameter in parameters.Keys)
-                    formulae[i].Parameters[parameter] = parameters[parameter];
-                foreach (KeyValuePair<string, double> param in Surface.mathConsts)
-                {
-                    formulae[i].Parameters.Add(param.Key, param.Value);
-                }
                 object value = formulae[i].Evaluate();
                 if (value.GetType() == typeof(int))
                     point[i] = (int)value;

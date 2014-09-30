@@ -51,7 +51,24 @@ namespace ParSurf
         public MainWindow()
         {
             InitializeComponent();
-            Cursor = Cursors.AppStarting;
+            using (Stream stream = File.Open("Surfaces.bin", FileMode.Open))
+            {
+                BinaryFormatter bin = new BinaryFormatter();
+                surfaces = (List<Surface>)bin.Deserialize(stream);
+            }
+            foreach (ParametricSurface surf in surfaces)
+            {
+                surf.parameters.Remove("pi");
+                surf.parameters.Remove("Pi");
+                surf.parameters.Remove("E");
+                surf.parameters.Remove("e");
+            }
+            surfaces = surfaces.OrderBy(surface => surface.name).ToList();
+            using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
+            {
+                BinaryFormatter bin = new BinaryFormatter();
+                bin.Serialize(stream, surfaces);
+            }
             //List<ParametricSurface> surfaces = new List<ParametricSurface>();
             //ParametricSurface surface = new ParametricSurface("Flat Torus", 3, ParametricSurface.spherePoint, new double[] { 0, 1 }, new double[] { 0, 1 }, new Dictionary<string, double>() { { "radius", 1 } });
             //surfaces.Add(surface);
