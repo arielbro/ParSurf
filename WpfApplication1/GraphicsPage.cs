@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
+using System.Windows.Threading;
 
 namespace ParSurf
 {
@@ -79,6 +80,7 @@ namespace ParSurf
         }
         protected void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            Mouse.OverrideCursor = Cursors.Wait;
             double widthFactor = 1;
             double heightFactor = 1;
             if (e.PreviousSize.Width != 0)
@@ -106,6 +108,8 @@ namespace ParSurf
             canvasBorder.Height = this.ActualHeight;
             viewportsBorder.Width = Math.Floor(this.ActualWidth / 2);
             viewportsBorder.Height = this.ActualHeight;
+            //force rendering to complete before releasing the mouse
+            Dispatcher.BeginInvoke(new Action(()=>{Mouse.OverrideCursor = Cursors.Arrow;}),DispatcherPriority.ApplicationIdle);
         }
         protected void border_MouseWheel(object sender, MouseWheelEventArgs e)
         {
