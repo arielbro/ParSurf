@@ -61,23 +61,20 @@ namespace ParSurf
             this.surface = surface;
             if (surface.GetType() == typeof(ParametricSurface) && ((ParametricSurface)surface).parameters.Count != 0)
             {
-                bool temp = false;
-                foreach (KeyValuePair<string, double> param in ((ParametricSurface)surface).parameters)
-                {
-                    if (Double.IsNaN(param.Value)) temp = true;
-                }
-                if (temp)
-                {
+                //bool temp = false;
+                //foreach (KeyValuePair<string, double> param in ((ParametricSurface)surface).parameters)
+                //{
+                //    if (Double.IsNaN(param.Value)) temp = true;
+                //}
+                //if (temp)
+                //{
+                
                     InputNumberForm parameterDialog = new InputNumberForm(((ParametricSurface)surface).parameters);
                     if (parameterDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
                         ((ParametricSurface)surface).parameters = parameterDialog.result;
-                        ((ParametricSurface)surface).parameters["Pi"] = Math.PI;
-                        ((ParametricSurface)surface).parameters["E"] = Math.E;
-                        ((ParametricSurface)surface).parameters["pi"] = Math.PI;
-                        ((ParametricSurface)surface).parameters["e"] = Math.E;
                     }
-                }
+                //}
             }
         }
         protected void Window_SizeChanged(object sender, SizeChangedEventArgs e)

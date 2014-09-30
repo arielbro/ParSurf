@@ -129,8 +129,8 @@ namespace ParSurf
             {
                 if (temp.IsSelected) { tab = temp; break; }
             }
-            if (((MenuItem)sender).Name == "parametersMenuItem") dict = ((GraphicsPage)((Frame)tab.Content).Content).surface.parameters;
-            InputNumberForm form = new InputNumberForm(dict,true);
+            if (((MenuItem)sender).Name == "parametersMenuItem") dict = ((ParametricSurface)((GraphicsPage)((Frame)tab.Content).Content).surface).parameters;
+            InputNumberForm form = new InputNumberForm(dict);
             System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
             if (formStatus == System.Windows.Forms.DialogResult.OK)
             {
@@ -167,7 +167,7 @@ namespace ParSurf
                 }
                 else if (sender == parametersMenuItem)
                 {
-                    ((GraphicsPage)((Frame)tab.Content).Content).surface.parameters = form.result;
+                    ((ParametricSurface)((GraphicsPage)((Frame)tab.Content).Content).surface).parameters = form.result;
                     ((GraphicsPage)((Frame)tab.Content).Content).reRender(2);
                 }
             }
@@ -199,10 +199,7 @@ namespace ParSurf
                 previousFormulaevranges = form.vrange;
                 List<NCalc.Expression> expressions = new List<NCalc.Expression>();
                 Dictionary<string, double> expParams = new Dictionary<string, double>();
-                expParams["Pi"] = Math.PI;
-                expParams["E"] = Math.E;
-                expParams["pi"] = Math.PI;
-                expParams["e"] = Math.E;
+                
                 //find parameters in the formulae (including u/v ranges)
                 foreach (string exp in form.formulas.Union(form.urange).Union(form.vrange)) 
                 {
@@ -237,6 +234,11 @@ namespace ParSurf
                     {
                         exp.Parameters.Add(param.Key, 1);//try to avoid devision by zero (which only *might* cause Exception)
                     }
+                    foreach (KeyValuePair<string, double> param in Surface.mathConsts)
+                    {
+                        exp.Parameters.Add(param.Key,param.Value);
+                    }
+                    
                 }
                 try
                 {
@@ -261,6 +263,10 @@ namespace ParSurf
                     exp.Parameters.Remove("u");
                     exp.Parameters.Remove("v");
                     foreach (KeyValuePair<string, double> param in expParams)
+                    {
+                        exp.Parameters.Remove(param.Key);
+                    }
+                    foreach (KeyValuePair<string, double> param in Surface.mathConsts)
                     {
                         exp.Parameters.Remove(param.Key);
                     }

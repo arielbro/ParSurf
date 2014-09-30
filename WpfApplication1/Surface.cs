@@ -10,6 +10,8 @@ namespace ParSurf
     [Serializable]
     public abstract class Surface
     {
+        static public Dictionary<string, double> mathConsts = new Dictionary<string, double>() { { "Pi", Math.PI }, { "pi", Math.PI }, { "E", Math.E }, { "e", Math.E } };
+        
         public int dimension;
         public string name;
         public IList<double[]> triangles;
@@ -58,6 +60,10 @@ namespace ParSurf
                 formulae[i].Parameters["v"] = v;
                 foreach (string parameter in parameters.Keys)
                     formulae[i].Parameters[parameter] = parameters[parameter];
+                foreach (KeyValuePair<string, double> param in Surface.mathConsts)
+                {
+                    formulae[i].Parameters.Add(param.Key, param.Value);
+                }
                 object value = formulae[i].Evaluate();
                 if (value.GetType() == typeof(int))
                     point[i] = (int)value;
@@ -84,6 +90,10 @@ namespace ParSurf
                 foreach (string param in parameters.Keys)
                 {
                     exp.Parameters[param] = parameters[param];
+                }
+                foreach (KeyValuePair<string, double> param in Surface.mathConsts)
+                {
+                    exp.Parameters.Add(param.Key, param.Value);
                 }
                 object value = exp.Evaluate();
                 double[] range = i < 2 ? urange : vrange;
@@ -138,7 +148,7 @@ namespace ParSurf
             parameters["conicMaximalRadius"] = conicMaximalRadius;
             parameters["pipeRadius"] = pipeRadius;
             parameters["length"] = length;
-            parameters["pi"] = Math.PI;
+            //parameters["pi"] = Math.PI;
             string[] coordinatesStrings = new string[3];
             for (int i = 0; i < 3; i++)
                 coordinatesStrings[(i + axisNumber) % 3] = expressionStrings[i];
