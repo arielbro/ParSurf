@@ -6,6 +6,9 @@ using System.Windows.Media.Media3D;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Diagnostics;
+using System.Windows.Threading;
+using System.Windows.Input;
+using ParSurf.Properties;
 
 namespace ParSurf
 {
@@ -56,8 +59,11 @@ namespace ParSurf
                 viewPort.Children.Add(modelAxis);
             }
         }
-        public void generate_viewport_object(IList<double[][]> triangles, Transform3D currentTransform = null)
+        public void generate_viewport_object(IList<double[][]> triangles, SolidColorBrush frontColor, SolidColorBrush backColor,
+                                            double opacity, Transform3D currentTransform = null)
         {
+            Mouse.OverrideCursor = Cursors.Wait;
+
             MeshGeometry3D triangleMesh = new MeshGeometry3D();
             int triangleIndex = 0;
 
@@ -76,12 +82,14 @@ namespace ParSurf
 
                 triangleIndex++;
             }
-
-            Material material = new DiffuseMaterial(
-                new SolidColorBrush(Colors.DeepSkyBlue));
+            frontColor = frontColor.Clone();
+            frontColor.Color = Color.FromScRgb((float)opacity, frontColor.Color.ScR, frontColor.Color.ScG, frontColor.Color.ScB);
+            Material material = new DiffuseMaterial(frontColor);
             geometryModel = new GeometryModel3D(
                 triangleMesh, material);
-            geometryModel.BackMaterial = new DiffuseMaterial(new SolidColorBrush(Colors.Firebrick));
+            backColor = backColor.Clone();
+            backColor.Color = Color.FromScRgb((float)opacity, backColor.Color.ScR, backColor.Color.ScG, backColor.Color.ScB);
+            geometryModel.BackMaterial = new DiffuseMaterial(backColor);
             model = new ModelVisual3D();
             model.Content = geometryModel;
             viewPort.Children.Add(model);
@@ -92,6 +100,9 @@ namespace ParSurf
             }
             else
                 geometryModel.Transform = currentTransform;
+
+            //force rendering before releasing mouse
+            this.viewPort.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle, null);
         }
         public void performTransform(Transform3D transform)
         {
@@ -235,6 +246,14 @@ namespace ParSurf
                 res.Add(newTriangle);
             }
             return res;
+        }
+        public void changeColorScheme(SolidColorBrush frontColor, SolidColorBrush backColor)
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            geometryModel.Material = new DiffuseMaterial(frontColor);
+            geometryModel.BackMaterial = new DiffuseMaterial(backColor);
+            geometryModel.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), 
+                                                                    DispatcherPriority.ApplicationIdle);
         }
     }
 }

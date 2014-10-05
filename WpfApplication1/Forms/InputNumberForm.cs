@@ -25,12 +25,11 @@ namespace ParSurf
             int i = 0;
             foreach (KeyValuePair<string, double> param in parameters)
             {
-                
                 Label newlabel = new Label();
                 TextBox newtextbox = new TextBox();
                 newlabel.Text = param.Key + ":";
                 newlabel.Name = "label" + i;
-                newtextbox.Text = Double.IsNaN(param.Value)?"0":param.Value.ToString();
+                newtextbox.Text = Double.IsNaN(param.Value)?"":param.Value.ToString();
                 newtextbox.Name = "textbox" + i;
                 newlabel.SetBounds(9, 18 + i * 56, 12, 13);
                 newtextbox.SetBounds(12, 36 + i * 56, 200, 20);
@@ -38,7 +37,6 @@ namespace ParSurf
                 newtextbox.Anchor = newtextbox.Anchor | AnchorStyles.Right;
                 this.Controls.AddRange(new Control[] { newlabel, newtextbox });
                 i++;
-             
             }
             paramNum = i;
             buttonOk.Text = "OK";

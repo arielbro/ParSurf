@@ -34,7 +34,7 @@ namespace ParSurf
             viewportsmDown = new bool[1];
             viewportsmLastPos = new Point[1];
             viewportManagers[0].generate_3d_axes(100);
-            viewportManagers[0].generate_viewport_object(renderTriangles);
+            viewportManagers[0].generate_viewport_object(renderTriangles, renderingFrontColor, renderingBackColor, renderingOpacity);
             viewportsBorder = viewportBorder;
             base.canvas = this.canvas;
             base.canvasBorder = this.canvasBorder;
@@ -43,34 +43,26 @@ namespace ParSurf
             Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle);
         }
         // reRendering objects after settings change. who = 0 vieport, who = 1 canvas, who = 2 both.
-        public override void reRender(int who = 2)
+        public override void reRender(ReRenderingModes who = ReRenderingModes.Both)
         {
-            switch(who)
-            {
-                case 0:
+            if(who == ReRenderingModes.Viewport || who == ReRenderingModes.Both)
                     {
-                        Transform3D trans = viewportManagers[0].getCurrentTransform();
+                        Transform3D trans = new MatrixTransform3D(ViewPortGraphics.convert3DArrayToTransformForm(currentTransform));
                         viewportManagers[0].reset();
                         viewportManagers[0].generate_3d_axes(100);
-                        renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution);
-                        viewportManagers[0].generate_viewport_object(renderTriangles);
+                        renderTriangles = surface.triangulate(renderResolution, renderResolution);
+                        viewportManagers[0].generate_viewport_object(renderTriangles, renderingFrontColor, renderingBackColor, 
+                                                                    renderingOpacity);
                         viewportManagers[0].performTransform(trans);
-                        break;
+
                     }
-                case 1:
+          if(who == ReRenderingModes.Canvas || who == ReRenderingModes.Both)
                     {
-                        parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
+                        parallelTriangles = surface.triangulate(parallelResolution, parallelResolution);
                         canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 3, parallelTriangles,Properties.Settings.Default.pointSize);
                         canvasManager.reDraw(currentTransform);
-                        break;
                     }
-                default:
-                    {
-                        this.reRender(0);
-                        this.reRender(1);
-                        break;
-                    }
-            }
+            
         }
         public void intializeSizes()
         {

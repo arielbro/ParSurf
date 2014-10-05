@@ -13,10 +13,12 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
+using ParSurf.Properties;
 
 namespace ParSurf
 {
     public enum GraphicModes { R3, R4, Rn }; //R3time at the future?
+    public enum ReRenderingModes {Viewport, Canvas, Both}
 
     public abstract class GraphicsPage : Page
     {
@@ -42,9 +44,12 @@ namespace ParSurf
         private bool mouseMoveSignificant = false;
         protected Point[] viewportsmLastPos;
         protected Point canvasmLastPos;
-        protected double[][] currentTransform;
+        public double[][] currentTransform;
         protected IList<double[][]> renderTriangles;
         protected IList<double[][]> parallelTriangles;
+        public SolidColorBrush renderingFrontColor;
+        public SolidColorBrush renderingBackColor;
+        public double renderingOpacity;
 
         public GraphicsPage()
         {
@@ -69,14 +74,19 @@ namespace ParSurf
                 //}
                 //if (temp)
                 //{
-                
-                    InputNumberForm parameterDialog = new InputNumberForm(((ParametricSurface)surface).parameters);
-                    if (parameterDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                    {
-                        ((ParametricSurface)surface).parameters = parameterDialog.result;
-                    }
+
+                InputNumberForm parameterDialog = new InputNumberForm(((ParametricSurface)surface).parameters);
+                if (parameterDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    ((ParametricSurface)surface).parameters = parameterDialog.result;
+                }
                 //}
             }
+            this.renderResolution = Settings.Default.renderResolution;
+            this.parallelResolution = Settings.Default.parallelResolution;
+            this.renderingFrontColor = Settings.Default.frontColor;
+            this.renderingBackColor = Settings.Default.backColor;
+            this.renderingOpacity = Settings.Default.renderingOpacity;
         }
         protected void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -109,7 +119,7 @@ namespace ParSurf
             viewportsBorder.Width = Math.Floor(this.ActualWidth / 2);
             viewportsBorder.Height = this.ActualHeight;
             //force rendering to complete before releasing the mouse
-            Dispatcher.BeginInvoke(new Action(()=>{Mouse.OverrideCursor = Cursors.Arrow;}),DispatcherPriority.ApplicationIdle);
+            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle);
         }
         protected void border_MouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -344,6 +354,40 @@ namespace ParSurf
             }
             return res;
         }
-        public abstract void reRender(int who = 2);
+        public abstract void reRender(ReRenderingModes who = ReRenderingModes.Both);
+        public void resetTransformation()
+        {
+            currentTransform = identityTransformation();
+            foreach (ViewPortGraphics manager in viewportManagers)
+                manager.setTransform(Transform3D.Identity);
+            canvasManager.reDraw(currentTransform);
+        }
+        public void applyTransformation(double[][] transformation)
+        {
+            currentTransform = multiplyMatrices(transformation, currentTransform);
+            reRender(ReRenderingModes.Both);
+        }
+        private double[][] identityTransformation()
+        {
+            double[][] identity = new double[dimension + 1][]; //affine transformations! 
+            for (int i = 0; i < dimension + 1; i++)
+            {
+                identity[i] = new double[dimension + 1];
+                identity[i][i] = 1; //identity
+            }
+            return identity;
+        }
+        public void applyRenderingColorScheme(SolidColorBrush frontColor, SolidColorBrush backColor)
+        {
+            this.renderingFrontColor = frontColor;
+            this.renderingBackColor = backColor;
+            foreach (ViewPortGraphics manager in viewportManagers)
+            {
+                foreach (ViewPortGraphics viewportManager in viewportManagers)
+                {
+                    viewportManager.changeColorScheme(frontColor, backColor);
+                }
+            }
+        }
     }
 }

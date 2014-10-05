@@ -19,7 +19,7 @@ namespace ParSurf
     /// </summary>
     public partial class PageND : GraphicsPage
     {
-       
+
         public PageND(Surface surface, int dimension)
             : base(GraphicModes.Rn, dimension, surface)
         {
@@ -34,7 +34,8 @@ namespace ParSurf
             viewportsmLastPos = new Point[1];
             currentAxes = new int[] { 0, 1, 2 };
             viewportManagers[0].generate_3d_axes(100);
-            viewportManagers[0].generate_viewport_object(ViewPortGraphics.projectNDTrianglesTo3D(renderTriangles, currentAxes));
+            viewportManagers[0].generate_viewport_object(ViewPortGraphics.projectNDTrianglesTo3D(renderTriangles, currentAxes),
+                                                         renderingFrontColor, renderingBackColor, renderingOpacity);
             viewportsBorder = viewportBorder;
             base.canvas = this.canvas;
             base.canvasBorder = this.canvasBorder;
@@ -73,36 +74,27 @@ namespace ParSurf
             currentAxes[2] = requestedAxes[2];
             viewportManagers[0].reset();
             viewportManagers[0].generate_viewport_object(ViewPortGraphics.projectNDTrianglesTo3D(renderTriangles, currentAxes),
+                                                         renderingFrontColor, renderingBackColor, renderingOpacity,
                                                          ViewPortGraphics.convertNDTransformTo3D(currentTransform, currentAxes));
         }
-        public override void reRender(int who = 2)
+        public override void reRender(ReRenderingModes who = ReRenderingModes.Both)
         {
-            switch (who)
+            if (who == ReRenderingModes.Viewport || who == ReRenderingModes.Both)
             {
-                case 0:
-                    {
-                        System.Windows.Media.Media3D.Transform3D trans = viewportManagers[0].getCurrentTransform();
-                        viewportManagers[0].reset();
-                        viewportManagers[0].generate_3d_axes(100);
-                        renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution);
-                        viewportManagers[0].generate_viewport_object(renderTriangles);
-                        viewportManagers[0].performTransform(ViewPortGraphics.convertNDTransformTo3D(currentTransform,currentAxes));
-                        break;
-                    }
-                case 1:
-                    {
-                        parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
-                        canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, dimension, parallelTriangles);
-                        canvasManager.reDraw(currentTransform);
-                        break;
-                    }
-                default:
-                    {
-                        this.reRender(0);
-                        this.reRender(1);
-                        break;
-                    }
+                System.Windows.Media.Media3D.Transform3D trans = viewportManagers[0].getCurrentTransform();
+                viewportManagers[0].reset();
+                viewportManagers[0].generate_3d_axes(100);
+                renderTriangles = surface.triangulate(renderResolution, renderResolution);
+                viewportManagers[0].generate_viewport_object(renderTriangles, renderingFrontColor, renderingBackColor, renderingOpacity);
+                viewportManagers[0].performTransform(ViewPortGraphics.convertNDTransformTo3D(currentTransform, currentAxes));
             }
+            if (who == ReRenderingModes.Canvas || who == ReRenderingModes.Both)
+            {
+                parallelTriangles = surface.triangulate(parallelResolution, parallelResolution);
+                canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, dimension, parallelTriangles);
+                canvasManager.reDraw(currentTransform);
+            }
+
         }
         public void intializeSizes()
         {

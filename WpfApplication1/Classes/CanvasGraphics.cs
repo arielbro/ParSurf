@@ -100,6 +100,8 @@ namespace ParSurf
         }
         private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            canvas.Dispatcher.Invoke(new Action(() => { Mouse.OverrideCursor = Cursors.Wait; }), DispatcherPriority.Send);
+
             double[][] currentTransformMatrix = e.Argument as double[][];
             double[][][] transformedTriangles = new double[triangles.Count][][];
             const int batchSize = 10;
@@ -110,6 +112,9 @@ namespace ParSurf
                     if (bgWorker.CancellationPending)
                     {
                         loopState.Stop();
+                        //wait for rendering to finish before releasing mouse
+                        canvas.Dispatcher.BeginInvoke(new Action(delegate { Mouse.OverrideCursor = Cursors.Arrow; }), 
+                            DispatcherPriority.ApplicationIdle);
                         e.Cancel = true;
                         return;
                     }
@@ -203,12 +208,6 @@ namespace ParSurf
             if (e.Error != null)
                 throw e.Error;
 
-            bool isWaitTriggered = false;
-            if (Mouse.OverrideCursor != Cursors.Wait)
-            {
-                Mouse.OverrideCursor = Cursors.Wait;
-                isWaitTriggered = true;
-            }
             Object[] resultData = e.Result as Object[];
             DrawingImage[] drawingImages = resultData[0] as DrawingImage[];
             Point[] drawingsStartingPoints = resultData[1] as Point[];
@@ -231,10 +230,10 @@ namespace ParSurf
                 Canvas.SetTop(ellipsesImages[i], drawingsStartingPoints[i].Y);
                 Canvas.SetLeft(ellipsesImages[i], drawingsStartingPoints[i].X);
             }
-            if (isWaitTriggered)
-            {//wait for canvas to finish drawing and then release the mouse. If called without Triggering wait, some other 
-             //part of the code is already forcing finishing, so no need to here.
-                canvas.Dispatcher.Invoke(new Action(delegate { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.Render);
+            {
+                //wait for rendering to finish before releasing mouse
+                canvas.Dispatcher.BeginInvoke(new Action(delegate { Mouse.OverrideCursor = Cursors.Arrow; }), 
+                                            DispatcherPriority.ApplicationIdle);
             }
         }
         private double[] applyTransformToPoint(double[] point, double[][] transform)
