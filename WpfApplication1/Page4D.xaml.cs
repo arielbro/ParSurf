@@ -17,15 +17,16 @@ namespace ParSurf
     /// <summary>
     /// Interaction logic for Page1.xaml
     /// </summary>
+    [Serializable()]
     public partial class Page4D : GraphicsPage
     {
         public Page4D(Surface surface)
             : base(GraphicModes.R4, 4, surface)
         {
             InitializeComponent();
-            parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
-            renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution);
-            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, Properties.Settings.Default.pointSize);
+            parallelTriangles = surface.triangulate(parallelResolution, parallelResolution);
+            renderTriangles = surface.triangulate(renderResolution, renderResolution);
+            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, pointSize);
             canvasManager.reDraw(currentTransform);
             viewports = new Viewport3D[] { viewport1, viewport2, viewport3, viewport4 };
             viewportManagers = new ViewPortGraphics[] { new ViewPortGraphics(viewport1), new ViewPortGraphics(viewport2),
@@ -45,6 +46,14 @@ namespace ParSurf
             intializeSizes();
 
         }
+        public Page4D(Surface surface,double[][] currentTrans, int renderRes, int parallelRes, double pointSize) : this(surface)
+        {
+            currentTransform = currentTrans;
+            renderResolution = renderRes;
+            parallelResolution = parallelRes;
+            this.pointSize = pointSize;
+            reRender(2);
+        }
         public override void reRender(ReRenderingModes who = ReRenderingModes.Both)
         {
             if (who == ReRenderingModes.Viewport || who == ReRenderingModes.Both)
@@ -53,7 +62,7 @@ namespace ParSurf
                 {
                     viewportManagers[i].reset();
                     viewportManagers[i].generate_3d_axes(100);
-                    renderTriangles = surface.triangulate(renderResolution, renderResolution);
+                            renderTriangles = surface.triangulate(renderResolution, renderResolution);
                     viewportManagers[i].generate_viewport_object(ViewPortGraphics.project4DTrianglesTo3D(renderTriangles, i),
                                                                  renderingFrontColor, renderingBackColor, renderingOpacity);
                     viewportManagers[i].performTransform(ViewPortGraphics.convert4DTransformTo3D(currentTransform, i));
@@ -61,8 +70,8 @@ namespace ParSurf
             }
             if (who == ReRenderingModes.Canvas || who == ReRenderingModes.Both)
             {
-                parallelTriangles = surface.triangulate(parallelResolution, parallelResolution);
-                canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, Properties.Settings.Default.pointSize);
+                        parallelTriangles = surface.triangulate(parallelResolution, parallelResolution);
+0                       canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, pointSize);
                 canvasManager.reDraw(currentTransform);
             }
 

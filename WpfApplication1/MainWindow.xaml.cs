@@ -370,6 +370,7 @@ namespace ParSurf
         }
         private void Save_Transformation_Click(object sender, RoutedEventArgs e)
         {
+            
         }
         private void Load_Transformation_Click(object sender, RoutedEventArgs e)
         {
@@ -377,7 +378,26 @@ namespace ParSurf
         }
         private void Save_Tab_State_Click(object sender, RoutedEventArgs e)
         {
-
+            System.Windows.Forms.SaveFileDialog save = new System.Windows.Forms.SaveFileDialog();
+            if (save.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                TabItem tab = new TabItem();
+                foreach (TabItem temp in this.tabControl1.Items)
+                {
+                    if (temp.IsSelected) { tab = temp; break; }
+                }
+                object[] toSave = new object[5];
+                toSave[0] = ((GraphicsPage)((ContentControl)tab.Content).Content).surface;
+                toSave[1] = ((GraphicsPage)((ContentControl)tab.Content).Content).currentTransform;
+                toSave[2] = ((GraphicsPage)((ContentControl)tab.Content).Content).renderResolution;
+                toSave[3] = ((GraphicsPage)((ContentControl)tab.Content).Content).parallelResolution;
+                toSave[4] = ((GraphicsPage)((ContentControl)tab.Content).Content).pointSize;
+                using (Stream stream = File.Open(save.FileName, FileMode.Create))
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+                    bin.Serialize(stream, toSave);
+                }
+            }
         }
         private void Load_Tab_State_Click(object sender, RoutedEventArgs e)
         {
@@ -492,7 +512,36 @@ namespace ParSurf
         }
         private void Save_Snapshot_Click(object sender, RoutedEventArgs e)
         {
-
+            System.Windows.Forms.OpenFileDialog load = new System.Windows.Forms.OpenFileDialog();
+            if (load.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                object[] page = new object[5];
+                using (Stream stream = File.Open(load.FileName, FileMode.Open))
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+                    page = (object[])bin.Deserialize(stream);
+                }
+                CloseableTabItem newtab = new CloseableTabItem();
+                newtab.SetHeader(new TextBlock { Text = ((Surface)page[0]).name });
+                Frame frame = new Frame();
+                switch (((Surface)page[0]).dimension)
+                {
+                    case 3:
+                        frame.Content = new Page3D(((Surface)page[0]));
+                        break;
+                    case 4:
+                        frame.Content = new Page4D(((Surface)page[0]), (double[][])page[1],(int)page[2],(int)page[3],(double)page[4]);
+                        break;
+                    default:
+                        frame.Content = new PageND(((Surface)page[0]), ((Surface)page[0]).dimension);
+                        break;
+                }
+                
+                newtab.Content = frame;
+                tabControl1.Items.Add(newtab);
+                newtab.IsSelected = true;
+                
+            }
         }
     }
 }

@@ -19,15 +19,15 @@ namespace ParSurf
 {
     public enum GraphicModes { R3, R4, Rn }; //R3time at the future?
     public enum ReRenderingModes {Viewport, Canvas, Both}
-
+    [Serializable()]
     public abstract class GraphicsPage : Page
     {
         protected double yCoordinateRange = 10;
         protected double xCoordinateRange = 10;
         protected double mouseMoveEpsilon = 0.8;
-        public int parallelResolution;
-        public int renderResolution;
-        public double pointSize;
+        public int parallelResolution = Properties.Settings.Default.parallelResolution;
+        public int renderResolution = Properties.Settings.Default.renderResolution;
+        public double pointSize = Properties.Settings.Default.pointSize;
         private GraphicModes mode;
         protected ViewPortGraphics[] viewportManagers;
         protected CanvasGraphics canvasManager;
