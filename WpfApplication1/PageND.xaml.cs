@@ -21,8 +21,8 @@ namespace ParSurf
     public partial class PageND : GraphicsPage
     {
 
-        public PageND(Surface surface, int dimension)
-            : base(GraphicModes.Rn, dimension, surface)
+        public PageND(Surface surface, int dimension, bool paramAsk = true)
+            : base(GraphicModes.Rn, dimension, surface,paramAsk)
         {
             InitializeComponent();
             parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
@@ -36,7 +36,7 @@ namespace ParSurf
             currentAxes = new int[] { 0, 1, 2 };
             viewportManagers[0].generate_3d_axes(100);
             viewportManagers[0].generate_viewport_object(ViewPortGraphics.projectNDTrianglesTo3D(renderTriangles, currentAxes),
-                                                         renderingFrontColor, renderingBackColor, renderingOpacity);
+                                                         settings.renderingFrontColor, settings.renderingBackColor, settings.renderingOpacity);
             viewportsBorder = viewportBorder;
             base.canvas = this.canvas;
             base.canvasBorder = this.canvasBorder;
@@ -44,7 +44,12 @@ namespace ParSurf
             this.renderTriangles = renderTriangles;
             intializeSizes();
         }
-
+        public PageND(Surface surface,double[][] currentTrans, TabSettings settings) : this(surface,surface.dimension,false)
+        {
+            currentTransform = currentTrans;
+            this.settings = settings;
+            reRender(ReRenderingModes.Both);
+        }
         private void button1_Click(object sender, RoutedEventArgs e)
         {
             int[] requestedAxes = new int[3];
@@ -75,7 +80,7 @@ namespace ParSurf
             currentAxes[2] = requestedAxes[2];
             viewportManagers[0].reset();
             viewportManagers[0].generate_viewport_object(ViewPortGraphics.projectNDTrianglesTo3D(renderTriangles, currentAxes),
-                                                         renderingFrontColor, renderingBackColor, renderingOpacity,
+                                                         settings.renderingFrontColor, settings.renderingBackColor, settings.renderingOpacity,
                                                          ViewPortGraphics.convertNDTransformTo3D(currentTransform, currentAxes));
         }
         public override void reRender(ReRenderingModes who = ReRenderingModes.Both)
@@ -85,13 +90,13 @@ namespace ParSurf
                 System.Windows.Media.Media3D.Transform3D trans = viewportManagers[0].getCurrentTransform();
                 viewportManagers[0].reset();
                 viewportManagers[0].generate_3d_axes(100);
-                renderTriangles = surface.triangulate(renderResolution, renderResolution);
-                viewportManagers[0].generate_viewport_object(renderTriangles, renderingFrontColor, renderingBackColor, renderingOpacity);
+                renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution);
+                viewportManagers[0].generate_viewport_object(renderTriangles, settings.renderingFrontColor, settings.renderingBackColor, settings.renderingOpacity);
                 viewportManagers[0].performTransform(ViewPortGraphics.convertNDTransformTo3D(currentTransform, currentAxes));
             }
             if (who == ReRenderingModes.Canvas || who == ReRenderingModes.Both)
             {
-                parallelTriangles = surface.triangulate(parallelResolution, parallelResolution);
+                parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution);
                 canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, dimension, parallelTriangles);
                 canvasManager.reDraw(currentTransform);
             }

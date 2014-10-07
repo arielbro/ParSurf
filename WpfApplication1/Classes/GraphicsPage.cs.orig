@@ -18,14 +18,20 @@ using ParSurf.Properties;
 namespace ParSurf
 {
     public enum GraphicModes { R3, R4, Rn }; //R3time at the future?
-    public enum ReRenderingModes {Viewport, Canvas, Both}
+<<<<<<< HEAD:WpfApplication1/GraphicsPage.cs
     [Serializable()]
+=======
+    public enum ReRenderingModes {Viewport, Canvas, Both}
+
+>>>>>>> 230d8407c13c994669757e6e620921e4948c14f0:WpfApplication1/Classes/GraphicsPage.cs
     public abstract class GraphicsPage : Page
     {
         protected double yCoordinateRange = 10;
         protected double xCoordinateRange = 10;
         protected double mouseMoveEpsilon = 0.8;
-        public TabSettings settings = new TabSettings();
+        public int parallelResolution = Properties.Settings.Default.parallelResolution;
+        public int renderResolution = Properties.Settings.Default.renderResolution;
+        public double pointSize = Properties.Settings.Default.pointSize;
         private GraphicModes mode;
         protected ViewPortGraphics[] viewportManagers;
         protected CanvasGraphics canvasManager;
@@ -45,10 +51,14 @@ namespace ParSurf
         public double[][] currentTransform;
         protected IList<double[][]> renderTriangles;
         protected IList<double[][]> parallelTriangles;
+        public SolidColorBrush renderingFrontColor;
+        public SolidColorBrush renderingBackColor;
+        public double renderingOpacity;
+
         public GraphicsPage()
         {
         }
-        public GraphicsPage(GraphicModes mode, int dimension, Surface surface, bool paramAsk)
+        public GraphicsPage(GraphicModes mode, int dimension, Surface surface)
         {
             currentTransform = new double[dimension + 1][]; //affine transformations! 
             for (int i = 0; i < dimension + 1; i++)
@@ -59,7 +69,7 @@ namespace ParSurf
             this.mode = mode;
             this.dimension = dimension;
             this.surface = surface;
-            if (paramAsk && surface.GetType() == typeof(ParametricSurface) && ((ParametricSurface)surface).parameters.Count != 0)
+            if (surface.GetType() == typeof(ParametricSurface) && ((ParametricSurface)surface).parameters.Count != 0)
             {
                 //bool temp = false;
                 //foreach (KeyValuePair<string, double> param in ((ParametricSurface)surface).parameters)
@@ -76,6 +86,11 @@ namespace ParSurf
                 }
                 //}
             }
+            this.renderResolution = Settings.Default.renderResolution;
+            this.parallelResolution = Settings.Default.parallelResolution;
+            this.renderingFrontColor = Settings.Default.frontColor;
+            this.renderingBackColor = Settings.Default.backColor;
+            this.renderingOpacity = Settings.Default.renderingOpacity;
         }
         protected void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -366,10 +381,10 @@ namespace ParSurf
             }
             return identity;
         }
-        public void applyRenderingColorScheme(Color frontColor, Color backColor)
+        public void applyRenderingColorScheme(SolidColorBrush frontColor, SolidColorBrush backColor)
         {
-            this.settings.renderingFrontColor = frontColor;
-            this.settings.renderingBackColor = backColor;
+            this.renderingFrontColor = frontColor;
+            this.renderingBackColor = backColor;
             foreach (ViewPortGraphics manager in viewportManagers)
             {
                 foreach (ViewPortGraphics viewportManager in viewportManagers)

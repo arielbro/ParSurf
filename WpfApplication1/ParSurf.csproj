@@ -96,6 +96,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\PropertyInfoToBrushConverter.cs" />
+    <Compile Include="Classes\TabSettings.cs" />
     <Compile Include="Forms\InputColorForm.cs">
       <SubType>Form</SubType>
     </Compile>

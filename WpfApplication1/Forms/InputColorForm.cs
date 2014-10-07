@@ -12,11 +12,11 @@ namespace ParSurf
 {
     public partial class InputColorForm : Form
     {
-        public System.Windows.Media.SolidColorBrush frontColor;
-        public System.Windows.Media.SolidColorBrush backColor;
+        public System.Windows.Media.Color frontColor;
+        public System.Windows.Media.Color backColor;
         BrushPickerComboControl brushPicker1;
         BrushPickerComboControl brushPicker2;
-        public InputColorForm(SolidColorBrush currentFrontColor, SolidColorBrush currentBackColor)
+        public InputColorForm(System.Windows.Media.Color currentFrontColor, System.Windows.Media.Color currentBackColor)
         {
             InitializeComponent();
             brushPicker1 = new BrushPickerComboControl();
@@ -34,18 +34,18 @@ namespace ParSurf
             this.CancelButton = buttonCancel;
             buttonCancel.DialogResult = DialogResult.Cancel;
 
-            this.label2.BackColor = System.Drawing.Color.FromArgb(currentFrontColor.Color.A, currentFrontColor.Color.R, 
-                                                                    currentFrontColor.Color.G, currentFrontColor.Color.B);
-            this.label1.BackColor = System.Drawing.Color.FromArgb(currentBackColor.Color.A, currentBackColor.Color.R, 
-                                                                    currentBackColor.Color.G, currentBackColor.Color.B);
-            brushPicker2.SelectedBrush = currentFrontColor;
-            brushPicker1.SelectedBrush = currentBackColor;
+            this.label2.BackColor = System.Drawing.Color.FromArgb(currentFrontColor.A, currentFrontColor.R, 
+                                                                    currentFrontColor.G, currentFrontColor.B);
+            this.label1.BackColor = System.Drawing.Color.FromArgb(currentBackColor.A, currentBackColor.R, 
+                                                                    currentBackColor.G, currentBackColor.B);
+            brushPicker2.SelectedBrush = new SolidColorBrush(currentFrontColor);
+            brushPicker1.SelectedBrush = new SolidColorBrush(currentBackColor);
         }
 
         private void buttonOk_Click(object sender, EventArgs e)
         {
-            frontColor = brushPicker1.SelectedBrush as SolidColorBrush;
-            backColor = brushPicker2.SelectedBrush as SolidColorBrush;
+            frontColor = (brushPicker1.SelectedBrush as SolidColorBrush).Color;
+            backColor = (brushPicker2.SelectedBrush as SolidColorBrush).Color;
             this.DialogResult = DialogResult.OK;
         }
 
@@ -53,13 +53,13 @@ namespace ParSurf
         {
             System.Windows.Media.Color color = (brushPicker1.SelectedBrush as SolidColorBrush).Color;
             label1.BackColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
-            this.frontColor = (brushPicker1.SelectedBrush as SolidColorBrush);
+            this.frontColor = (brushPicker1.SelectedBrush as SolidColorBrush).Color;
         }
         public void brushPicker2_ColorChanged(Object sender, PropertyChangedEventArgs e)
         {
             System.Windows.Media.Color color = (brushPicker2.SelectedBrush as SolidColorBrush).Color;
             label2.BackColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
-            this.backColor = (brushPicker1.SelectedBrush as SolidColorBrush);
+            this.backColor = (brushPicker1.SelectedBrush as SolidColorBrush).Color;
         }
 
     }

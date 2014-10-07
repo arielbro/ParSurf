@@ -61,10 +61,10 @@ namespace ParSurf.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FFF0F8FF")]
-        public global::System.Windows.Media.SolidColorBrush frontColor {
+        [global::System.Configuration.DefaultSettingValueAttribute("#00000000")]
+        public global::System.Windows.Media.Color frontColor {
             get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["frontColor"]));
+                return ((global::System.Windows.Media.Color)(this["frontColor"]));
             }
             set {
                 this["frontColor"] = value;
@@ -74,9 +74,9 @@ namespace ParSurf.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FFB22222")]
-        public global::System.Windows.Media.SolidColorBrush backColor {
+        public global::System.Windows.Media.Color backColor {
             get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["backColor"]));
+                return ((global::System.Windows.Media.Color)(this["backColor"]));
             }
             set {
                 this["backColor"] = value;

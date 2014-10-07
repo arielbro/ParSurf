@@ -59,7 +59,7 @@ namespace ParSurf
                 viewPort.Children.Add(modelAxis);
             }
         }
-        public void generate_viewport_object(IList<double[][]> triangles, SolidColorBrush frontColor, SolidColorBrush backColor,
+        public void generate_viewport_object(IList<double[][]> triangles, Color frontColor, Color backColor,
                                             double opacity, Transform3D currentTransform = null)
         {
             Mouse.OverrideCursor = Cursors.Wait;
@@ -82,14 +82,14 @@ namespace ParSurf
 
                 triangleIndex++;
             }
-            frontColor = frontColor.Clone();
-            frontColor.Color = Color.FromScRgb((float)opacity, frontColor.Color.ScR, frontColor.Color.ScG, frontColor.Color.ScB);
-            Material material = new DiffuseMaterial(frontColor);
+            
+            frontColor = Color.FromScRgb((float)opacity, frontColor.ScR, frontColor.ScG, frontColor.ScB);
+            Material material = new DiffuseMaterial(new SolidColorBrush(frontColor));
             geometryModel = new GeometryModel3D(
                 triangleMesh, material);
-            backColor = backColor.Clone();
-            backColor.Color = Color.FromScRgb((float)opacity, backColor.Color.ScR, backColor.Color.ScG, backColor.Color.ScB);
-            geometryModel.BackMaterial = new DiffuseMaterial(backColor);
+            
+            backColor = Color.FromScRgb((float)opacity, backColor.ScR, backColor.ScG, backColor.ScB);
+            geometryModel.BackMaterial = new DiffuseMaterial(new SolidColorBrush(backColor));
             model = new ModelVisual3D();
             model.Content = geometryModel;
             viewPort.Children.Add(model);
@@ -247,11 +247,11 @@ namespace ParSurf
             }
             return res;
         }
-        public void changeColorScheme(SolidColorBrush frontColor, SolidColorBrush backColor)
+        public void changeColorScheme(Color frontColor, Color backColor)
         {
             Mouse.OverrideCursor = Cursors.Wait;
-            geometryModel.Material = new DiffuseMaterial(frontColor);
-            geometryModel.BackMaterial = new DiffuseMaterial(backColor);
+            geometryModel.Material = new DiffuseMaterial(new SolidColorBrush(frontColor));
+            geometryModel.BackMaterial = new DiffuseMaterial(new SolidColorBrush(backColor));
             geometryModel.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), 
                                                                     DispatcherPriority.ApplicationIdle);
         }

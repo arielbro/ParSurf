@@ -20,13 +20,13 @@ namespace ParSurf
     [Serializable()]
     public partial class Page4D : GraphicsPage
     {
-        public Page4D(Surface surface, bool paramAsk = true)
-            : base(GraphicModes.R4, 4, surface, paramAsk)
+        public Page4D(Surface surface)
+            : base(GraphicModes.R4, 4, surface)
         {
             InitializeComponent();
-            parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution);
-            renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution);
-            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, settings.pointSize);
+            parallelTriangles = surface.triangulate(parallelResolution, parallelResolution);
+            renderTriangles = surface.triangulate(renderResolution, renderResolution);
+            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, pointSize);
             canvasManager.reDraw(currentTransform);
             viewports = new Viewport3D[] { viewport1, viewport2, viewport3, viewport4 };
             viewportManagers = new ViewPortGraphics[] { new ViewPortGraphics(viewport1), new ViewPortGraphics(viewport2),
@@ -38,7 +38,7 @@ namespace ParSurf
                 //project the triangles to the 
                 viewportManagers[i].generate_3d_axes(100);
                 viewportManagers[i].generate_viewport_object(ViewPortGraphics.project4DTrianglesTo3D(renderTriangles, i),
-                                                             settings.renderingFrontColor, settings.renderingBackColor, settings.renderingOpacity);
+                                                             renderingFrontColor, renderingBackColor, renderingOpacity);
             }
             base.canvas = this.canvas;
             base.canvasBorder = this.canvasBorder;
@@ -46,30 +46,65 @@ namespace ParSurf
             intializeSizes();
 
         }
-        public Page4D(Surface surface,double[][] currentTrans, TabSettings settings) : this(surface,false)
+<<<<<<< HEAD
+        public Page4D(Surface surface,double[][] currentTrans, int renderRes, int parallelRes, double pointSize) : this(surface)
         {
             currentTransform = currentTrans;
-            this.settings = settings;
-            reRender(ReRenderingModes.Both);
+            renderResolution = renderRes;
+            parallelResolution = parallelRes;
+            this.pointSize = pointSize;
+            reRender(2);
         }
+        public override void reRender(int who = 2)
+=======
         public override void reRender(ReRenderingModes who = ReRenderingModes.Both)
+>>>>>>> 230d8407c13c994669757e6e620921e4948c14f0
         {
             if (who == ReRenderingModes.Viewport || who == ReRenderingModes.Both)
             {
+<<<<<<< HEAD
+                case 0:
+                    {
+                        System.Windows.Media.Media3D.Transform3D trans = viewportManagers[0].getCurrentTransform();
+                        for (int i = 0; i < 4; i++)
+                        {
+                            viewportManagers[i].reset();
+                            viewportManagers[i].generate_3d_axes(100);
+                            renderTriangles = surface.triangulate(renderResolution, renderResolution);
+                            viewportManagers[i].generate_viewport_object(ViewPortGraphics.project4DTrianglesTo3D(renderTriangles, i));
+                            viewportManagers[i].performTransform(ViewPortGraphics.convert4DTransformTo3D(currentTransform,i));
+                        }
+                        break;
+                    }
+                case 1:
+                    {
+                        parallelTriangles = surface.triangulate(parallelResolution, parallelResolution);
+                        canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, pointSize);
+                        canvasManager.reDraw(currentTransform);
+                        break;
+                    }
+                default:
+                    {
+                        this.reRender(0);
+                        this.reRender(1);
+                        break;
+                    }
+=======
                 for (int i = 0; i < 4; i++)
                 {
                     viewportManagers[i].reset();
                     viewportManagers[i].generate_3d_axes(100);
-                    renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution);
+                    renderTriangles = surface.triangulate(renderResolution, renderResolution);
                     viewportManagers[i].generate_viewport_object(ViewPortGraphics.project4DTrianglesTo3D(renderTriangles, i),
-                                                                 settings.renderingFrontColor, settings.renderingBackColor, settings.renderingOpacity);
+                                                                 renderingFrontColor, renderingBackColor, renderingOpacity);
                     viewportManagers[i].performTransform(ViewPortGraphics.convert4DTransformTo3D(currentTransform, i));
                 }
+>>>>>>> 230d8407c13c994669757e6e620921e4948c14f0
             }
             if (who == ReRenderingModes.Canvas || who == ReRenderingModes.Both)
             {
-                parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution);
-                canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, settings.pointSize);
+                parallelTriangles = surface.triangulate(parallelResolution, parallelResolution);
+                canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, Properties.Settings.Default.pointSize);
                 canvasManager.reDraw(currentTransform);
             }
 

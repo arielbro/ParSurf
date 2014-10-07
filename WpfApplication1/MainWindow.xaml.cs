@@ -155,7 +155,7 @@ namespace ParSurf
                         MessageBox.Show("Input for parameter must be a positive double");
                         return;
                     }
-                    ((GraphicsPage)((Frame)tab.Content).Content).renderResolution = Convert.ToInt32(form.result["Point Size"]);
+                    ((GraphicsPage)((Frame)tab.Content).Content).settings.renderResolution = Convert.ToInt32(form.result["Point Size"]);
                     Properties.Settings.Default.pointSize = form.result["Point Size"];
                     ((GraphicsPage)((Frame)tab.Content).Content).reRender(ReRenderingModes.Canvas);
                     //canvasGraphics.reDraw(); 
@@ -169,16 +169,16 @@ namespace ParSurf
                 //    }
                 else if (sender == renderResolutionMenuItem)
                 {
-                    ((GraphicsPage)((Frame)tab.Content).Content).renderResolution = Convert.ToInt32(form.result["Render Resolution"]);
+                    ((GraphicsPage)((Frame)tab.Content).Content).settings.renderResolution = Convert.ToInt32(form.result["Render Resolution"]);
                     Properties.Settings.Default.renderResolution = Convert.ToInt32(form.result["Render Resolution"]);
-                    ((GraphicsPage)((Frame)tab.Content).Content).renderResolution = Properties.Settings.Default.renderResolution;
+                    ((GraphicsPage)((Frame)tab.Content).Content).settings.renderResolution = Properties.Settings.Default.renderResolution;
                     ((GraphicsPage)((Frame)tab.Content).Content).reRender(ReRenderingModes.Viewport);
                 }
                 else if (sender == parallelResoltuionMenuItem)
                 {
-                    ((GraphicsPage)((Frame)tab.Content).Content).renderResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
+                    ((GraphicsPage)((Frame)tab.Content).Content).settings.renderResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
                     Properties.Settings.Default.parallelResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
-                    ((GraphicsPage)((Frame)tab.Content).Content).parallelResolution = Properties.Settings.Default.parallelResolution;
+                    ((GraphicsPage)((Frame)tab.Content).Content).settings.parallelResolution = Properties.Settings.Default.parallelResolution;
                     ((GraphicsPage)((Frame)tab.Content).Content).reRender(ReRenderingModes.Canvas);
                 }
                 else if (sender == parametersMenuItem)
@@ -379,6 +379,9 @@ namespace ParSurf
         private void Save_Tab_State_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.SaveFileDialog save = new System.Windows.Forms.SaveFileDialog();
+            save.DefaultExt = ".tab";
+            save.InitialDirectory = System.IO.Path.GetFullPath("/Tabs/");
+            save.RestoreDirectory = true;
             if (save.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 TabItem tab = new TabItem();
@@ -386,12 +389,10 @@ namespace ParSurf
                 {
                     if (temp.IsSelected) { tab = temp; break; }
                 }
-                object[] toSave = new object[5];
+                object[] toSave = new object[3];
                 toSave[0] = ((GraphicsPage)((ContentControl)tab.Content).Content).surface;
                 toSave[1] = ((GraphicsPage)((ContentControl)tab.Content).Content).currentTransform;
-                toSave[2] = ((GraphicsPage)((ContentControl)tab.Content).Content).renderResolution;
-                toSave[3] = ((GraphicsPage)((ContentControl)tab.Content).Content).parallelResolution;
-                toSave[4] = ((GraphicsPage)((ContentControl)tab.Content).Content).pointSize;
+                toSave[2] = ((GraphicsPage)((ContentControl)tab.Content).Content).settings;
                 using (Stream stream = File.Open(save.FileName, FileMode.Create))
                 {
                     BinaryFormatter bin = new BinaryFormatter();
@@ -401,7 +402,40 @@ namespace ParSurf
         }
         private void Load_Tab_State_Click(object sender, RoutedEventArgs e)
         {
-
+            System.Windows.Forms.OpenFileDialog load = new System.Windows.Forms.OpenFileDialog();
+            load.DefaultExt = ".tab";
+            load.InitialDirectory = System.IO.Path.GetFullPath("/Tabs/");
+            load.RestoreDirectory = true;
+            if (load.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                object[] toLoad = new object[3];
+                using (Stream stream = File.Open(load.FileName, FileMode.Open))
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+                    toLoad = (object[])bin.Deserialize(stream);
+                }
+                
+                Mouse.OverrideCursor = Cursors.Wait;
+                CloseableTabItem newtab = new CloseableTabItem();
+                newtab.SetHeader(new TextBlock { Text = ((Surface)toLoad[0]).name });
+                Frame frame = new Frame();
+                switch (((Surface)toLoad[0]).dimension)
+                {
+                    case 3:
+                        frame.Content = new Page3D(((Surface)toLoad[0]), ((double[][])toLoad[1]), ((TabSettings)toLoad[2]));
+                        break;
+                    case 4:
+                        frame.Content = new Page4D(((Surface)toLoad[0]), ((double[][])toLoad[1]), ((TabSettings)toLoad[2]));
+                        break;
+                    default:
+                        frame.Content = new PageND(((Surface)toLoad[0]), ((double[][])toLoad[1]), ((TabSettings)toLoad[2]));
+                        break;
+                }
+                newtab.Content = frame;
+                tabControl1.Items.Add(newtab);
+                newtab.IsSelected = true;
+                
+            }
         }
         private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -466,11 +500,11 @@ namespace ParSurf
                 if (tab.IsEnabled)
                     currentPage = (GraphicsPage)(((Frame)tab.Content).Content);
 
-            System.Windows.Media.SolidColorBrush currentFrontColor = currentPage != null ? currentPage.renderingFrontColor :
+            System.Windows.Media.Color currentFrontColor = currentPage != null ? currentPage.settings.renderingFrontColor :
                                                                                 Settings.Default.frontColor;
-            System.Windows.Media.SolidColorBrush currentBackColor = currentPage != null ? currentPage.renderingBackColor :
+            System.Windows.Media.Color currentBackColor = currentPage != null ? currentPage.settings.renderingBackColor :
                                                                             Settings.Default.backColor;
-            double currentOpacity = currentPage != null ? currentPage.renderingFrontColor.Opacity : Settings.Default.renderingOpacity;
+            double currentOpacity = currentPage != null ? currentPage.settings.renderingFrontColor.A : Settings.Default.renderingOpacity;
             if (sender == colorSchemeChooseColorsMenuItem)
             {
                 InputColorForm form = new InputColorForm(currentFrontColor, currentBackColor);
@@ -483,18 +517,18 @@ namespace ParSurf
             }
             else if (sender == colorSchemeAllBlueMenuItem)
             {
-                currentFrontColor = Settings.Default.frontColor = new SolidColorBrush(Colors.RoyalBlue);
-                currentBackColor = Settings.Default.backColor = new SolidColorBrush(Colors.RoyalBlue);
+                currentFrontColor = Settings.Default.frontColor = (new SolidColorBrush(Colors.RoyalBlue)).Color;
+                currentBackColor = Settings.Default.backColor = (new SolidColorBrush(Colors.RoyalBlue)).Color;
             }
             else if (sender == colorSchemeBlueRedMenuItem)
             {
-                currentFrontColor = Settings.Default.frontColor = new SolidColorBrush(Colors.RoyalBlue);
-                currentBackColor = Settings.Default.backColor = new SolidColorBrush(Colors.Firebrick);
+                currentFrontColor = Settings.Default.frontColor = (new SolidColorBrush(Colors.RoyalBlue)).Color;
+                currentBackColor = Settings.Default.backColor = (new SolidColorBrush(Colors.Firebrick)).Color;
             }
             else if (sender == colorSchemeTransperencyMenuItem)
             {
                 Dictionary<string, double> transparancyParameterDict = new Dictionary<string, double>();
-                transparancyParameterDict["opacity"] = Settings.Default.frontColor.Opacity;
+                transparancyParameterDict["opacity"] = Settings.Default.frontColor.A;
                 InputNumberForm form = new InputNumberForm(transparancyParameterDict);
                 System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
                 if (formStatus != System.Windows.Forms.DialogResult.OK)
@@ -503,45 +537,19 @@ namespace ParSurf
             }
             if (currentPage != null)
             {
-                currentFrontColor = currentFrontColor.Clone();
-                currentFrontColor.Opacity = currentOpacity;
-                currentBackColor = currentBackColor.Clone();
-                currentBackColor.Opacity = currentOpacity;
+                currentFrontColor.ScA = (float)currentOpacity;
+                currentBackColor.ScA = (float)currentOpacity;
                     currentPage.applyRenderingColorScheme(currentFrontColor, currentBackColor);
             }
         }
         private void Save_Snapshot_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.OpenFileDialog load = new System.Windows.Forms.OpenFileDialog();
-            if (load.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                object[] page = new object[5];
-                using (Stream stream = File.Open(load.FileName, FileMode.Open))
-                {
-                    BinaryFormatter bin = new BinaryFormatter();
-                    page = (object[])bin.Deserialize(stream);
-                }
-                CloseableTabItem newtab = new CloseableTabItem();
-                newtab.SetHeader(new TextBlock { Text = ((Surface)page[0]).name });
-                Frame frame = new Frame();
-                switch (((Surface)page[0]).dimension)
-                {
-                    case 3:
-                        frame.Content = new Page3D(((Surface)page[0]));
-                        break;
-                    case 4:
-                        frame.Content = new Page4D(((Surface)page[0]), (double[][])page[1],(int)page[2],(int)page[3],(double)page[4]);
-                        break;
-                    default:
-                        frame.Content = new PageND(((Surface)page[0]), ((Surface)page[0]).dimension);
-                        break;
-                }
-                
-                newtab.Content = frame;
-                tabControl1.Items.Add(newtab);
-                newtab.IsSelected = true;
-                
-            }
+            
+        }
+
+        private void parallelPointsShownMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
