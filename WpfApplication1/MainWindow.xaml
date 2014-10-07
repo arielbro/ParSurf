@@ -792,9 +792,9 @@
                 <MenuItem Name="pointSizeMenuItem" Header="Point size..." Click="graphicSettingsMenuItem_Click"/>
                 <MenuItem Name="parallelResoltuionMenuItem" Header="Parallel coordinates resolution..." Click="graphicSettingsMenuItem_Click"/>
                 <MenuItem Name="parallelPointsShownMenuItem" Header="Plane points shown">
-                    <MenuItem Name="parallelPointsShownMenuItemStandard" Header="Standard - consecutive trios + transfposed" Click="parallelPointsShownMenuItem_Click"/>
-                    <MenuItem Name="parallelPointsShownMenuItemNoTransposed" Header="Consecutive trios, no transfposed" Click="parallelPointsShownMenuItem_Click"/>
-                    <MenuItem Name="parallelPointsShownMenuItemOnlyTransposed" Header="Consecutive trios, only transfposed" Click="parallelPointsShownMenuItem_Click"/>
+                    <MenuItem Name="parallelPointsShownMenuItemStandard" IsEnabled="False" Header="Standard - consecutive trios + transfposed" Click="parallelPointsShownMenuItem_Click"/>
+                    <MenuItem Name="parallelPointsShownMenuItemNoTransposed" IsEnabled="False" Header="Consecutive trios, no transfposed" Click="parallelPointsShownMenuItem_Click"/>
+                    <MenuItem Name="parallelPointsShownMenuItemOnlyTransposed" IsEnabled="False" Header="Consecutive trios, only transfposed" Click="parallelPointsShownMenuItem_Click"/>
                     <MenuItem Name="parallelPointsShownMenuItemNone" Header="Reset shown points (none)" Click="parallelPointsShownMenuItem_Click"/>
                     <MenuItem Name="parallelPointsShownMenuItemChooseManually" Header="Choose shown points manually"/>
                 </MenuItem>
