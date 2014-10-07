@@ -412,7 +412,7 @@ namespace ParSurf
         {
             foreach (TabItem tab in tabControl1.Items)
             {
-                if (tab.IsEnabled)
+                if (tab.IsSelected)
                 {
                     GraphicsPage currentPage = (GraphicsPage)(((Frame)tab.Content).Content);
                     currentPage.resetTransformation();
@@ -424,7 +424,7 @@ namespace ParSurf
         {
             foreach (TabItem tab in tabControl1.Items)
             {
-                if (tab.IsEnabled)
+                if (tab.IsSelected)
                 {
                     GraphicsPage currentPage = (GraphicsPage)(((Frame)tab.Content).Content);
 
@@ -443,7 +443,7 @@ namespace ParSurf
         {
             GraphicsPage currentPage = null;
             foreach (TabItem tab in tabControl1.Items)
-                if (tab.IsEnabled)
+                if (tab.IsSelected)
                     currentPage = (GraphicsPage)(((Frame)tab.Content).Content);
 
             System.Windows.Media.SolidColorBrush currentFrontColor = currentPage != null ? currentPage.renderingFrontColor :
