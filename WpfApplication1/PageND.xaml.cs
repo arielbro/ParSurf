@@ -17,6 +17,7 @@ namespace ParSurf
     /// <summary>
     /// Interaction logic for Page1.xaml
     /// </summary>
+    [Serializable()]
     public partial class PageND : GraphicsPage
     {
        

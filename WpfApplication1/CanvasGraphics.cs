@@ -30,7 +30,7 @@ namespace ParSurf
         private int dimension;
 
         public CanvasGraphics(Canvas canvas, double xCoordinateRange, double yCoordinateRange, int dimension, IList<double[][]> triangles, double pointSize = 0.8)
-                                IList<double[][]> triangles)
+                                
         {
             this.pointSize = pointSize;
             this.canvas = canvas;
@@ -321,46 +321,46 @@ namespace ParSurf
         }
         public void performScaleTransform(double scale)
         {
-                        foreach (UIElement element in canvas.Children)
-            {
-                if (element is Image)
-                {
-                    ScaleTransform s = new ScaleTransform(scale, scale);
-                    Image image = element as Image;
-                    TransformGroup group = image.RenderTransform as TransformGroup;
-                    //the renderTransformOrigin coordinates values are relative to the size of the element - (0,0) is top-left corner,
-                    //(1,1) is bottom-right. Currently the transform is centered on the axes (so they can be left in their original position).
-                    //Consider centering on the point the mouse is at (and correcting axes height/width post scaling).
-                    //                    double originLeft = -Canvas.GetLeft(image) + canvas1.ActualWidth / 2 + currentCanvasTranslation.X;
-                    //                    double originTop = -Canvas.GetTop(image) + canvas1.ActualHeight / 2 + currentCanvasTranslation.Y;
-                    Point imageOrigin = canvas.TranslatePoint(currentCanvasOrigin, image);
-                    image.RenderTransformOrigin = new Point(imageOrigin.X / image.ActualWidth,
-                        imageOrigin.Y / image.ActualHeight);
-                    group.Children.Add(s);
-                }
-                if (element is Line)
-                {//vertical axes need to be moved, not scaled
-                    Line line = element as Line;
-                    bool isHorizontal = line.X2 != line.X1;
-                    TransformGroup group = line.RenderTransform as TransformGroup;
-                    TranslateTransform t;
-                    //can't access top/left of the Line's (will get NaN), and X/Y values don't update on translation.
-                    Point p = line.TranslatePoint(new Point(0, 0), canvas);
-                    if (isHorizontal)
-                    {
-                        double translation = (scale - 1) * (line.Y1 - canvas.ActualHeight / 2) * currentCanvasScale;
-                        t = new TranslateTransform(0, translation);
-                    }
-                    else
-                    {
-                        double translation = (scale - 1) * (line.X1 - canvas.ActualWidth / 2) * currentCanvasScale;
-                        t = new TranslateTransform(translation, 0);
-                    }
-                    group.Children.Add(t);
-                }
+            //            foreach (UIElement element in canvas.Children)
+            //{
+            //    if (element is Image)
+            //    {
+            //        ScaleTransform s = new ScaleTransform(scale, scale);
+            //        Image image = element as Image;
+            //        TransformGroup group = image.RenderTransform as TransformGroup;
+            //        //the renderTransformOrigin coordinates values are relative to the size of the element - (0,0) is top-left corner,
+            //        //(1,1) is bottom-right. Currently the transform is centered on the axes (so they can be left in their original position).
+            //        //Consider centering on the point the mouse is at (and correcting axes height/width post scaling).
+            //        //                    double originLeft = -Canvas.GetLeft(image) + canvas1.ActualWidth / 2 + currentCanvasTranslation.X;
+            //        //                    double originTop = -Canvas.GetTop(image) + canvas1.ActualHeight / 2 + currentCanvasTranslation.Y;
+            //        Point imageOrigin = canvas.TranslatePoint(currentCanvasOrigin, image);
+            //        image.RenderTransformOrigin = new Point(imageOrigin.X / image.ActualWidth,
+            //            imageOrigin.Y / image.ActualHeight);
+            //        group.Children.Add(s);
+            //    }
+            //    if (element is Line)
+            //    {//vertical axes need to be moved, not scaled
+            //        Line line = element as Line;
+            //        bool isHorizontal = line.X2 != line.X1;
+            //        TransformGroup group = line.RenderTransform as TransformGroup;
+            //        TranslateTransform t;
+            //        //can't access top/left of the Line's (will get NaN), and X/Y values don't update on translation.
+            //        Point p = line.TranslatePoint(new Point(0, 0), canvas);
+            //        if (isHorizontal)
+            //        {
+            //            double translation = (scale - 1) * (line.Y1 - canvas.ActualHeight / 2) * currentCanvasScale;
+            //            t = new TranslateTransform(0, translation);
+            //        }
+            //        else
+            //        {
+            //            double translation = (scale - 1) * (line.X1 - canvas.ActualWidth / 2) * currentCanvasScale;
+            //            t = new TranslateTransform(translation, 0);
+            //        }
+            //        group.Children.Add(t);
+            //    }
 
-            }
-            currentCanvasScale *= scale;
+            //}
+            //currentCanvasScale *= scale;
         }
         public void performTranslateTransfrom(double dx, double dy)
         {
