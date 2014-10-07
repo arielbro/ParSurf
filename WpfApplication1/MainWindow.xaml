@@ -791,11 +791,12 @@
             <MenuItem Header="Tab Settings">
                 <MenuItem Name="pointSizeMenuItem" Header="Point size..." Click="graphicSettingsMenuItem_Click"/>
                 <MenuItem Name="parallelResoltuionMenuItem" Header="Parallel coordinates resolution..." Click="graphicSettingsMenuItem_Click"/>
-                <MenuItem Name="parallelPointsShownMenuItem" Header="Plane points shown..." IsEnabled="False">
+                <MenuItem Name="parallelPointsShownMenuItem" Header="Plane points shown">
                     <MenuItem Name="parallelPointsShownMenuItemStandard" Header="Standard - consecutive trios + transfposed" Click="parallelPointsShownMenuItem_Click"/>
                     <MenuItem Name="parallelPointsShownMenuItemNoTransposed" Header="Consecutive trios, no transfposed" Click="parallelPointsShownMenuItem_Click"/>
                     <MenuItem Name="parallelPointsShownMenuItemOnlyTransposed" Header="Consecutive trios, only transfposed" Click="parallelPointsShownMenuItem_Click"/>
-                    <MenuItem Name="parallelPointsShownMenuItemNone" Header="Choose representing points" Click="parallelPointsShownMenuItem_Click"/>
+                    <MenuItem Name="parallelPointsShownMenuItemNone" Header="Reset shown points (none)" Click="parallelPointsShownMenuItem_Click"/>
+                    <MenuItem Name="parallelPointsShownMenuItemChooseManually" Header="Choose shown points manually"/>
                 </MenuItem>
                 <MenuItem Name="renderResolutionMenuItem" Header="3D Rendering resolution..." Click="graphicSettingsMenuItem_Click"/>
                 <MenuItem Header="3D Rendering color scheme" Name="colorSchemeParentMenuItem">

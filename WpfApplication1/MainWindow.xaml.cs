@@ -370,7 +370,7 @@ namespace ParSurf
         }
         private void Save_Transformation_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
         private void Load_Transformation_Click(object sender, RoutedEventArgs e)
         {
@@ -408,6 +408,7 @@ namespace ParSurf
             //gray-out and undo graying of the parametric-surface specific "parameters"
             Debug.Assert(e.AddedItems.Count <= 1);//could be 0 on last tab deletion
             Debug.Assert(e.RemovedItems.Count <= 1);//could be 0 on first tab addition
+            setUpParallelPointsShownMenuItems();
             if (e.AddedItems.Count > 0)
             {
                 Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.ApplicationIdle);
@@ -507,7 +508,7 @@ namespace ParSurf
                 currentFrontColor.Opacity = currentOpacity;
                 currentBackColor = currentBackColor.Clone();
                 currentBackColor.Opacity = currentOpacity;
-                    currentPage.applyRenderingColorScheme(currentFrontColor, currentBackColor);
+                currentPage.applyRenderingColorScheme(currentFrontColor, currentBackColor);
             }
         }
         private void Save_Snapshot_Click(object sender, RoutedEventArgs e)
@@ -530,17 +531,72 @@ namespace ParSurf
                         frame.Content = new Page3D(((Surface)page[0]));
                         break;
                     case 4:
-                        frame.Content = new Page4D(((Surface)page[0]), (double[][])page[1],(int)page[2],(int)page[3],(double)page[4]);
+                        frame.Content = new Page4D(((Surface)page[0]), (double[][])page[1], (int)page[2], (int)page[3], (double)page[4]);
                         break;
                     default:
                         frame.Content = new PageND(((Surface)page[0]), ((Surface)page[0]).dimension);
                         break;
                 }
-                
+
                 newtab.Content = frame;
                 tabControl1.Items.Add(newtab);
                 newtab.IsSelected = true;
-                
+
+            }
+        }
+        private void parallelPointsShownMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender == parallelPointsShownMenuItemStandard)
+            {
+            }
+            else if (sender == parallelPointsShownMenuItemNoTransposed)
+            {
+            }
+            else if (sender == parallelPointsShownMenuItemOnlyTransposed)
+            {
+            }
+            else if (sender == parallelPointsShownMenuItemNone)
+            {
+            }
+            else //manual selection - Pi_ijk included in name, plus transposed or not as '
+            {
+                MenuItem selectedMenuItem = sender as MenuItem;
+                if (selectedMenuItem.IsChecked)//dechecking
+                {
+
+                }
+                else//checking
+                {
+
+                }
+            }
+            setUpParallelPointsShownMenuItems();
+        }
+        private void setUpParallelPointsShownMenuItems()
+        {
+            foreach (TabItem tab in tabControl1.Items)
+            {
+                if (tab.IsSelected)
+                {
+                    GraphicsPage currentPage = (GraphicsPage)(((Frame)tab.Content).Content);
+                    //set up Pi_ijk and Pi_ijk' for each non-decreasing ijk trio 
+                    for (int i = 0; i < currentPage.dimension; i++)
+                        for (int j = i + 1; j < currentPage.dimension; j++)
+                            for (int k = j + 1; k < currentPage.dimension; j++)
+                            {
+                                //note that "normal" people use notations starting with 1 for axes.
+                                foreach (bool isTransposed in new bool[]{ false, true })
+                                {
+                                    MenuItem pi_ijk_MenuItem = new MenuItem();
+                                    pi_ijk_MenuItem.Header = string.Format("Pi{3}_{0}{1}{2}", i, j, k,isTransposed ? "'" : "");
+                                    pi_ijk_MenuItem.Name = pi_ijk_MenuItem.Header as string;
+                                    pi_ijk_MenuItem.IsCheckable = true;
+                                    pi_ijk_MenuItem.IsChecked = ??????;
+                                    pi_ijk_MenuItem.Click += parallelPointsShownMenuItem_Click;
+                                }
+                            }
+                    break;
+                }
             }
         }
     }

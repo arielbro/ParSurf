@@ -35,7 +35,7 @@ namespace ParSurf
         protected Viewport3D[] viewports;
         protected Border viewportsBorder;
         protected Border canvasBorder;
-        protected int dimension;
+        public int dimension;
         protected int[] currentAxes;
         public Surface surface;
         protected bool[] viewportsmDown;
