@@ -58,5 +58,41 @@ namespace ParSurf.Properties {
                 this["pointSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFF0F8FF")]
+        public global::System.Windows.Media.SolidColorBrush frontColor {
+            get {
+                return ((global::System.Windows.Media.SolidColorBrush)(this["frontColor"]));
+            }
+            set {
+                this["frontColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFB22222")]
+        public global::System.Windows.Media.SolidColorBrush backColor {
+            get {
+                return ((global::System.Windows.Media.SolidColorBrush)(this["backColor"]));
+            }
+            set {
+                this["backColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double renderingOpacity {
+            get {
+                return ((double)(this["renderingOpacity"]));
+            }
+            set {
+                this["renderingOpacity"] = value;
+            }
+        }
     }
 }

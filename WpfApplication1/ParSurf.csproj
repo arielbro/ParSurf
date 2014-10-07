@@ -81,56 +81,74 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="W3b.Sine">
       <HintPath>..\arbitraryPrecisionLibrary\W3b.Sine.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Surface.cs" />
-    <Compile Include="CloseableTabItem.cs" />
-    <Compile Include="CustomTabControl.cs" />
-    <Compile Include="InverseBooleanConverter.cs" />
+    <Compile Include="Classes\PropertyInfoToBrushConverter.cs" />
+    <Compile Include="Forms\InputColorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\InputColorForm.Designer.cs">
+      <DependentUpon>InputColorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\InputMatrixForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\InputMatrixForm.Designer.cs">
+      <DependentUpon>InputMatrixForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\Surface.cs" />
+    <Compile Include="Controls\CloseableTabItem.cs" />
+    <Compile Include="Controls\CustomTabControl.cs" />
+    <Compile Include="Classes\InverseBooleanConverter.cs" />
     <Compile Include="PageND.xaml.cs">
       <DependentUpon>PageND.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GraphicsPage.cs" />
+    <Compile Include="Classes\GraphicsPage.cs" />
     <Compile Include="Page4D.xaml.cs">
       <DependentUpon>Page4D.xaml</DependentUpon>
     </Compile>
     <Compile Include="Page3D.xaml.cs">
       <DependentUpon>Page3D.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ParametersInputForm.cs">
+    <Compile Include="Forms\ParametersInputForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ParametersInputForm.Designer.cs">
+    <Compile Include="Forms\ParametersInputForm.Designer.cs">
       <DependentUpon>ParametersInputForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ScrollableTabPanel.cs" />
-    <Compile Include="ScrollBarConverters.cs" />
-    <Compile Include="TabCloseButton.xaml.cs">
+    <Compile Include="Controls\ScrollableTabPanel.cs" />
+    <Compile Include="Classes\ScrollBarConverters.cs" />
+    <Compile Include="Controls\TabCloseButton.xaml.cs">
       <DependentUpon>TabCloseButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TriangulationLibrary.cs" />
-    <Compile Include="ViewPortGraphics.cs" />
-    <Compile Include="CanvasGraphics.cs" />
-    <Compile Include="FormulaInputForm.cs">
+    <Compile Include="Classes\TriangulationLibrary.cs" />
+    <Compile Include="Controls\BrushPickerComboControl.xaml.cs">
+      <DependentUpon>BrushPickerComboControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\ViewPortGraphics.cs" />
+    <Compile Include="Classes\CanvasGraphics.cs" />
+    <Compile Include="Forms\FormulaInputForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormulaInputForm.Designer.cs">
+    <Compile Include="Forms\FormulaInputForm.Designer.cs">
       <DependentUpon>FormulaInputForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="InputNumberForm.cs">
+    <Compile Include="Forms\InputNumberForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InputNumberForm.Designer.cs">
+    <Compile Include="Forms\InputNumberForm.Designer.cs">
       <DependentUpon>InputNumberForm.cs</DependentUpon>
     </Compile>
     <Page Include="PageND.xaml">
@@ -145,7 +163,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ParallelCoordinates.cs" />
+    <Compile Include="Classes\ParallelCoordinates.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -162,7 +180,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TabCloseButton.xaml">
+    <Page Include="Controls\TabCloseButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\BrushPickerComboControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -181,10 +203,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="FormulaInputForm.resx">
+    <EmbeddedResource Include="Forms\InputColorForm.resx">
+      <DependentUpon>InputColorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\InputMatrixForm.resx">
+      <DependentUpon>InputMatrixForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormulaInputForm.resx">
       <DependentUpon>FormulaInputForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InputNumberForm.resx">
+    <EmbeddedResource Include="Forms\InputNumberForm.resx">
       <DependentUpon>InputNumberForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -20,7 +20,8 @@ namespace ParSurf
     [Serializable()]
     public partial class Page4D : GraphicsPage
     {
-        public Page4D(Surface surface) : base(GraphicModes.R4, 4, surface)
+        public Page4D(Surface surface)
+            : base(GraphicModes.R4, 4, surface)
         {
             InitializeComponent();
             parallelTriangles = surface.triangulate(parallelResolution, parallelResolution);
@@ -36,7 +37,8 @@ namespace ParSurf
             {
                 //project the triangles to the 
                 viewportManagers[i].generate_3d_axes(100);
-                viewportManagers[i].generate_viewport_object(ViewPortGraphics.project4DTrianglesTo3D(renderTriangles, i));
+                viewportManagers[i].generate_viewport_object(ViewPortGraphics.project4DTrianglesTo3D(renderTriangles, i),
+                                                             renderingFrontColor, renderingBackColor, renderingOpacity);
             }
             base.canvas = this.canvas;
             base.canvasBorder = this.canvasBorder;
@@ -52,37 +54,27 @@ namespace ParSurf
             this.pointSize = pointSize;
             reRender(2);
         }
-        public override void reRender(int who = 2)
+        public override void reRender(ReRenderingModes who = ReRenderingModes.Both)
         {
-            switch (who) //What is this switch??? It seems all redundant.
+            if (who == ReRenderingModes.Viewport || who == ReRenderingModes.Both)
             {
-                case 0:
-                    {
-                        System.Windows.Media.Media3D.Transform3D trans = viewportManagers[0].getCurrentTransform();
-                        for (int i = 0; i < 4; i++)
-                        {
-                            viewportManagers[i].reset();
-                            viewportManagers[i].generate_3d_axes(100);
+                for (int i = 0; i < 4; i++)
+                {
+                    viewportManagers[i].reset();
+                    viewportManagers[i].generate_3d_axes(100);
                             renderTriangles = surface.triangulate(renderResolution, renderResolution);
-                            viewportManagers[i].generate_viewport_object(ViewPortGraphics.project4DTrianglesTo3D(renderTriangles, i));
-                            viewportManagers[i].performTransform(ViewPortGraphics.convert4DTransformTo3D(currentTransform,i));
-                        }
-                        break;
-                    }
-                case 1:
-                    {
-                        parallelTriangles = surface.triangulate(parallelResolution, parallelResolution);
-                        canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, pointSize);
-                        canvasManager.reDraw(currentTransform);
-                        break;
-                    }
-                default:
-                    {
-                        this.reRender(0);
-                        this.reRender(1);
-                        break;
-                    }
+                    viewportManagers[i].generate_viewport_object(ViewPortGraphics.project4DTrianglesTo3D(renderTriangles, i),
+                                                                 renderingFrontColor, renderingBackColor, renderingOpacity);
+                    viewportManagers[i].performTransform(ViewPortGraphics.convert4DTransformTo3D(currentTransform, i));
+                }
             }
+            if (who == ReRenderingModes.Canvas || who == ReRenderingModes.Both)
+            {
+                        parallelTriangles = surface.triangulate(parallelResolution, parallelResolution);
+0                       canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, pointSize);
+                canvasManager.reDraw(currentTransform);
+            }
+
         }
         public void intializeSizes()
         {
@@ -98,7 +90,7 @@ namespace ParSurf
             {
                 bord.Height = this.ActualHeight / 2;
                 bord.Width = this.ActualWidth / 4;
-            }            
+            }
         }
     }
 }

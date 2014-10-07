@@ -358,7 +358,6 @@
                                 <Popup Name="Popup"
                                Placement="Bottom"
                                IsOpen="{TemplateBinding IsSubmenuOpen}"
-                               AllowsTransparency="True" 
                                Focusable="False"
                                PopupAnimation="Fade">
                                     <!-- 
@@ -370,18 +369,18 @@
                               at the very top of this window), a reference to 
                               PresentationFramework.Aero is required.
                            -->
-                                  <Border Name="SubmenuBorder"
+                                    <Border Name="SubmenuBorder"
                                    Margin="1"
                                    SnapsToDevicePixels="True"
                                    BorderBrush="{StaticResource LineButtonBorderBrush}" 
                                    Background="{StaticResource TabItemMenuBackcolor}" 
                                    CornerRadius="1" 
                                    BorderThickness="1">
-                                            <StackPanel 
+                                        <StackPanel 
                                     IsItemsHost="True" 
                                     KeyboardNavigation.DirectionalNavigation="Cycle" />
-                                        </Border>
-                                   
+                                    </Border>
+
                                 </Popup>
                             </Grid>
                         </Border>
@@ -390,7 +389,7 @@
                                 <Setter TargetName="ButtonBorder" Property="Background" 
                                 Value="{StaticResource LineButtonHoverBrush}" />
                             </Trigger>
-                            
+
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -777,36 +776,50 @@
     <!--MouseWheel="Grid_MouseWheel"-->
     <Grid Name="grid">
         <Menu Height="23" HorizontalAlignment="Stretch" Name="menu1" VerticalAlignment="Top" Margin="0,0,0,0">
-            <MenuItem Name ="MenuItem_new_shape" Header="New Shape" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <MenuItem Name="MenuItem_PointCloud" Header="Point cloud" VerticalAlignment="Center"/>
-                <MenuItem Name="MenuItem_ImplicitEquation" Header="Implicit equation" VerticalAlignment="Center"/>
-                <MenuItem Name="MenuItem_ParametricSurface" Header="Parametric Surface" VerticalAlignment="Center">
-                    <MenuItem Name="MenuItem_newParametricSurface" Header="New Parametric Surface" Click="newParametricSurface_Click" VerticalAlignment="Center"/>
-                    <MenuItem Name="MenuItem_savedParametricSurface" Header="Saved Parametric Surfaces" VerticalAlignment="Center"/>
-
+            <MenuItem Header="File">
+                <MenuItem Name="Save_Parametric_Surface" Header="Save surface..." Click="Save_Parametric_Surface_Click"/>
+                <MenuItem Name="MenuItem_savedParametricSurface" Header="Load surface..." VerticalAlignment="Center"/>
+                <MenuItem Name="Save_Tab_State" Header="Save tab state..." Click="Save_Tab_State_Click"/>
+                <MenuItem Name="Load_Tab_State" Header="Load tab state..." Click="Load_Tab_State_Click"/>
+                <MenuItem Name="Save_Snapshot" Header="Save snapshot..." Click="Save_Snapshot_Click"/>
+            </MenuItem>
+            <MenuItem Name ="MenuItem_new_shape" Header="New Surface" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <MenuItem Name="MenuItem_PointCloud" Header="From point cloud..." VerticalAlignment="Center"/>
+                <MenuItem Name="MenuItem_ImplicitEquation" Header="From implicit equation..." VerticalAlignment="Center"/>
+                <MenuItem Name="MenuItem_newParametricSurface" Header="From parametric equation..." Click="newParametricSurface_Click" VerticalAlignment="Center"/>
+            </MenuItem>
+            <MenuItem Header="Tab Settings">
+                <MenuItem Name="pointSizeMenuItem" Header="Point size..." Click="graphicSettingsMenuItem_Click"/>
+                <MenuItem Name="parallelResoltuionMenuItem" Header="Parallel coordinates resolution..." Click="graphicSettingsMenuItem_Click"/>
+                <MenuItem Name="parallelPointsShownMenuItem" Header="Plane points shown..." IsEnabled="False">
+                    <MenuItem Name="parallelPointsShownMenuItemStandard" Header="Standard - consecutive trios + transfposed" Click="parallelPointsShownMenuItem_Click"/>
+                    <MenuItem Name="parallelPointsShownMenuItemNoTransposed" Header="Consecutive trios, no transfposed" Click="parallelPointsShownMenuItem_Click"/>
+                    <MenuItem Name="parallelPointsShownMenuItemOnlyTransposed" Header="Consecutive trios, only transfposed" Click="parallelPointsShownMenuItem_Click"/>
+                    <MenuItem Name="parallelPointsShownMenuItemNone" Header="Choose representing points" Click="parallelPointsShownMenuItem_Click"/>
+                </MenuItem>
+                <MenuItem Name="renderResolutionMenuItem" Header="3D Rendering resolution..." Click="graphicSettingsMenuItem_Click"/>
+                <MenuItem Header="3D Rendering color scheme" Name="colorSchemeParentMenuItem">
+                    <MenuItem Name="colorSchemeBlueRedMenuItem" Header="Blue and red" Click="colorSchemeMenuItem_Click"/>
+                    <MenuItem Name="colorSchemeAllBlueMenuItem" Header="All blue" Click="colorSchemeMenuItem_Click"/>
+                    <MenuItem Name="colorSchemeChooseColorsMenuItem" Header="Choose colors..." Click="colorSchemeMenuItem_Click"/>
+                    <MenuItem Name="colorSchemeTransperencyMenuItem" Header="Set opacity..." Click="colorSchemeMenuItem_Click"/>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="Save and Load">
-                <MenuItem Name="Save_Parametric_Surface" Header="Save Parametric Surface" Click="Save_Parametric_Surface_Click"/>
-                <MenuItem Name="Save_Tab_State" Header="Save Tab State" Click="Save_Tab_State_Click"/>
-                <MenuItem Name="Load_Tab_State" Header="Load Tab State" Click="Load_Tab_State_Click"/>
-            </MenuItem>
-            <MenuItem Header="Settings">
-                <MenuItem Name="pointSizeMenuItem" Header="Point size" Click="graphicSettingsMenuItem_Click"/>
-                <MenuItem Name="parallelResoltuionMenuItem" Header="Parallel coordinates resolution" Click="graphicSettingsMenuItem_Click"/>
-                <MenuItem Name="renderResolutionMenuItem" Header="3D Rendering resolution" Click="graphicSettingsMenuItem_Click"/>
-                <MenuItem Name="parametersMenuItem" Header="Change shape parameters" Click="graphicSettingsMenuItem_Click"/>
+            <MenuItem Header="Surface Settings">
+                <MenuItem Name="parametersMenuItem" Header="Change shape parameters..." Click="graphicSettingsMenuItem_Click" IsEnabled="False"/>
+                <MenuItem Name="resetTransformationMenuItem" Header="Reset current surface transformation" Click="resetTransformationMenuItem_Click" IsEnabled="False"/>
+                <MenuItem Name="applyTransformationMenuItem" Header="Apply a transformation to the surface..." Click="applyTransformationMenuItem_Click"  IsEnabled="False"/>
             </MenuItem>
             <MenuItem Header="help">
-                <MenuItem Header="help"/>
+                <MenuItem Header="About"/>
+                <MenuItem Header="Help"/>
             </MenuItem>
         </Menu>
-        
         <DockPanel>
-            <TabControl SelectedIndex="0" HorizontalAlignment="Stretch" Margin="0,25,0,0" Name="tabControl1" VerticalAlignment="Stretch" >
-             
+            <TabControl SelectedIndex="0" HorizontalAlignment="Stretch" Margin="0,25,0,0" Name="tabControl1" VerticalAlignment="Stretch" 
+                        SelectionChanged="tabControl1_SelectionChanged">
+
             </TabControl>
         </DockPanel>
-
     </Grid>
 </Window>
