@@ -27,8 +27,11 @@ namespace ParSurf
             InitializeComponent();
             parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
             renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution);
-            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, dimension, parallelTriangles);
-            canvasManager.reDraw(currentTransform);
+            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, dimension, parallelTriangles,
+                                                settings.originalPLanePointsShown, settings.transposedPLanePointsShown, settings.pointSize);
+            applyParallelColorScheme(settings.originalPlanePointsColor, settings.transposedPlanePointsColor,
+                         settings.isPlanePointsColoringGradient, settings.isPlanePointsColoringArbitrary);
+            canvasManager.reDraw(currentTransform, parallelTriangles);
             viewports = new Viewport3D[] { viewport };
             viewportManagers = new ViewPortGraphics[] { new ViewPortGraphics(viewport) };
             viewportsmDown = new bool[1];
@@ -96,9 +99,9 @@ namespace ParSurf
             }
             if (who == ReRenderingModes.Canvas || who == ReRenderingModes.Both)
             {
+                canvasManager.pointSize = settings.pointSize;
                 parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution);
-                canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, dimension, parallelTriangles);
-                canvasManager.reDraw(currentTransform);
+                canvasManager.reDraw(currentTransform, parallelTriangles);
             }
 
         }

@@ -61,18 +61,6 @@ namespace ParSurf.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#00000000")]
-        public global::System.Windows.Media.Color frontColor {
-            get {
-                return ((global::System.Windows.Media.Color)(this["frontColor"]));
-            }
-            set {
-                this["frontColor"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FFB22222")]
         public global::System.Windows.Media.Color backColor {
             get {
@@ -92,6 +80,66 @@ namespace ParSurf.Properties {
             }
             set {
                 this["renderingOpacity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFF0F8FF")]
+        public global::System.Windows.Media.Color frontColor {
+            get {
+                return ((global::System.Windows.Media.Color)(this["frontColor"]));
+            }
+            set {
+                this["frontColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#00FF0000")]
+        public global::System.Windows.Media.Color originalPlanePointsColor {
+            get {
+                return ((global::System.Windows.Media.Color)(this["originalPlanePointsColor"]));
+            }
+            set {
+                this["originalPlanePointsColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#0000FF00")]
+        public global::System.Windows.Media.Color transposedPlanePointsColor {
+            get {
+                return ((global::System.Windows.Media.Color)(this["transposedPlanePointsColor"]));
+            }
+            set {
+                this["transposedPlanePointsColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool isPlanePointsColoringGradient {
+            get {
+                return ((bool)(this["isPlanePointsColoringGradient"]));
+            }
+            set {
+                this["isPlanePointsColoringGradient"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isPlanePointsColoringArbitrary {
+            get {
+                return ((bool)(this["isPlanePointsColoringArbitrary"]));
+            }
+            set {
+                this["isPlanePointsColoringArbitrary"] = value;
             }
         }
     }

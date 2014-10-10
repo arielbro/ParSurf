@@ -34,8 +34,8 @@ namespace ParSurf
     public partial class MainWindow : Window
     {
 
-        public int parallelResolution = 30;
-        public int renderResolution = 150;
+        public int parallelResolution;
+        public int renderResolution;
         ParametricSurface shape;
         string[] previousFormulae;
         string previousFormulaeName;
@@ -94,6 +94,7 @@ namespace ParSurf
             //not implemented yet
             MenuItem_PointCloud.IsEnabled = false;
             MenuItem_ImplicitEquation.IsEnabled = false;
+            parallelPointsShownMenuItem.IsEnabled = false;
 
             //Cursor = Cursors.Arrow;
         }
@@ -138,12 +139,12 @@ namespace ParSurf
                     dict.Add("Parallel Resolution", Settings.Default.parallelResolution);
                     break;
             }
-            TabItem tab = new TabItem();
+            GraphicsPage currentPage = null;
             foreach (TabItem temp in this.tabControl1.Items)
             {
-                if (temp.IsSelected) { tab = temp; break; }
+                if (temp.IsSelected) { currentPage = ((Frame)(temp.Content)).Content as GraphicsPage; break; }
             }
-            if (((MenuItem)sender).Name == "parametersMenuItem") dict = ((ParametricSurface)((GraphicsPage)((Frame)tab.Content).Content).surface).parameters;
+            if (((MenuItem)sender).Name == "parametersMenuItem") dict = ((ParametricSurface)(currentPage.surface)).parameters;
             InputNumberForm form = new InputNumberForm(dict);
             System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
             if (formStatus == System.Windows.Forms.DialogResult.OK)
@@ -155,36 +156,36 @@ namespace ParSurf
                         MessageBox.Show("Input for parameter must be a positive double");
                         return;
                     }
-                    ((GraphicsPage)((Frame)tab.Content).Content).settings.renderResolution = Convert.ToInt32(form.result["Point Size"]);
                     Properties.Settings.Default.pointSize = form.result["Point Size"];
-                    ((GraphicsPage)((Frame)tab.Content).Content).reRender(ReRenderingModes.Canvas);
-                    //canvasGraphics.reDraw(); 
-                    return;
+                    if (currentPage != null)
+                    {
+                        currentPage.settings.pointSize = Convert.ToInt32(form.result["Point Size"]);
+                        currentPage.reRender(ReRenderingModes.Canvas);
+                    }
+                    
                 }
-                //    else if (Double.IsNaN(form.result) || form.result <= 0 ||
-                //           Convert.ToInt32(form.result) != form.result)
-                //    {
-                //        MessageBox.Show("Input for parameter must be a positive integer");
-                //        return;
-                //    }
                 else if (sender == renderResolutionMenuItem)
                 {
-                    ((GraphicsPage)((Frame)tab.Content).Content).settings.renderResolution = Convert.ToInt32(form.result["Render Resolution"]);
                     Properties.Settings.Default.renderResolution = Convert.ToInt32(form.result["Render Resolution"]);
-                    ((GraphicsPage)((Frame)tab.Content).Content).settings.renderResolution = Properties.Settings.Default.renderResolution;
-                    ((GraphicsPage)((Frame)tab.Content).Content).reRender(ReRenderingModes.Viewport);
+                    if (currentPage != null)
+                    {
+                        currentPage.settings.renderResolution = Convert.ToInt32(form.result["Render Resolution"]);
+                        currentPage.reRender(ReRenderingModes.Viewport);
+                    }
                 }
                 else if (sender == parallelResoltuionMenuItem)
                 {
-                    ((GraphicsPage)((Frame)tab.Content).Content).settings.renderResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
-                    Properties.Settings.Default.parallelResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
-                    ((GraphicsPage)((Frame)tab.Content).Content).settings.parallelResolution = Properties.Settings.Default.parallelResolution;
-                    ((GraphicsPage)((Frame)tab.Content).Content).reRender(ReRenderingModes.Canvas);
-                }
+                    if (currentPage != null)
+                    {
+                        currentPage.settings.parallelResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
+                        currentPage.reRender(ReRenderingModes.Canvas);
+                    }
+                        Properties.Settings.Default.parallelResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
+                    }
                 else if (sender == parametersMenuItem)
                 {
-                    ((ParametricSurface)((GraphicsPage)((Frame)tab.Content).Content).surface).parameters = form.result;
-                    ((GraphicsPage)((Frame)tab.Content).Content).reRender(ReRenderingModes.Both);
+                    ((ParametricSurface)currentPage.surface).parameters = form.result;
+                    currentPage.reRender(ReRenderingModes.Both);
                 }
             }
             Properties.Settings.Default.Save();
@@ -414,7 +415,7 @@ namespace ParSurf
                     BinaryFormatter bin = new BinaryFormatter();
                     toLoad = (object[])bin.Deserialize(stream);
                 }
-                
+
                 Mouse.OverrideCursor = Cursors.Wait;
                 CloseableTabItem newtab = new CloseableTabItem();
                 newtab.SetHeader(new TextBlock { Text = ((Surface)toLoad[0]).name });
@@ -434,7 +435,7 @@ namespace ParSurf
                 newtab.Content = frame;
                 tabControl1.Items.Add(newtab);
                 newtab.IsSelected = true;
-                
+
             }
         }
         private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -448,6 +449,7 @@ namespace ParSurf
                 Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.ApplicationIdle);
                 resetTransformationMenuItem.IsEnabled = true;
                 applyTransformationMenuItem.IsEnabled = true;
+                parallelPointsShownMenuItem.IsEnabled = true;
                 Surface surface = (Surface)((GraphicsPage)((Frame)((TabItem)e.AddedItems[0]).Content).Content).surface;
                 if (surface.GetType() == typeof(ParametricSurface) && ((ParametricSurface)surface).parameters.Count > 0)
                 {
@@ -461,6 +463,7 @@ namespace ParSurf
                 parametersMenuItem.IsEnabled = false;
                 resetTransformationMenuItem.IsEnabled = false;
                 applyTransformationMenuItem.IsEnabled = false;
+                parallelPointsShownMenuItem.IsEnabled = false;
             }
         }
         private void resetTransformationMenuItem_Click(object sender, RoutedEventArgs e)
@@ -508,23 +511,23 @@ namespace ParSurf
             double currentOpacity = currentPage != null ? currentPage.settings.renderingFrontColor.A : Settings.Default.renderingOpacity;
             if (sender == colorSchemeChooseColorsMenuItem)
             {
-                InputColorForm form = new InputColorForm(currentFrontColor, currentBackColor);
+                InputColorForm form = new InputColorForm(currentFrontColor, currentBackColor, "Front color", "Back color");
                 System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
                 if (formStatus != System.Windows.Forms.DialogResult.OK)
                     return;
 
-                currentFrontColor = Settings.Default.frontColor = form.frontColor;
-                currentBackColor = Settings.Default.backColor = form.backColor;
+                currentFrontColor = Settings.Default.frontColor = form.firstColor;
+                currentBackColor = Settings.Default.backColor = form.secondColor;
             }
             else if (sender == colorSchemeAllBlueMenuItem)
             {
-                currentFrontColor = Settings.Default.frontColor = (new SolidColorBrush(Colors.RoyalBlue)).Color;
-                currentBackColor = Settings.Default.backColor = (new SolidColorBrush(Colors.RoyalBlue)).Color;
+                currentFrontColor = Settings.Default.frontColor = Colors.RoyalBlue;
+                currentBackColor = Settings.Default.backColor = Colors.RoyalBlue;
             }
             else if (sender == colorSchemeBlueRedMenuItem)
             {
-                currentFrontColor = Settings.Default.frontColor = (new SolidColorBrush(Colors.RoyalBlue)).Color;
-                currentBackColor = Settings.Default.backColor = (new SolidColorBrush(Colors.Firebrick)).Color;
+                currentFrontColor = Settings.Default.frontColor = Colors.RoyalBlue;
+                currentBackColor = Settings.Default.backColor = Colors.Firebrick;
             }
             else if (sender == colorSchemeTransperencyMenuItem)
             {
@@ -545,41 +548,55 @@ namespace ParSurf
         }
         private void Save_Snapshot_Click(object sender, RoutedEventArgs e)
         {
-            
-        }
 
-        private void parallelPointsShownMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-
-            }
         }
         private void parallelPointsShownMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (sender == parallelPointsShownMenuItemStandard)
-            {
-            }
-            else if (sender == parallelPointsShownMenuItemNoTransposed)
-            {
-            }
-            else if (sender == parallelPointsShownMenuItemOnlyTransposed)
-            {
-            }
-            else if (sender == parallelPointsShownMenuItemNone)
-            {
-            }
-            else //manual selection - Pi_ijk included in name, plus transposed or not as '
-            {
-                MenuItem selectedMenuItem = sender as MenuItem;
-                if (selectedMenuItem.IsChecked)//dechecking
-                {
+            GraphicsPage currentPage = null;
 
-                }
-                else//checking
+            foreach (TabItem tab in tabControl1.Items)
+                if (tab.IsSelected)
                 {
+                    MenuItem selectedMenuItem = sender as MenuItem;
+                    currentPage = (GraphicsPage)(((Frame)tab.Content).Content);
+                    if (selectedMenuItem.Name.Contains("manual"))
+                    {
+                        //manual selection - Pi_ijk included in name, plus transposed or not as '
+                        string[] splittedName = ((MenuItem)sender).Name.Split('_');
+                        int i = int.Parse(splittedName[1]);
+                        int j = int.Parse(splittedName[2]);
+                        int k = int.Parse(splittedName[3]);
+                        bool isTransposed = bool.Parse(splittedName[4]);
 
+                        //Notice that the change in IsChecked happens before the 
+                        //event handler is called (so when IsChecked == true, the user just checked it)
+                        List<Tuple<int, int, int>> relevantList = isTransposed ? currentPage.settings.transposedPLanePointsShown :
+                                                       currentPage.settings.originalPLanePointsShown;
+                        if (selectedMenuItem.IsChecked)
+                            relevantList.Add(new Tuple<int, int, int>(i, j, k));
+                        else
+                            relevantList.Remove(new Tuple<int, int, int>(i, j, k));
+
+                    }
+                    else
+                    {
+                        List<Tuple<int, int, int>> originalPoints = currentPage.settings.originalPLanePointsShown;
+                        List<Tuple<int, int, int>> transposedPoints = currentPage.settings.transposedPLanePointsShown;
+                        originalPoints.Clear();
+                        transposedPoints.Clear();
+
+                        if (sender == parallelPointsShownMenuItemStandard || sender == parallelPointsShownMenuItemNoTransposed)
+                            for (int i = 0; i < currentPage.dimension - 2; i++)
+                                originalPoints.Add(new Tuple<int, int, int>(i, i + 1, i + 2));
+                        if (sender == parallelPointsShownMenuItemStandard || sender == parallelPointsShownMenuItemOnlyTransposed)
+                            for (int i = 0; i < currentPage.dimension - 2; i++)
+                                transposedPoints.Add(new Tuple<int, int, int>(i, i + 1, i + 2));
+
+                        setUpParallelPointsShownMenuItems();
+                    }
+                    currentPage.reRender(ReRenderingModes.Canvas);
+                    break;
                 }
-            }
-            setUpParallelPointsShownMenuItems();
         }
         private void setUpParallelPointsShownMenuItems()
         {
@@ -587,25 +604,98 @@ namespace ParSurf
             {
                 if (tab.IsSelected)
                 {
+                    Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.ApplicationIdle);
                     GraphicsPage currentPage = (GraphicsPage)(((Frame)tab.Content).Content);
                     //set up Pi_ijk and Pi_ijk' for each non-decreasing ijk trio 
+                    parallelPointsShownMenuItemChooseManually.Items.Clear();
                     for (int i = 0; i < currentPage.dimension; i++)
                         for (int j = i + 1; j < currentPage.dimension; j++)
-                            for (int k = j + 1; k < currentPage.dimension; j++)
+                            for (int k = j + 1; k < currentPage.dimension; k++)
                             {
                                 //note that "normal" people use notations starting with 1 for axes.
-                                foreach (bool isTransposed in new bool[]{ false, true })
+                                foreach (bool isTransposed in new bool[] { false, true })
                                 {
                                     MenuItem pi_ijk_MenuItem = new MenuItem();
-                                    pi_ijk_MenuItem.Header = string.Format("Pi{3}_{0}{1}{2}", i, j, k,isTransposed ? "'" : "");
-                                    pi_ijk_MenuItem.Name = pi_ijk_MenuItem.Header as string;
+                                    pi_ijk_MenuItem.Header = string.Format("Pi_{0}{1}{2}{3}", i + 1, j + 1, k + 1, isTransposed ? "'" : "");
+                                    pi_ijk_MenuItem.Name = string.Format("manual_{0}_{1}_{2}_{3}", i, j, k, isTransposed ? "true" : "false");
                                     pi_ijk_MenuItem.IsCheckable = true;
-                                    pi_ijk_MenuItem.IsChecked = ??????;
+
+                                    List<Tuple<int, int, int>> relevantList = isTransposed ? 
+                                                                                        currentPage.settings.transposedPLanePointsShown :
+                                                                                        currentPage.settings.originalPLanePointsShown;
+                                    pi_ijk_MenuItem.IsChecked = relevantList.Contains(new Tuple<int, int, int>(i, j, k));
                                     pi_ijk_MenuItem.Click += parallelPointsShownMenuItem_Click;
+
+                                    parallelPointsShownMenuItemChooseManually.Items.Add(pi_ijk_MenuItem);
                                 }
                             }
                     break;
                 }
+            }
+        }
+
+        private void parallelColorSchemeMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            GraphicsPage currentPage = null;
+            foreach (TabItem tab in tabControl1.Items)
+                if (tab.IsSelected)
+                    currentPage = (GraphicsPage)(((Frame)tab.Content).Content);
+
+            System.Windows.Media.Color currentOriginalPointsColor = currentPage != null ? currentPage.settings.originalPlanePointsColor :
+                                                                                Settings.Default.originalPlanePointsColor;
+            System.Windows.Media.Color currentTransposedPointsColor = currentPage != null ? currentPage.settings.transposedPlanePointsColor :
+                                                                            Settings.Default.transposedPlanePointsColor;
+            bool currentIsGradient = currentPage != null ? currentPage.settings.isPlanePointsColoringGradient :
+                                                                            Settings.Default.isPlanePointsColoringGradient;
+            bool currentIsArbitrary = currentPage != null ? currentPage.settings.isPlanePointsColoringArbitrary :
+                                                                            Settings.Default.isPlanePointsColoringArbitrary;
+
+            if (sender == parallelColorSchemeMenuItemChooseTwoColors)
+            {
+                InputColorForm form = new InputColorForm(currentOriginalPointsColor, currentTransposedPointsColor, 
+                                                        "Original points", "Transposed points");
+                System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
+                if (formStatus != System.Windows.Forms.DialogResult.OK)
+                    return;
+
+                currentOriginalPointsColor = Settings.Default.originalPlanePointsColor = form.firstColor;
+                currentTransposedPointsColor = Settings.Default.transposedPlanePointsColor = form.secondColor;
+                currentIsGradient = Settings.Default.isPlanePointsColoringGradient = false;
+                currentIsArbitrary = Settings.Default.isPlanePointsColoringArbitrary = false;
+            }
+            else if (sender == parallelColorSchemeMenuItemChooseTwoColorsGradient)
+            {
+                InputColorForm form = new InputColorForm(currentOriginalPointsColor, currentTransposedPointsColor,
+                                                        "Original points", "Transposed points");
+                System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
+                if (formStatus != System.Windows.Forms.DialogResult.OK)
+                    return;
+
+                currentOriginalPointsColor = Settings.Default.originalPlanePointsColor = form.firstColor;
+                currentTransposedPointsColor = Settings.Default.transposedPlanePointsColor = form.secondColor;
+                currentIsGradient = Settings.Default.isPlanePointsColoringGradient = true;
+                currentIsArbitrary = Settings.Default.isPlanePointsColoringArbitrary = false;
+            }
+            else if (sender == parallelColorSchemeMenuItemGreenAndRedGradient)
+            {
+                currentOriginalPointsColor = Settings.Default.frontColor = Colors.Red;
+                currentTransposedPointsColor = Settings.Default.backColor = Colors.Green;
+                currentIsGradient = Settings.Default.isPlanePointsColoringGradient = false;
+                currentIsArbitrary = Settings.Default.isPlanePointsColoringArbitrary = false;
+            }
+            else if (sender == parallelColorSchemeMenuItemArbitrary)
+            {
+                currentOriginalPointsColor = Settings.Default.frontColor = Colors.Red;
+                currentTransposedPointsColor = Settings.Default.backColor = Colors.Green;
+                currentIsGradient = Settings.Default.isPlanePointsColoringGradient = false;
+                currentIsArbitrary = Settings.Default.isPlanePointsColoringArbitrary = true;
+            }
+            if (currentPage != null)
+            {
+                currentPage.applyParallelColorScheme(currentOriginalPointsColor,currentTransposedPointsColor,
+                                                currentIsGradient,currentIsArbitrary);
+            }
+
         }
     }
 }

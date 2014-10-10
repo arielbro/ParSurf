@@ -14,17 +14,18 @@ using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using ParSurf.Properties;
+using System.Reflection;
 
 namespace ParSurf
 {
     public enum GraphicModes { R3, R4, Rn }; //R3time at the future?
-    public enum ReRenderingModes {Viewport, Canvas, Both}
+    public enum ReRenderingModes { Viewport, Canvas, Both }
     [Serializable()]
     public abstract class GraphicsPage : Page
     {
-        protected double yCoordinateRange = 10;
-        protected double xCoordinateRange = 10;
-        protected double mouseMoveEpsilon = 0.8;
+        protected const double yCoordinateRange = 10;
+        protected const double xCoordinateRange = 10;
+        protected const double mouseMoveEpsilon = 0.8;
         public TabSettings settings = new TabSettings();
         private GraphicModes mode;
         protected ViewPortGraphics[] viewportManagers;
@@ -75,6 +76,13 @@ namespace ParSurf
                     ((ParametricSurface)surface).parameters = parameterDialog.result;
                 }
                 //}
+            }
+            settings.originalPLanePointsShown = new List<Tuple<int, int, int>>();
+            settings.transposedPLanePointsShown = new List<Tuple<int, int, int>>();
+            for (int i = 0; i < dimension - 2; i++)
+            {
+                settings.originalPLanePointsShown.Add(new Tuple<int, int, int>(i, i + 1, i + 2));
+                settings.transposedPLanePointsShown.Add(new Tuple<int, int, int>(i, i + 1, i + 2));
             }
         }
         protected void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -153,12 +161,12 @@ namespace ParSurf
             if (mode == GraphicModes.Rn)
                 viewportManagers[0].performTransform(transform);
             //update canvas
-            canvasManager.reDraw(currentTransform);
+            canvasManager.reDraw(currentTransform, parallelTriangles);
         }
         protected void viewportBorder_MouseUp(object sender, MouseButtonEventArgs e)
         {
             if (mouseMoveSignificant)
-                canvasManager.reDraw(currentTransform);
+                canvasManager.reDraw(currentTransform, parallelTriangles);
             resetMouseDowns();
         }
         protected void canvasBorder_MouseUp(object sender, MouseButtonEventArgs e)
@@ -349,7 +357,7 @@ namespace ParSurf
             currentTransform = identityTransformation();
             foreach (ViewPortGraphics manager in viewportManagers)
                 manager.setTransform(Transform3D.Identity);
-            canvasManager.reDraw(currentTransform);
+            canvasManager.reDraw(currentTransform, parallelTriangles);
         }
         public void applyTransformation(double[][] transformation)
         {
@@ -377,6 +385,24 @@ namespace ParSurf
                     viewportManager.changeColorScheme(frontColor, backColor);
                 }
             }
+        }
+
+
+        internal void applyParallelColorScheme(Color currentOriginalPointsColor, Color currentTransposedPointsColor,
+                                        bool currentIsGradient, bool currentIsArbitrary)
+        {
+            ParSurf.CanvasGraphics.ColoringFunction coloringFunction;
+            int originalPoints = settings.originalPLanePointsShown.Count;
+            int transposedPoints = settings.transposedPLanePointsShown.Count;
+            if (currentIsArbitrary)
+                coloringFunction = ParSurf.CanvasGraphics.getArbitraryColoringFunction(originalPoints,transposedPoints);
+            else if (currentIsGradient)
+                coloringFunction = ParSurf.CanvasGraphics.getGradientColoringFunction(currentOriginalPointsColor,
+                                                            currentTransposedPointsColor, originalPoints,transposedPoints);
+            else
+                coloringFunction = ParSurf.CanvasGraphics.getSolidColoringFunction(currentOriginalPointsColor,
+                                                                                currentTransposedPointsColor);
+            canvasManager.coloringFunction = coloringFunction;
         }
     }
 }

@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.elementHost2 = new System.Windows.Forms.Integration.ElementHost();
-            this.buttonCancel = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.buttonCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.elementHost2 = new System.Windows.Forms.Integration.ElementHost();
+            this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -51,26 +51,26 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.elementHost2);
+            this.splitContainer1.Panel1.Controls.Add(this.elementHost1);
             this.splitContainer1.Panel1.Controls.Add(this.buttonCancel);
-            this.splitContainer1.Panel1.Controls.Add(this.label2);
+            this.splitContainer1.Panel1.Controls.Add(this.label1);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.elementHost1);
-            this.splitContainer1.Panel2.Controls.Add(this.label1);
+            this.splitContainer1.Panel2.Controls.Add(this.elementHost2);
+            this.splitContainer1.Panel2.Controls.Add(this.label2);
             this.splitContainer1.Size = new System.Drawing.Size(396, 153);
             this.splitContainer1.SplitterDistance = 196;
             this.splitContainer1.TabIndex = 0;
             // 
-            // elementHost2
+            // elementHost1
             // 
-            this.elementHost2.Location = new System.Drawing.Point(-1, 107);
-            this.elementHost2.Name = "elementHost2";
-            this.elementHost2.Size = new System.Drawing.Size(197, 44);
-            this.elementHost2.TabIndex = 4;
-            this.elementHost2.Text = "elementHost2";
-            this.elementHost2.Child = null;
+            this.elementHost1.Location = new System.Drawing.Point(-1, 107);
+            this.elementHost1.Name = "elementHost1";
+            this.elementHost1.Size = new System.Drawing.Size(197, 44);
+            this.elementHost1.TabIndex = 4;
+            this.elementHost1.Text = "elementHost2";
+            this.elementHost1.Child = null;
             // 
             // buttonCancel
             // 
@@ -81,36 +81,34 @@
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             // 
-            // label2
-            // 
-            this.label2.BackColor = System.Drawing.SystemColors.Window;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
-            this.label2.Location = new System.Drawing.Point(3, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(193, 130);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Front color";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // elementHost1
-            // 
-            this.elementHost1.Location = new System.Drawing.Point(-1, 107);
-            this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(196, 44);
-            this.elementHost1.TabIndex = 3;
-            this.elementHost1.Text = "elementHost1";
-            this.elementHost1.Child = null;
-            // 
             // label1
             // 
             this.label1.BackColor = System.Drawing.SystemColors.Window;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
-            this.label1.Location = new System.Drawing.Point(-1, 0);
+            this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(195, 130);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Back color";
+            this.label1.Size = new System.Drawing.Size(193, 130);
+            this.label1.TabIndex = 1;
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // elementHost2
+            // 
+            this.elementHost2.Location = new System.Drawing.Point(-1, 107);
+            this.elementHost2.Name = "elementHost2";
+            this.elementHost2.Size = new System.Drawing.Size(196, 44);
+            this.elementHost2.TabIndex = 3;
+            this.elementHost2.Text = "elementHost1";
+            this.elementHost2.Child = null;
+            // 
+            // label2
+            // 
+            this.label2.BackColor = System.Drawing.SystemColors.Window;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
+            this.label2.Location = new System.Drawing.Point(-1, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(195, 130);
+            this.label2.TabIndex = 2;
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button1
             // 
@@ -156,10 +154,10 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button buttonOk;
-        private System.Windows.Forms.Integration.ElementHost elementHost2;
         private System.Windows.Forms.Integration.ElementHost elementHost1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Integration.ElementHost elementHost2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
 
     }
 }
