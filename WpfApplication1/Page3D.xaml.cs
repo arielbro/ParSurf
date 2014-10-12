@@ -32,7 +32,7 @@ namespace ParSurf
                                   settings.originalPLanePointsShown, settings.transposedPLanePointsShown, settings.pointSize);
             applyParallelColorScheme(settings.originalPlanePointsColor, settings.transposedPlanePointsColor, 
                                      settings.isPlanePointsColoringGradient, settings.isPlanePointsColoringArbitrary);
-//            canvasManager.reDraw(currentTransform, parallelTriangles);
+            //canvasManager.reDraw(currentTransform, parallelTriangles);
             viewports = new Viewport3D[] { viewport };
             viewportManagers = new ViewPortGraphics[] { new ViewPortGraphics(viewport) };
             viewportsmDown = new bool[1];
@@ -44,7 +44,7 @@ namespace ParSurf
             base.canvasBorder = this.canvasBorder;
             base.viewportsBorder = this.viewportBorder;
             intializeSizes();
-            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle);
+            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle);
         }
         public Page3D(Surface surface,double[][] currentTrans, TabSettings settings) : this(surface,false)
         {

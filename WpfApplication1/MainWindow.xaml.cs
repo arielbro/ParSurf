@@ -42,55 +42,98 @@ namespace ParSurf
         string[] previousFormulaeURanges;
         string[] previousFormulaevranges;
         private List<Surface> surfaces;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            using (Stream stream = File.Open("Surfaces.bin", FileMode.Open))
+            object[][] toLoad;
+            try
             {
-                BinaryFormatter bin = new BinaryFormatter();
-                surfaces = (List<Surface>)bin.Deserialize(stream);
-            }
-            foreach (ParametricSurface surf in surfaces)
-            {
-                surf.parameters.Remove("pi");
-                surf.parameters.Remove("Pi");
-                surf.parameters.Remove("E");
-                surf.parameters.Remove("e");
-            }
-            surfaces = surfaces.OrderBy(surface => surface.name).ToList();
-            using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
-            {
-                BinaryFormatter bin = new BinaryFormatter();
-                bin.Serialize(stream, surfaces);
-            }
-
-            if (File.Exists("Surfaces.bin"))
-            {
-                using (Stream stream = File.Open("Surfaces.bin", FileMode.Open))
+                using (Stream stream = File.Open("LastTabs", FileMode.OpenOrCreate))
                 {
                     BinaryFormatter bin = new BinaryFormatter();
-                    surfaces = (List<Surface>)bin.Deserialize(stream);
+                    toLoad = (object[][])bin.Deserialize(stream);
                 }
-            }
-            else
-            {
-                using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
+                for (int i = 0; i < toLoad.Length; i++)
                 {
-                    surfaces = new List<Surface>();
-                    BinaryFormatter bin = new BinaryFormatter();
-                    bin.Serialize(stream, surfaces);
-                }
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    CloseableTabItem newtab = new CloseableTabItem();
+                    newtab.SetHeader(new TextBlock { Text = ((Surface)toLoad[i][0]).name });
+                    Frame frame = new Frame();
+                    ((TabSettings)toLoad[i][2]).loadColors();
+                    switch (((Surface)toLoad[i][0]).dimension)
+                    {
+                        case 3:
+                            frame.Content = new Page3D(((Surface)toLoad[i][0]), ((double[][])toLoad[i][1]), ((TabSettings)toLoad[i][2]));
+                            break;
+                        case 4:
+                            frame.Content = new Page4D(((Surface)toLoad[i][0]), ((double[][])toLoad[i][1]), ((TabSettings)toLoad[i][2]));
+                            break;
+                        default:
+                            frame.Content = new PageND(((Surface)toLoad[i][0]), ((double[][])toLoad[i][1]), ((TabSettings)toLoad[i][2]));
+                            break;
+                    }
+                    newtab.Content = frame;
+                    tabControl1.Items.Add(newtab);
+                    newtab.IsSelected = true;
 
+                }
             }
-            for (int i = 0; i < surfaces.Count; i++)
-            {
-                MenuItem item = new MenuItem();
-                item.Header = surfaces[i].name;
-                item.Name = "MenuItem_" + i.ToString();
-                item.Click += parametric_select_item_checked;
-                MenuItem_savedParametricSurface.Items.Add(item);
-            }
+            catch { }
+            //using (Stream stream = File.Open("Surfaces.bin", FileMode.Open))
+            //{
+            //    BinaryFormatter bin = new BinaryFormatter();
+            //    surfaces = (List<Surface>)bin.Deserialize(stream);
+            //}
+            //foreach (Surface surf in surfaces)
+            //{
+            //    using (Stream stream = File.Open(System.IO.Path.GetFullPath("Surfaces")+"/"+surf.name+".surf", FileMode.Create))
+            //    {
+            //        BinaryFormatter bin = new BinaryFormatter();
+            //        bin.Serialize(stream, surf);
+            //    }
+            //}
+            //foreach (ParametricSurface surf in surfaces)
+            //{
+            //    surf.parameters.Remove("pi");
+            //    surf.parameters.Remove("Pi");
+            //    surf.parameters.Remove("E");
+            //    surf.parameters.Remove("e");
+            //}
+            //surfaces = surfaces.OrderBy(surface => surface.name).ToList();
+            //using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
+            //{
+            //    BinaryFormatter bin = new BinaryFormatter();
+            //    bin.Serialize(stream, surfaces);
+            //}
+
+            //if (File.Exists("Surfaces.bin"))
+            //{
+            //    using (Stream stream = File.Open("Surfaces.bin", FileMode.Open))
+            //    {
+            //        BinaryFormatter bin = new BinaryFormatter();
+            //        surfaces = (List<Surface>)bin.Deserialize(stream);
+            //    }
+            //}
+            //else
+            //{
+            //    using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
+            //    {
+            //        surfaces = new List<Surface>();
+            //        BinaryFormatter bin = new BinaryFormatter();
+            //        bin.Serialize(stream, surfaces);
+            //    }
+
+            //}
+            //for (int i = 0; i < surfaces.Count; i++)
+            //{
+            //    MenuItem item = new MenuItem();
+            //    item.Header = surfaces[i].name;
+            //    item.Name = "MenuItem_" + i.ToString();
+            //    item.Click += parametric_select_item_checked;
+            //    MenuItem_savedParametricSurface.Items.Add(item);
+            //}
             //not implemented yet
             MenuItem_PointCloud.IsEnabled = false;
             MenuItem_ImplicitEquation.IsEnabled = false;
@@ -122,7 +165,7 @@ namespace ParSurf
             tabControl1.Items.Add(newtab);
             newtab.IsSelected = true;
             //force rendering of canvas before releasing mouse.
-            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle, null);
+            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle, null);
         }
         private void graphicSettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -162,7 +205,7 @@ namespace ParSurf
                         currentPage.settings.pointSize = Convert.ToInt32(form.result["Point Size"]);
                         currentPage.reRender(ReRenderingModes.Canvas);
                     }
-                    
+
                 }
                 else if (sender == renderResolutionMenuItem)
                 {
@@ -180,8 +223,8 @@ namespace ParSurf
                         currentPage.settings.parallelResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
                         currentPage.reRender(ReRenderingModes.Canvas);
                     }
-                        Properties.Settings.Default.parallelResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
-                    }
+                    Properties.Settings.Default.parallelResolution = Convert.ToInt32(form.result["Parallel Resolution"]);
+                }
                 else if (sender == parametersMenuItem)
                 {
                     ((ParametricSurface)currentPage.surface).parameters = form.result;
@@ -327,7 +370,7 @@ namespace ParSurf
                 break;
             }
             //force rendering of canvas before releasing mouse
-            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle, null);
+            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle, null);
         }
         private void mainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -351,37 +394,47 @@ namespace ParSurf
         }
         private void Save_Parametric_Surface_Click(object sender, RoutedEventArgs e)
         {
-            TabItem tab = new TabItem();
-            foreach (TabItem temp in this.tabControl1.Items)
+            System.Windows.Forms.SaveFileDialog save = new System.Windows.Forms.SaveFileDialog();
+            save.DefaultExt = ".surf";
+            save.InitialDirectory = System.IO.Path.GetFullPath("Surfaces");
+            save.RestoreDirectory = true;
+            if (save.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                if (temp.IsSelected) { tab = temp; break; }
+                TabItem tab = new TabItem();
+                foreach (TabItem temp in this.tabControl1.Items)
+                {
+                    if (temp.IsSelected) { tab = temp; break; }
+                }
+                using (Stream stream = File.Open(save.FileName, FileMode.Create))
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+                    bin.Serialize(stream, ((GraphicsPage)((ContentControl)tab.Content).Content).surface);
+                }
             }
-            Surface newSurface = ((GraphicsPage)((Frame)tab.Content).Content).surface;
-            surfaces.Add(newSurface);
-            using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
-            {
-                BinaryFormatter bin = new BinaryFormatter();
-                bin.Serialize(stream, surfaces);
-            }
-            MenuItem item = new MenuItem();
-            item.Header = newSurface.name;
-            item.Name = "MenuItem_" + MenuItem_savedParametricSurface.Items.Count.ToString();
-            item.Click += parametric_select_item_checked;
-            MenuItem_savedParametricSurface.Items.Add(item);
+            //TabItem tab = new TabItem();
+            //foreach (TabItem temp in this.tabControl1.Items)
+            //{
+            //    if (temp.IsSelected) { tab = temp; break; }
+            //}
+            //Surface newSurface = ((GraphicsPage)((Frame)tab.Content).Content).surface;
+            //surfaces.Add(newSurface);
+            //using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
+            //{
+            //    BinaryFormatter bin = new BinaryFormatter();
+            //    bin.Serialize(stream, surfaces);
+            //}
+            //MenuItem item = new MenuItem();
+            //item.Header = newSurface.name;
+            //item.Name = "MenuItem_" + MenuItem_savedParametricSurface.Items.Count.ToString();
+            //item.Click += parametric_select_item_checked;
+            //MenuItem_savedParametricSurface.Items.Add(item);
         }
-        private void Save_Transformation_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
-        private void Load_Transformation_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
         private void Save_Tab_State_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.SaveFileDialog save = new System.Windows.Forms.SaveFileDialog();
             save.DefaultExt = ".tab";
-            save.InitialDirectory = System.IO.Path.GetFullPath("/Tabs/");
+            save.InitialDirectory = System.IO.Path.GetFullPath("Tabs");
             save.RestoreDirectory = true;
             if (save.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -393,6 +446,7 @@ namespace ParSurf
                 object[] toSave = new object[3];
                 toSave[0] = ((GraphicsPage)((ContentControl)tab.Content).Content).surface;
                 toSave[1] = ((GraphicsPage)((ContentControl)tab.Content).Content).currentTransform;
+                ((GraphicsPage)((ContentControl)tab.Content).Content).settings.saveColors();
                 toSave[2] = ((GraphicsPage)((ContentControl)tab.Content).Content).settings;
                 using (Stream stream = File.Open(save.FileName, FileMode.Create))
                 {
@@ -405,7 +459,8 @@ namespace ParSurf
         {
             System.Windows.Forms.OpenFileDialog load = new System.Windows.Forms.OpenFileDialog();
             load.DefaultExt = ".tab";
-            load.InitialDirectory = System.IO.Path.GetFullPath("/Tabs/");
+            load.Filter = "Tab Files (*.tab)|*.tab|All Files (*.*)|*.*";
+            load.InitialDirectory = System.IO.Path.GetFullPath("Tabs");
             load.RestoreDirectory = true;
             if (load.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -420,6 +475,7 @@ namespace ParSurf
                 CloseableTabItem newtab = new CloseableTabItem();
                 newtab.SetHeader(new TextBlock { Text = ((Surface)toLoad[0]).name });
                 Frame frame = new Frame();
+                ((TabSettings)toLoad[2]).loadColors();
                 switch (((Surface)toLoad[0]).dimension)
                 {
                     case 3:
@@ -446,7 +502,7 @@ namespace ParSurf
             setUpParallelPointsShownMenuItems();
             if (e.AddedItems.Count > 0)
             {
-                Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.ApplicationIdle);
+                Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.SystemIdle);
                 resetTransformationMenuItem.IsEnabled = true;
                 applyTransformationMenuItem.IsEnabled = true;
                 parallelPointsShownMenuItem.IsEnabled = true;
@@ -619,7 +675,7 @@ namespace ParSurf
             {
                 if (tab.IsSelected)
                 {
-                    Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.ApplicationIdle);
+                    Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.SystemIdle);
                     GraphicsPage currentPage = (GraphicsPage)(((Frame)tab.Content).Content);
                     //set up Pi_ijk and Pi_ijk' for each non-decreasing ijk trio 
                     parallelPointsShownMenuItemChooseManually.Items.Clear();
@@ -635,7 +691,7 @@ namespace ParSurf
                                     pi_ijk_MenuItem.Name = string.Format("manual_{0}_{1}_{2}_{3}", i, j, k, isTransposed ? "true" : "false");
                                     pi_ijk_MenuItem.IsCheckable = true;
 
-                                    List<Tuple<int, int, int>> relevantList = isTransposed ? 
+                                    List<Tuple<int, int, int>> relevantList = isTransposed ?
                                                                                         currentPage.settings.transposedPLanePointsShown :
                                                                                         currentPage.settings.originalPLanePointsShown;
                                     pi_ijk_MenuItem.IsChecked = relevantList.Contains(new Tuple<int, int, int>(i, j, k));
@@ -666,7 +722,7 @@ namespace ParSurf
 
             if (sender == parallelColorSchemeMenuItemChooseTwoColors)
             {
-                InputColorForm form = new InputColorForm(currentOriginalPointsColor, currentTransposedPointsColor, 
+                InputColorForm form = new InputColorForm(currentOriginalPointsColor, currentTransposedPointsColor,
                                                         "Original points", "Transposed points");
                 System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
                 if (formStatus != System.Windows.Forms.DialogResult.OK)
@@ -707,10 +763,129 @@ namespace ParSurf
             Settings.Default.Save();
             if (currentPage != null)
             {
-                currentPage.applyParallelColorScheme(currentOriginalPointsColor,currentTransposedPointsColor,
-                                                currentIsGradient,currentIsArbitrary);
+                currentPage.applyParallelColorScheme(currentOriginalPointsColor, currentTransposedPointsColor,
+                                                currentIsGradient, currentIsArbitrary);
             }
 
+        }
+
+        private void mainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            int hi;
+        }
+
+        private void mainWindow_Closing(object sender, EventArgs e)
+        {
+            object[][] toSave = new object[tabControl1.Items.Count][];
+            for (int i = 0; i < tabControl1.Items.Count; i++)
+            {
+                TabItem tab = (TabItem)tabControl1.Items[i];
+                toSave[i] = new object[3];
+                toSave[i][0] = ((GraphicsPage)((ContentControl)tab.Content).Content).surface;
+                toSave[i][1] = ((GraphicsPage)((ContentControl)tab.Content).Content).currentTransform;
+                ((GraphicsPage)((ContentControl)tab.Content).Content).settings.saveColors();
+                toSave[i][2] = ((GraphicsPage)((ContentControl)tab.Content).Content).settings;
+            }
+            using (Stream stream = File.Open("LastTabs", FileMode.Create))
+            {
+                BinaryFormatter bin = new BinaryFormatter();
+                bin.Serialize(stream, toSave);
+            }
+        }
+
+        private void Load_Parametric_Surface_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog load = new System.Windows.Forms.OpenFileDialog();
+            load.DefaultExt = ".surf";
+            load.Filter = "Surface Files (*.surf)|*.surf|All Files (*.*)|*.*";
+            load.InitialDirectory = System.IO.Path.GetFullPath("Surface");
+            load.RestoreDirectory = true;
+            if (load.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                Surface toLoad;
+                using (Stream stream = File.Open(load.FileName, FileMode.Open))
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+                    toLoad = (Surface)bin.Deserialize(stream);
+                }
+
+                Mouse.OverrideCursor = Cursors.Wait;
+                CloseableTabItem newtab = new CloseableTabItem();
+                newtab.SetHeader(new TextBlock { Text = toLoad.name });
+                Frame frame = new Frame();
+                switch (toLoad.dimension)
+                {
+                    case 3:
+                        frame.Content = new Page3D(toLoad);
+                        break;
+                    case 4:
+                        frame.Content = new Page4D(toLoad);
+                        break;
+                    default:
+                        frame.Content = new PageND(toLoad,toLoad.dimension);
+                        break;
+                }
+                newtab.Content = frame;
+                tabControl1.Items.Add(newtab);
+                newtab.IsSelected = true;
+
+            }
+        }
+        
+        private void CreateSaveBitmap(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.SaveFileDialog save = new System.Windows.Forms.SaveFileDialog();
+            save.DefaultExt = "";
+            save.InitialDirectory = System.IO.Path.GetFullPath("Snapshots");
+            save.RestoreDirectory = true;
+            if (save.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                GraphicsPage currentPage = null;
+                foreach (TabItem tab in tabControl1.Items)
+                    if (tab.IsSelected)
+                        currentPage = (GraphicsPage)(((Frame)tab.Content).Content);
+                RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
+             (int)currentPage.canvas.ActualWidth * 500 / 96, (int)currentPage.canvas.ActualHeight * 500 / 96,
+             500, 500, PixelFormats.Pbgra32);
+                // needed otherwise the image output is black
+                currentPage.canvas.Measure(new Size((int)currentPage.canvas.ActualWidth, (int)currentPage.canvas.ActualHeight));
+                //currentPage.canvas.Arrange(new Rect(new Size((int)currentPage.canvas.ActualWidth, (int)currentPage.canvas.ActualHeight)));
+                renderBitmap.Render(currentPage.canvas);
+                //JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+                using (FileStream file = File.Create(save.FileName+"Canvas.png"))
+                {
+                    encoder.Save(file);
+                }
+                if (currentPage.dimension == 4)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        RenderTargetBitmap bmp = new RenderTargetBitmap((int)currentPage.viewports[0].ActualWidth * 500 / 96, (int)currentPage.viewports[0].ActualHeight * 500 / 96, 500, 500, PixelFormats.Pbgra32);
+                        bmp.Render(currentPage.viewports[i]);
+                        Clipboard.SetImage(bmp);
+                        PngBitmapEncoder png = new PngBitmapEncoder();
+                        png.Frames.Add(BitmapFrame.Create(bmp));
+                        using (Stream stm = File.Create(save.FileName + "3DView"+i+".png"))
+                        {
+                            png.Save(stm);
+                        }
+                    }
+                }
+                else
+                {
+                    RenderTargetBitmap bmp = new RenderTargetBitmap((int)currentPage.viewports[0].ActualWidth * 500 / 96, (int)currentPage.viewports[0].ActualHeight * 500 / 96, 500, 500, PixelFormats.Pbgra32);
+                    bmp.Render(currentPage.viewports[0]);
+                    Clipboard.SetImage(bmp);
+                    PngBitmapEncoder png = new PngBitmapEncoder();
+                    png.Frames.Add(BitmapFrame.Create(bmp));
+                    using (Stream stm = File.Create(save.FileName + "3DView.png"))
+                    {
+                        png.Save(stm);
+                    }
+                }
+            }
         }
     }
 }

@@ -71,10 +71,25 @@ namespace ParSurf
             dimform.Location = new Point(70, 64 + ((dimension - 1) * 29));
             dimform.Size = DimForm1.Size;
             dimform.Font = DimForm1.Font;
+            dimform.TabIndex = dimension;
             dimform.Name = "DimForm" + dimension;
             this.Controls.Add(dimform);
             dimform.BringToFront();
             this.Height += 29;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (dimension <= 3) return;
+            dimension--;
+            foreach (Control item in this.Controls)
+            {
+                if (item.Location.Y > 122 + ((dimension - 3) * 29))
+                    item.Location = new Point(item.Location.X, item.Location.Y - 29);
+            }
+            this.Controls.RemoveByKey("AxisLabel"+(dimension+1));
+            this.Controls.RemoveByKey("DimForm" + (dimension + 1));
+            this.Height -= 29;
         }
 
     }

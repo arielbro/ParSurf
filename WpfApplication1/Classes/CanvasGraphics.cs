@@ -122,7 +122,7 @@ namespace ParSurf
                         loopState.Stop();
                         //wait for rendering to finish before releasing mouse
                         canvas.Dispatcher.BeginInvoke(new Action(delegate { Mouse.OverrideCursor = Cursors.Arrow; }),
-                            DispatcherPriority.ApplicationIdle);
+                            DispatcherPriority.SystemIdle);
                         e.Cancel = true;
                         return;
                     }
@@ -192,7 +192,7 @@ namespace ParSurf
                 {
                     //wait for rendering to finish before releasing mouse
                     canvas.Dispatcher.BeginInvoke(new Action(delegate { Mouse.OverrideCursor = Cursors.Arrow; }),
-                                                DispatcherPriority.ApplicationIdle);
+                                            DispatcherPriority.SystemIdle);
                 }
             }
         }

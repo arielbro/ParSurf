@@ -5,7 +5,7 @@
         WindowState="Maximized"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:ParSurf"
-        
+        Closed="mainWindow_Closing"
         SizeChanged="mainWindow_SizeChanged"
         VerticalAlignment="Stretch"
         HorizontalAlignment="Stretch"
@@ -778,10 +778,10 @@
         <Menu Height="23" HorizontalAlignment="Stretch" Name="menu1" VerticalAlignment="Top" Margin="0,0,0,0">
             <MenuItem Header="File">
                 <MenuItem Name="Save_Parametric_Surface" Header="Save surface..." Click="Save_Parametric_Surface_Click"/>
-                <MenuItem Name="MenuItem_savedParametricSurface" Header="Load surface..." VerticalAlignment="Center"/>
+                <MenuItem Name="Load_Parametric_Surface" Header="Load surface..." Click="Load_Parametric_Surface_Click" VerticalAlignment="Center"/>
                 <MenuItem Name="Save_Tab_State" Header="Save tab state..." Click="Save_Tab_State_Click"/>
                 <MenuItem Name="Load_Tab_State" Header="Load tab state..." Click="Load_Tab_State_Click"/>
-                <MenuItem Name="Save_Snapshot" Header="Save snapshot..." Click="Save_Snapshot_Click"/>
+                <MenuItem Name="Save_Snapshot" Header="Save snapshot..." Click="CreateSaveBitmap"/>
             </MenuItem>
             <MenuItem Name ="MenuItem_new_shape" Header="New Surface" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <MenuItem Name="MenuItem_PointCloud" Header="From point cloud..." VerticalAlignment="Center"/>

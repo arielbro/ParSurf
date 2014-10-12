@@ -102,7 +102,7 @@ namespace ParSurf
                 geometryModel.Transform = currentTransform;
 
             //force rendering before releasing mouse
-            this.viewPort.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle);
+            this.viewPort.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle);
         }
         public void performTransform(Transform3D transform)
         {
@@ -253,7 +253,7 @@ namespace ParSurf
             geometryModel.Material = new DiffuseMaterial(new SolidColorBrush(frontColor));
             geometryModel.BackMaterial = new DiffuseMaterial(new SolidColorBrush(backColor));
             geometryModel.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), 
-                                                                    DispatcherPriority.ApplicationIdle);
+                                                                    DispatcherPriority.SystemIdle);
         }
     }
 }
