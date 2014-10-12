@@ -115,6 +115,7 @@ namespace ParSurf
             canvasBorder.Height = this.ActualHeight;
             viewportsBorder.Width = Math.Floor(this.ActualWidth / 2);
             viewportsBorder.Height = this.ActualHeight;
+            reRender(ReRenderingModes.Both);
             //force rendering to complete before releasing the mouse
             Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle);
         }

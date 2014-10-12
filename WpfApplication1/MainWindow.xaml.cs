@@ -165,7 +165,7 @@ namespace ParSurf
             tabControl1.Items.Add(newtab);
             newtab.IsSelected = true;
             //force rendering of canvas before releasing mouse.
-            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle, null);
+            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle);
         }
         private void graphicSettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -397,6 +397,8 @@ namespace ParSurf
             System.Windows.Forms.SaveFileDialog save = new System.Windows.Forms.SaveFileDialog();
             save.DefaultExt = ".surf";
             save.InitialDirectory = System.IO.Path.GetFullPath("Surfaces");
+            if (!System.IO.Directory.Exists(save.InitialDirectory))
+                System.IO.Directory.CreateDirectory(save.InitialDirectory);
             save.RestoreDirectory = true;
             if (save.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -432,9 +434,12 @@ namespace ParSurf
 
         private void Save_Tab_State_Click(object sender, RoutedEventArgs e)
         {
+            Mouse.OverrideCursor = Cursors.Wait;
             System.Windows.Forms.SaveFileDialog save = new System.Windows.Forms.SaveFileDialog();
             save.DefaultExt = ".tab";
             save.InitialDirectory = System.IO.Path.GetFullPath("Tabs");
+            if(!System.IO.Directory.Exists(save.InitialDirectory))
+                System.IO.Directory.CreateDirectory(save.InitialDirectory);
             save.RestoreDirectory = true;
             if (save.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -453,7 +458,10 @@ namespace ParSurf
                     BinaryFormatter bin = new BinaryFormatter();
                     bin.Serialize(stream, toSave);
                 }
+
             }
+            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle);
+
         }
         private void Load_Tab_State_Click(object sender, RoutedEventArgs e)
         {
@@ -461,6 +469,8 @@ namespace ParSurf
             load.DefaultExt = ".tab";
             load.Filter = "Tab Files (*.tab)|*.tab|All Files (*.*)|*.*";
             load.InitialDirectory = System.IO.Path.GetFullPath("Tabs");
+            if (!System.IO.Directory.Exists(load.InitialDirectory))
+                System.IO.Directory.CreateDirectory(load.InitialDirectory);
             load.RestoreDirectory = true;
             if (load.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -491,7 +501,7 @@ namespace ParSurf
                 newtab.Content = frame;
                 tabControl1.Items.Add(newtab);
                 newtab.IsSelected = true;
-
+                Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle);
             }
         }
         private void tabControl1_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -602,10 +612,7 @@ namespace ParSurf
                 currentPage.applyRenderingColorScheme(currentFrontColor, currentBackColor);
             }
         }
-        private void Save_Snapshot_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
         private void parallelPointsShownMenuItem_Click(object sender, RoutedEventArgs e)
         {
             GraphicsPage currentPage = null;
@@ -768,12 +775,10 @@ namespace ParSurf
             }
 
         }
-
         private void mainWindow_Closing(object sender, CancelEventArgs e)
         {
             int hi;
         }
-
         private void mainWindow_Closing(object sender, EventArgs e)
         {
             object[][] toSave = new object[tabControl1.Items.Count][];
@@ -792,13 +797,14 @@ namespace ParSurf
                 bin.Serialize(stream, toSave);
             }
         }
-
         private void Load_Parametric_Surface_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog load = new System.Windows.Forms.OpenFileDialog();
             load.DefaultExt = ".surf";
             load.Filter = "Surface Files (*.surf)|*.surf|All Files (*.*)|*.*";
             load.InitialDirectory = System.IO.Path.GetFullPath("Surface");
+            if (!System.IO.Directory.Exists(load.InitialDirectory))
+                System.IO.Directory.CreateDirectory(load.InitialDirectory);
             load.RestoreDirectory = true;
             if (load.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -830,13 +836,14 @@ namespace ParSurf
                 newtab.IsSelected = true;
 
             }
-        }
-        
+        }     
         private void CreateSaveBitmap(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.SaveFileDialog save = new System.Windows.Forms.SaveFileDialog();
             save.DefaultExt = "";
             save.InitialDirectory = System.IO.Path.GetFullPath("Snapshots");
+            if (!System.IO.Directory.Exists(save.InitialDirectory))
+                System.IO.Directory.CreateDirectory(save.InitialDirectory);
             save.RestoreDirectory = true;
             if (save.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
