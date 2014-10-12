@@ -63,7 +63,7 @@ namespace ParSurf
             {
                 Point[] planePoints = plane.represent();
                 if (planePoints != null)
-                    foreach (bool transposed in new bool[] { false, true})
+                    foreach (bool transposed in new bool[] { false, true })
                         for (int i = transposed ? dimension - 2 : 0; i < (transposed ? 2 * (dimension - 2) : dimension - 2); i++)
                             points[transposed ? 1 : 0].Add(planePoints[i]);
             }
@@ -201,15 +201,19 @@ namespace ParSurf
             }
         }
 
+        private static Point3D[] triangleProjection(double[][] triangle, Tuple<int, int, int> axes)
+        {
+            return new Point3D[]{new Point3D(triangle[0][axes.Item1],triangle[0][axes.Item2],triangle[0][axes.Item3]),
+                                 new Point3D(triangle[1][axes.Item1],triangle[1][axes.Item2],triangle[1][axes.Item3]),
+                                 new Point3D(triangle[2][axes.Item1],triangle[2][axes.Item2],triangle[2][axes.Item3])};
+        }
         private static double[][] planeCoefficientsFromTriangleRn(double[][] triangle, int dimension)
         {
             //Plane equation from three points - in Rn, (n-2) independant equations determine a plane.
             //It can be futher constrainted that the i'th equation will consist of the variables (Xi,Xi+1, Xi+2) alone.
             double[][] res = new double[dimension - 2][];
             for (int i = 0; i < dimension - 2; i++)
-                res[i] = planeCoefficientsFromTriangle3D(new Point3D[]{new Point3D(triangle[0][i],triangle[0][i+1],triangle[0][i+2]),
-                                                                       new Point3D(triangle[1][i],triangle[1][i+1],triangle[1][i+2]),
-                                                                       new Point3D(triangle[2][i],triangle[2][i+1],triangle[2][i+2])});
+                res[i] = planeCoefficientsFromTriangle3D(triangleProjection(triangle, new Tuple<int, int, int>(i, i + 1, i + 2)));
             return res;
         }
         //R3 only method (which is used in the Rn case)
@@ -226,7 +230,8 @@ namespace ParSurf
             double c0 = c1 * p1.X + c2 * p1.Y + c3 * p1.Z;
             return new double[] { c1, c2, c3, c0 };
         }
-        public List<Point[]>[] getPlanePointsFromTriangles(double[][][] triangles, int dimension)
+        public List<Point[]>[] getPlanePointsFromTriangles(double[][][] triangles, int dimension,
+                       List<Tuple<int, int, int>> originalPlanePointsToCompute, List<Tuple<int, int, int>> transposedPLanePointsToCompute)
         {
             //using equation from P.167 (5.78) on Alfred's book for representative points of p-flat using defining equations.
             List<Point[]> globalOriginalPoints = new List<Point[]>();
@@ -238,23 +243,36 @@ namespace ParSurf
                 {//encountered during scaling via the viewport, for some reason. investigate at some point...
                     continue;
                 }
-                Point[] originalPoints = new Point[dimension - 2];
-                Point[] transposedPoints = new Point[dimension - 2];
-                double[][] coefficients = planeCoefficientsFromTriangleRn(triangle, dimension);          
-                for (int i = 0; i < dimension - 2; i++)
+                Point[] originalPoints = new Point[originalPlanePointsToCompute.Count];
+                Point[] transposedPoints = new Point[transposedPLanePointsToCompute.Count];
+                for (int i = 0; i < originalPlanePointsToCompute.Count; i++)
                 {
-                    double c1 = coefficients[i][0];
-                    double c2 = coefficients[i][1];
-                    double c3 = coefficients[i][2];
-                    double c0 = coefficients[i][3];
-                    double sumCoefs = c1+c2+c3;
+                    Tuple<int, int, int> indices = originalPlanePointsToCompute[i];
+                    double[] coefficients = planeCoefficientsFromTriangle3D(triangleProjection(triangle, indices));
+                    double c1 = coefficients[0];
+                    double c2 = coefficients[1];
+                    double c3 = coefficients[2];
+                    double c0 = coefficients[3];
+                    double sumCoefs = c1 + c2 + c3;
                     if (sumCoefs == 0)
-                    {
-                        originalPoints[i] = new Point(Double.PositiveInfinity,Double.PositiveInfinity);
+                        originalPoints[i] = new Point(Double.PositiveInfinity, Double.PositiveInfinity);
+                    else
+                        originalPoints[i] = new Point((c2 + 2 * c3) / sumCoefs + offset, c0 / sumCoefs);
+                }
+                //warning - some code repretition...
+                for (int i = 0; i < transposedPLanePointsToCompute.Count; i++)
+                {
+                    Tuple<int, int, int> indices = transposedPLanePointsToCompute[i];
+                    double[] coefficients = planeCoefficientsFromTriangle3D(triangleProjection(triangle, indices));
+                    double c1 = coefficients[0];
+                    double c2 = coefficients[1];
+                    double c3 = coefficients[2];
+                    double c0 = coefficients[3];
+                    double sumCoefs = c1 + c2 + c3;
+                    if (sumCoefs == 0)
                         transposedPoints[i] = new Point(Double.PositiveInfinity, Double.PositiveInfinity);
-                    }
-                    originalPoints[i] = new Point((c2 + 2*c3)/sumCoefs + offset, c0/sumCoefs);
-                    transposedPoints[i] = new Point((3*c1 + c2 + 2 * c3)/sumCoefs + offset, c0 / sumCoefs);
+                    else
+                        transposedPoints[i] = new Point((3 * c1 + c2 + 2 * c3) / sumCoefs + offset, c0 / sumCoefs);
                 }
                 globalOriginalPoints.Add(originalPoints);
                 globalTransposedPoints.Add(transposedPoints);
@@ -278,11 +296,11 @@ namespace ParSurf
                 double c3 = coefficients[2];
                 double c0 = coefficients[3];
 
-                double denominator = c1+c2+c3;
+                double denominator = c1 + c2 + c3;
                 if (denominator == 0) continue;//ideal points skipped
                 double offset = axesCoordinates[0];//this formula is obtained for axes with X1=0.
-                originalPoints.Add(new Point((c2 + 2*c3)/denominator + offset, c0/denominator));//roughly page 152 from Alfred's book
-                transposedPoints.Add(new Point((3*c1 + c2 + 2 * c3)/denominator + offset, c0 / denominator));
+                originalPoints.Add(new Point((c2 + 2 * c3) / denominator + offset, c0 / denominator));//roughly page 152 from Alfred's book
+                transposedPoints.Add(new Point((3 * c1 + c2 + 2 * c3) / denominator + offset, c0 / denominator));
             }
             return new List<Point>[] { originalPoints, transposedPoints };
         }

@@ -62,7 +62,7 @@ namespace ParSurf
             Label axislabel = new Label();
             axislabel.Size = AxisLabel1.Size;
             axislabel.Font = AxisLabel1.Font;
-            axislabel.Text = "X" + dimension+"(u,t):";
+            axislabel.Text = "X" + dimension+"(u,v):";
             axislabel.AutoSize = true;
             axislabel.Location = new Point(12, 64 + ((dimension - 1) * 29));
             axislabel.Name = "AxisLabel" + dimension;

@@ -16,6 +16,12 @@ namespace ParSurf
         [NonSerializedAttribute()]
         public Color renderingBackColor = Properties.Settings.Default.backColor;
         public double renderingOpacity = Properties.Settings.Default.renderingOpacity;
+        public List<Tuple<int, int, int>> originalPLanePointsShown;//structure - Pi_ijk - X[i][j][k][0], Pi'_ijk - X[i][j][k][1]
+        public List<Tuple<int, int, int>> transposedPLanePointsShown;
+        public Color originalPlanePointsColor = Properties.Settings.Default.originalPlanePointsColor;
+        public Color transposedPlanePointsColor = Properties.Settings.Default.transposedPlanePointsColor;
+        public bool isPlanePointsColoringGradient = Properties.Settings.Default.isPlanePointsColoringGradient;
+        public bool isPlanePointsColoringArbitrary = Properties.Settings.Default.isPlanePointsColoringArbitrary;
         public float[] backArgb;
         public float[] frontArgb;
         public TabSettings()

@@ -11,14 +11,26 @@
     <Setting Name="pointSize" Type="System.Double" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
-    <Setting Name="frontColor" Type="System.Windows.Media.Color" Scope="User">
-      <Value Profile="(Default)">#00000000</Value>
-    </Setting>
     <Setting Name="backColor" Type="System.Windows.Media.Color" Scope="User">
       <Value Profile="(Default)">#FFB22222</Value>
     </Setting>
     <Setting Name="renderingOpacity" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="frontColor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#FFF0F8FF</Value>
+    </Setting>
+    <Setting Name="originalPlanePointsColor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#00FF0000</Value>
+    </Setting>
+    <Setting Name="transposedPlanePointsColor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#0000FF00</Value>
+    </Setting>
+    <Setting Name="isPlanePointsColoringGradient" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="isPlanePointsColoringArbitrary" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>
