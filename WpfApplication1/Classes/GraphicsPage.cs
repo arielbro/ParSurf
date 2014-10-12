@@ -30,8 +30,8 @@ namespace ParSurf
         private GraphicModes mode;
         protected ViewPortGraphics[] viewportManagers;
         protected CanvasGraphics canvasManager;
-        protected Canvas canvas;
-        protected Viewport3D[] viewports;
+        public Canvas canvas;
+        public Viewport3D[] viewports;
         protected Border viewportsBorder;
         protected Border canvasBorder;
         public int dimension;
@@ -116,7 +116,7 @@ namespace ParSurf
             viewportsBorder.Width = Math.Floor(this.ActualWidth / 2);
             viewportsBorder.Height = this.ActualHeight;
             //force rendering to complete before releasing the mouse
-            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle);
+            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle);
         }
         protected void border_MouseWheel(object sender, MouseWheelEventArgs e)
         {

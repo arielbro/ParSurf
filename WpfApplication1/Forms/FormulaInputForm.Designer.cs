@@ -60,40 +60,41 @@
             this.label4.Size = new System.Drawing.Size(572, 17);
             this.label4.TabIndex = 18;
             this.label4.Text = "Enter the parametric equation for a surface, using a separate formula for each co" +
-    "ordinate";
+                "ordinate";
             // 
             // AxisLabel3
             // 
             this.AxisLabel3.AutoSize = true;
             this.AxisLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.AxisLabel3.Location = new System.Drawing.Point(13, 122);
+            this.AxisLabel3.Location = new System.Drawing.Point(12, 122);
             this.AxisLabel3.Name = "AxisLabel3";
             this.AxisLabel3.Size = new System.Drawing.Size(63, 20);
             this.AxisLabel3.TabIndex = 17;
             this.AxisLabel3.Text = "X3(u,v):";
-            this.AxisLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.AxisLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // AxisLabel2
             // 
             this.AxisLabel2.AutoSize = true;
             this.AxisLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.AxisLabel2.Location = new System.Drawing.Point(13, 93);
+            this.AxisLabel2.Location = new System.Drawing.Point(12, 93);
             this.AxisLabel2.Name = "AxisLabel2";
             this.AxisLabel2.Size = new System.Drawing.Size(63, 20);
             this.AxisLabel2.TabIndex = 15;
             this.AxisLabel2.Text = "X2(u,v):";
-            this.AxisLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.AxisLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // AxisLabel1
             // 
             this.AxisLabel1.AutoSize = true;
             this.AxisLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.AxisLabel1.Location = new System.Drawing.Point(13, 64);
+            this.AxisLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.AxisLabel1.Location = new System.Drawing.Point(12, 64);
             this.AxisLabel1.Name = "AxisLabel1";
             this.AxisLabel1.Size = new System.Drawing.Size(63, 20);
             this.AxisLabel1.TabIndex = 13;
             this.AxisLabel1.Text = "X1(u,v):";
-            this.AxisLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.AxisLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // button2
             // 
@@ -101,7 +102,7 @@
             this.button2.Location = new System.Drawing.Point(293, 228);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(106, 32);
-            this.button2.TabIndex = 4;
+            this.button2.TabIndex = 107;
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
             // 
@@ -111,7 +112,7 @@
             this.button1.Location = new System.Drawing.Point(180, 228);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(107, 32);
-            this.button1.TabIndex = 3;
+            this.button1.TabIndex = 106;
             this.button1.Text = "Confirm";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
@@ -122,7 +123,7 @@
             this.DimForm1.Location = new System.Drawing.Point(70, 64);
             this.DimForm1.Name = "DimForm1";
             this.DimForm1.Size = new System.Drawing.Size(486, 23);
-            this.DimForm1.TabIndex = 0;
+            this.DimForm1.TabIndex = 1;
             // 
             // DimForm2
             // 
@@ -130,7 +131,7 @@
             this.DimForm2.Location = new System.Drawing.Point(70, 93);
             this.DimForm2.Name = "DimForm2";
             this.DimForm2.Size = new System.Drawing.Size(486, 23);
-            this.DimForm2.TabIndex = 1;
+            this.DimForm2.TabIndex = 2;
             // 
             // DimForm3
             // 
@@ -138,7 +139,7 @@
             this.DimForm3.Location = new System.Drawing.Point(70, 122);
             this.DimForm3.Name = "DimForm3";
             this.DimForm3.Size = new System.Drawing.Size(486, 23);
-            this.DimForm3.TabIndex = 2;
+            this.DimForm3.TabIndex = 3;
             // 
             // label5
             // 
@@ -155,7 +156,7 @@
             this.button3.Location = new System.Drawing.Point(180, 151);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(106, 32);
-            this.button3.TabIndex = 22;
+            this.button3.TabIndex = 100;
             this.button3.Text = "Add Dimension";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -165,14 +166,16 @@
             this.textBox1.Location = new System.Drawing.Point(86, 195);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(75, 20);
-            this.textBox1.TabIndex = 23;
+            this.textBox1.TabIndex = 102;
+            this.textBox1.Text = "0";
             // 
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(196, 195);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(75, 20);
-            this.textBox2.TabIndex = 24;
+            this.textBox2.TabIndex = 103;
+            this.textBox2.Text = "1";
             // 
             // label7
             // 
@@ -209,23 +212,26 @@
             this.textBox4.Location = new System.Drawing.Point(481, 195);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(75, 20);
-            this.textBox4.TabIndex = 28;
+            this.textBox4.TabIndex = 105;
+            this.textBox4.Text = "1";
             // 
             // textBox3
             // 
             this.textBox3.Location = new System.Drawing.Point(371, 195);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(75, 20);
-            this.textBox3.TabIndex = 27;
+            this.textBox3.TabIndex = 104;
+            this.textBox3.Text = "0";
             // 
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(291, 151);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(107, 32);
-            this.button4.TabIndex = 30;
+            this.button4.TabIndex = 101;
             this.button4.Text = "Remove Dimension";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // label1
             // 
@@ -244,7 +250,7 @@
             this.textBoxName.Location = new System.Drawing.Point(133, 8);
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.Size = new System.Drawing.Size(423, 23);
-            this.textBoxName.TabIndex = 32;
+            this.textBoxName.TabIndex = 0;
             // 
             // FormulaInputForm
             // 

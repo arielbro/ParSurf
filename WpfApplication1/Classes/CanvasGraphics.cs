@@ -122,7 +122,7 @@ namespace ParSurf
                         loopState.Stop();
                         //wait for rendering to finish before releasing mouse
                         canvas.Dispatcher.BeginInvoke(new Action(delegate { Mouse.OverrideCursor = Cursors.Arrow; }),
-                            DispatcherPriority.ApplicationIdle);
+                            DispatcherPriority.SystemIdle);
                         e.Cancel = true;
                         return;
                     }
@@ -179,7 +179,7 @@ namespace ParSurf
                 for (int k = 0; k < numberOfDrawings; k++)
                 {
                     ellipseses[k].Children.Add(new EllipseGeometry(new Point(0, 0), 0, 0));
-                    imagesStartingPoints[isTransposed ? originalParallelPointsShown.Count + k : k] = new Point(minXs[k], minYs[k]);
+                    imagesStartingPoints[isTransposed ? originalParallelPointsShown.Count + k : k] = new Point(Math.Min(0,minXs[k]), Math.Min(0,minYs[k]));
                     ellipseses[k].Freeze();
                     ellipseDraws[k].Geometry = ellipseses[k];
                     ellipseDraws[k].Freeze();
@@ -221,7 +221,9 @@ namespace ParSurf
                 ellipsesImage.Source = drawingImages[i];
                 ellipsesImage.Stretch = Stretch.None;
                 ellipsesImage.RenderTransform = new TransformGroup();
+                
                 ellipsesImages[i] = ellipsesImage;
+            
             }
 
             clearCanvasPoints();
@@ -235,7 +237,7 @@ namespace ParSurf
             {
                 //wait for rendering to finish before releasing mouse
                 canvas.Dispatcher.BeginInvoke(new Action(delegate { Mouse.OverrideCursor = Cursors.Arrow; }),
-                                            DispatcherPriority.ApplicationIdle);
+                                            DispatcherPriority.SystemIdle);
             }
         }
         private double[] applyTransformToPoint(double[] point, double[][] transform)
