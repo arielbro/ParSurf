@@ -34,7 +34,7 @@ namespace ParSurf
             int triangleIndexAxis = 0;
             for (int i = 0; i < 3; i++)
             {
-                IList<double[][]> trianglesAxis = axes[i].triangulate(renderResolution, renderResolution);
+                IList<double[][]> trianglesAxis = axes[i].triangulate(renderResolution, renderResolution, viewPort);
 
                 foreach (double[][] triangle in trianglesAxis)
                 {
@@ -62,7 +62,7 @@ namespace ParSurf
         public void generate_viewport_object(IList<double[][]> triangles, Color frontColor, Color backColor,
                                             double opacity, Transform3D currentTransform = null)
         {
-            Mouse.OverrideCursor = Cursors.Wait;
+            this.viewPort.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Wait; }), DispatcherPriority.Send);
 
             MeshGeometry3D triangleMesh = new MeshGeometry3D();
             int triangleIndex = 0;
@@ -102,7 +102,7 @@ namespace ParSurf
                 geometryModel.Transform = currentTransform;
 
             //force rendering before releasing mouse
-            this.viewPort.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle, null);
+            this.viewPort.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle);
         }
         public void performTransform(Transform3D transform)
         {
@@ -249,7 +249,7 @@ namespace ParSurf
         }
         public void changeColorScheme(Color frontColor, Color backColor)
         {
-            Mouse.OverrideCursor = Cursors.Wait;
+            this.viewPort.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Wait; }), DispatcherPriority.Send);
             geometryModel.Material = new DiffuseMaterial(new SolidColorBrush(frontColor));
             geometryModel.BackMaterial = new DiffuseMaterial(new SolidColorBrush(backColor));
             geometryModel.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), 

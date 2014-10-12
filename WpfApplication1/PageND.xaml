@@ -10,7 +10,7 @@
                   HorizontalAlignment="Stretch"
       SizeChanged="Window_SizeChanged">
     <Grid Name="grid">
-                <Border Name="viewportBorder"
+        <Border Name="viewportBorder"
         BorderThickness="5"
         BorderBrush="Black"
         HorizontalAlignment="Right"

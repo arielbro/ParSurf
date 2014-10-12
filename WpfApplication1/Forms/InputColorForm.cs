@@ -35,8 +35,8 @@ namespace ParSurf
             this.CancelButton = buttonCancel;
             buttonCancel.DialogResult = DialogResult.Cancel;
 
-            this.label2.Text = label1Text;
-            this.label1.Text = label2Text;
+            this.label2.Text = label2Text;
+            this.label1.Text = label1Text;
             this.label1.BackColor = System.Drawing.Color.FromArgb(currentFirstColor.A, currentFirstColor.R, 
                                                                     currentFirstColor.G, currentFirstColor.B);
             this.label2.BackColor = System.Drawing.Color.FromArgb(currentSecondColor.A, currentSecondColor.R, 
@@ -55,13 +55,13 @@ namespace ParSurf
         public void brushPicker1_ColorChanged(Object sender, PropertyChangedEventArgs e)
         {
             System.Windows.Media.Color color = (brushPicker1.SelectedBrush as SolidColorBrush).Color;
-            label2.BackColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+            label1.BackColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
             this.firstColor = (brushPicker1.SelectedBrush as SolidColorBrush).Color;
         }
         public void brushPicker2_ColorChanged(Object sender, PropertyChangedEventArgs e)
         {
             System.Windows.Media.Color color = (brushPicker2.SelectedBrush as SolidColorBrush).Color;
-            label1.BackColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+            label2.BackColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
             this.secondColor = (brushPicker2.SelectedBrush as SolidColorBrush).Color;
         }
 

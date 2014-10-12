@@ -591,9 +591,24 @@ namespace ParSurf
                         if (sender == parallelPointsShownMenuItemStandard || sender == parallelPointsShownMenuItemOnlyTransposed)
                             for (int i = 0; i < currentPage.dimension - 2; i++)
                                 transposedPoints.Add(new Tuple<int, int, int>(i, i + 1, i + 2));
+                        if (sender == parallelPointsShownMenuItemAll)
+                        {
+                            for(int i=0; i< currentPage.dimension -2 ;i++)
+                                for(int j=i+1; j<currentPage.dimension - 1; j++)
+                                    for (int k = j + 1; k < currentPage.dimension; k++)
+                                    {
+                                        originalPoints.Add(new Tuple<int, int, int>(i, j, k));
+                                        transposedPoints.Add(new Tuple<int, int, int>(i, j, k));
+                                    }
+                                        
+                        }
 
                         setUpParallelPointsShownMenuItems();
                     }
+                    currentPage.applyParallelColorScheme(currentPage.settings.originalPlanePointsColor,
+                                                         currentPage.settings.transposedPlanePointsColor,
+                                                         currentPage.settings.isPlanePointsColoringGradient,
+                                                         currentPage.settings.isPlanePointsColoringArbitrary);
                     currentPage.reRender(ReRenderingModes.Canvas);
                     break;
                 }
@@ -633,7 +648,6 @@ namespace ParSurf
                 }
             }
         }
-
         private void parallelColorSchemeMenuItem_Click(object sender, RoutedEventArgs e)
         {
             GraphicsPage currentPage = null;
@@ -678,18 +692,19 @@ namespace ParSurf
             }
             else if (sender == parallelColorSchemeMenuItemGreenAndRedGradient)
             {
-                currentOriginalPointsColor = Settings.Default.frontColor = Colors.Red;
-                currentTransposedPointsColor = Settings.Default.backColor = Colors.Green;
-                currentIsGradient = Settings.Default.isPlanePointsColoringGradient = false;
+                currentOriginalPointsColor = Settings.Default.originalPlanePointsColor = Colors.Red;
+                currentTransposedPointsColor = Settings.Default.transposedPlanePointsColor = Colors.Green;
+                currentIsGradient = Settings.Default.isPlanePointsColoringGradient = true;
                 currentIsArbitrary = Settings.Default.isPlanePointsColoringArbitrary = false;
             }
             else if (sender == parallelColorSchemeMenuItemArbitrary)
             {
-                currentOriginalPointsColor = Settings.Default.frontColor = Colors.Red;
-                currentTransposedPointsColor = Settings.Default.backColor = Colors.Green;
+                currentOriginalPointsColor = Settings.Default.originalPlanePointsColor = Colors.Red;
+                currentTransposedPointsColor = Settings.Default.transposedPlanePointsColor = Colors.Green;
                 currentIsGradient = Settings.Default.isPlanePointsColoringGradient = false;
                 currentIsArbitrary = Settings.Default.isPlanePointsColoringArbitrary = true;
             }
+            Settings.Default.Save();
             if (currentPage != null)
             {
                 currentPage.applyParallelColorScheme(currentOriginalPointsColor,currentTransposedPointsColor,

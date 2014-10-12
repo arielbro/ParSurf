@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Diagnostics;
 using System.Windows.Threading;
 using System.Windows.Input;
+using System.Windows;
 
 namespace ParSurf
 {
@@ -23,7 +24,7 @@ namespace ParSurf
             this.name = name;
             this.dimension = dimension;
         }
-        public abstract IList<double[][]> triangulate(int usteps, int vsteps);
+        public abstract IList<double[][]> triangulate(int usteps, int vsteps, UIElement caller);
     }
 
     [Serializable]
@@ -75,10 +76,10 @@ namespace ParSurf
             }
             return point;
         }
-        public override IList<double[][]> triangulate(int usteps, int vsteps)
+        public override IList<double[][]> triangulate(int usteps, int vsteps, UIElement caller)
         {
             formulae = null; //perhaps parameters have changed since last call to triangulate, so don't save the expressions between calls
-            Mouse.OverrideCursor = Cursors.Wait;
+            caller.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Wait; }), DispatcherPriority.Send);
 
             //// create a mesh points in a snake scale like pattern - 
             //// for each "row" v_i, iterate over u values, for each adjecent pair, create a triangle with a 
@@ -127,7 +128,7 @@ namespace ParSurf
                         triangles.Add(new double[][] { point2, point1, pointLowerLeft });
                 }
             }
-            Mouse.OverrideCursor = Cursors.Arrow;
+            caller.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle);
             return triangles;
         }
         public static ParametricSurface getAxis(int axisNumber)

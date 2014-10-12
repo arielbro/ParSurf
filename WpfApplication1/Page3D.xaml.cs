@@ -26,13 +26,13 @@ namespace ParSurf
         {
             Mouse.OverrideCursor = Cursors.Wait;
             InitializeComponent();
-            parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution);
-            renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution);
+            parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution, this);
+            renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution, this);
             canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 3, parallelTriangles,
                                   settings.originalPLanePointsShown, settings.transposedPLanePointsShown, settings.pointSize);
             applyParallelColorScheme(settings.originalPlanePointsColor, settings.transposedPlanePointsColor, 
                                      settings.isPlanePointsColoringGradient, settings.isPlanePointsColoringArbitrary);
-            canvasManager.reDraw(currentTransform, parallelTriangles);
+//            canvasManager.reDraw(currentTransform, parallelTriangles);
             viewports = new Viewport3D[] { viewport };
             viewportManagers = new ViewPortGraphics[] { new ViewPortGraphics(viewport) };
             viewportsmDown = new bool[1];
@@ -50,7 +50,7 @@ namespace ParSurf
         {
             currentTransform = currentTrans;
             this.settings = settings;
-            reRender(ReRenderingModes.Both);
+//            reRender(ReRenderingModes.Both);
         }
         // reRendering objects after settings change. who = 0 vieport, who = 1 canvas, who = 2 both.
         public override void reRender(ReRenderingModes who = ReRenderingModes.Both)
@@ -60,7 +60,7 @@ namespace ParSurf
                         Transform3D trans = new MatrixTransform3D(ViewPortGraphics.convert3DArrayToTransformForm(currentTransform));
                         viewportManagers[0].reset();
                         viewportManagers[0].generate_3d_axes(100);
-                        renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution);
+                        renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution, this);
                         viewportManagers[0].generate_viewport_object(renderTriangles, settings.renderingFrontColor, settings.renderingBackColor,
                                                                     settings.renderingOpacity);
                         viewportManagers[0].performTransform(trans);
@@ -69,7 +69,7 @@ namespace ParSurf
           if(who == ReRenderingModes.Canvas || who == ReRenderingModes.Both)
                     {
                         canvasManager.pointSize = settings.pointSize;
-                        parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution);
+                        parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution, this);
                         canvasManager.reDraw(currentTransform, parallelTriangles);
                     }
             

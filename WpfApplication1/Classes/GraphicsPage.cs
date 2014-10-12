@@ -183,7 +183,11 @@ namespace ParSurf
         {
             lastMouseButtonState = e;
             //find manager to the relevant object.
-            UIElement managed = (sender as Border).Child;
+            UIElement managed = (sender as Border).Child;            
+            if (mode == GraphicModes.Rn)
+            {//here the border houses a grid which houses the viewport
+                managed = viewports[0];
+            }
             for (int i = 0; i < viewports.Length; i++)
                 if (viewports[i] == managed)
                 {
@@ -387,7 +391,6 @@ namespace ParSurf
             }
         }
 
-
         internal void applyParallelColorScheme(Color currentOriginalPointsColor, Color currentTransposedPointsColor,
                                         bool currentIsGradient, bool currentIsArbitrary)
         {
@@ -403,6 +406,7 @@ namespace ParSurf
                 coloringFunction = ParSurf.CanvasGraphics.getSolidColoringFunction(currentOriginalPointsColor,
                                                                                 currentTransposedPointsColor);
             canvasManager.coloringFunction = coloringFunction;
+            reRender(ReRenderingModes.Canvas);
         }
     }
 }

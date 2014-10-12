@@ -801,6 +801,7 @@
                     <MenuItem Name="parallelPointsShownMenuItemStandard" Header="Standard - consecutive trios + transfposed" Click="parallelPointsShownMenuItem_Click"/>
                     <MenuItem Name="parallelPointsShownMenuItemNoTransposed" Header="Consecutive trios, no transfposed" Click="parallelPointsShownMenuItem_Click"/>
                     <MenuItem Name="parallelPointsShownMenuItemOnlyTransposed" Header="Consecutive trios, only transfposed" Click="parallelPointsShownMenuItem_Click"/>
+                    <MenuItem Name="parallelPointsShownMenuItemAll" Header="Show all points" Click="parallelPointsShownMenuItem_Click"/>
                     <MenuItem Name="parallelPointsShownMenuItemNone" Header="Reset shown points (none)" Click="parallelPointsShownMenuItem_Click"/>
                     <MenuItem Name="parallelPointsShownMenuItemChooseManually" Header="Choose shown points manually"/>
                 </MenuItem>

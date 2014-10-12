@@ -108,12 +108,12 @@ namespace ParSurf
         }
         private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            canvas.Dispatcher.Invoke(new Action(() => { Mouse.OverrideCursor = Cursors.Wait; }), DispatcherPriority.Send);
+            canvas.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Wait; }), DispatcherPriority.Send);
 
             double[][] currentTransformMatrix = e.Argument as double[][];
             double[][][] transformedTriangles = new double[triangles.Count][][];
-            const int batchSize = 10;
-            Parallel.For(0, triangles.Count / batchSize + 1, (batch, loopState) =>
+            int batchSize = (triangles.Count + Environment.ProcessorCount - 1) / Environment.ProcessorCount; //(which is triangles/processors rounded up)
+            Parallel.For(0, Environment.ProcessorCount, (batch, loopState) =>
             {
                 for (int i = batch * batchSize; i < Math.Min((batch + 1) * batchSize, triangles.Count); i++)
                 {
@@ -139,65 +139,11 @@ namespace ParSurf
             });
             List<Point[]>[] pointSets = parallelUniverse.getPlanePointsFromTriangles(transformedTriangles, dimension,
                                                                   originalParallelPointsShown, transposedParallelPointsShown);
-            int totalDrawingNumber = originalParallelPointsShown.Count + transposedParallelPointsShown.Count;
-            Point[] imagesStartingPoints = new Point[totalDrawingNumber];
-            DrawingImage[] imageDrawings = new DrawingImage[totalDrawingNumber];
 
-            foreach (bool isTransposed in new bool[] { false, true })
-            {
-                int numberOfDrawings = isTransposed ? transposedParallelPointsShown.Count : originalParallelPointsShown.Count;
-                GeometryDrawing[] ellipseDraws = new GeometryDrawing[numberOfDrawings];
-                GeometryGroup[] ellipseses = new GeometryGroup[numberOfDrawings];
-                double[] minXs = new double[numberOfDrawings];
-                double[] minYs = new double[numberOfDrawings];
-                for (int i = 0; i < numberOfDrawings; i++)
-                {
-                    ellipseDraws[i] = new GeometryDrawing();
-                    ellipseDraws[i].Brush = new SolidColorBrush(coloringFunction(i, isTransposed));
-                    ellipseses[i] = new GeometryGroup();
-                    ellipseses[i].FillRule = FillRule.Nonzero;
-                }
-                foreach (Point[] pointSet in pointSets[isTransposed ? 1 : 0])
-                {
-                    Debug.Assert(pointSet.Length == numberOfDrawings);
-                    for (int k = 0; k < numberOfDrawings; k++)
-                    {
-                        Point point = pointSet[k];
-                        if (bgWorker.CancellationPending) { e.Cancel = true; return; }
-                        if (Double.IsInfinity(point.X) || Double.IsInfinity(point.Y) ||
-                            Double.IsNaN(point.X) || Double.IsNaN(point.Y)) continue;
-                        Point canvasPoint = canvasCoordinates(point);
-                        //get minimal positions of points to set the drawing position inside the canvas (remember that it can contain points with
-                        //negative X/Y values, which will be used for panning and zooming.
-                        minXs[k] = Math.Min(minXs[k], canvasPoint.X);
-                        minYs[k] = Math.Min(minYs[k], canvasPoint.Y);
-                        EllipseGeometry ellipse = new EllipseGeometry(canvasPoint, pointSize, pointSize);
-                        ellipseses[k].Children.Add(ellipse);
-                    }
-                }
-                //do this so the drawing will be correctly aligned in the canvas, in case the minimal X/Y of points is higher than 0.
-                for (int k = 0; k < numberOfDrawings; k++)
-                {
-                    ellipseses[k].Children.Add(new EllipseGeometry(new Point(0, 0), 0, 0));
-                    imagesStartingPoints[isTransposed ? originalParallelPointsShown.Count + k : k] = new Point(minXs[k], minYs[k]);
-                    ellipseses[k].Freeze();
-                    ellipseDraws[k].Geometry = ellipseses[k];
-                    ellipseDraws[k].Freeze();
-                    DrawingImage ellipsesDrawingImage = new DrawingImage(ellipseDraws[k]);
-                    // Freeze the objects for performance benefits and for enabling thread ownership transfer
-                    ellipsesDrawingImage.Freeze();
-                    imageDrawings[isTransposed ? originalParallelPointsShown.Count + k : k] = ellipsesDrawingImage;
-                }
-            }
-            Object returnedData = new Object[] { imageDrawings, imagesStartingPoints, parallelUniverse };
+            //            int totalDrawingNumber = originalParallelPointsShown.Count + transposedParallelPointsShown.Count;
+
+            Object returnedData = pointSets;
             e.Result = returnedData;
-
-            //csv output for iman
-            //int length = outputLines.GetLength(0);
-            //StringBuilder sb = new StringBuilder();
-            //for (int index = 0; index < length; index++)
-            //    sb.AppendLine(string.Join(delimiter, outputLines[index]));
-            //File.AppendAllText(csvfilePath, sb.ToString());
         }
         private void bgWorker_RunWorkerCompleted(object sender,
                                        RunWorkerCompletedEventArgs e)
@@ -210,32 +156,44 @@ namespace ParSurf
             if (e.Error != null)
                 throw e.Error;
 
-            Object[] resultData = e.Result as Object[];
-            DrawingImage[] drawingImages = resultData[0] as DrawingImage[];
-            Point[] drawingsStartingPoints = resultData[1] as Point[];
-
-            Image[] ellipsesImages = new Image[drawingImages.Length];
-            for (int i = 0; i < drawingImages.Length; i++)
-            {
-                Image ellipsesImage = new Image();
-                ellipsesImage.Source = drawingImages[i];
-                ellipsesImage.Stretch = Stretch.None;
-                ellipsesImage.RenderTransform = new TransformGroup();
-                ellipsesImages[i] = ellipsesImage;
-            }
-
+            List<Point[]>[] pointSets = e.Result as List<Point[]>[];
             clearCanvasPoints();
 
-            for (int i = 0; i < ellipsesImages.Length; i++)
+            int originalsCount = originalParallelPointsShown.Count;
+            int transposedCount = transposedParallelPointsShown.Count;
+            int totalCount = originalsCount + transposedCount;
+            foreach (bool isTransposedSet in new bool[] { false, true })
             {
-                canvas.Children.Add(ellipsesImages[i]);
-                Canvas.SetTop(ellipsesImages[i], drawingsStartingPoints[i].Y);
-                Canvas.SetLeft(ellipsesImages[i], drawingsStartingPoints[i].X);
-            }
-            {
-                //wait for rendering to finish before releasing mouse
-                canvas.Dispatcher.BeginInvoke(new Action(delegate { Mouse.OverrideCursor = Cursors.Arrow; }),
-                                            DispatcherPriority.ApplicationIdle);
+                List<Point[]> relevantPointSet = (isTransposedSet ? pointSets[1] : pointSets[0]);
+                int relevantCount = isTransposedSet ? transposedCount : originalsCount;
+                SolidColorBrush[] brushes = new SolidColorBrush[relevantCount];
+                for (int i = 0; i < relevantCount; i++)
+                {
+                    brushes[i] = new SolidColorBrush(coloringFunction(i, isTransposedSet));
+                    brushes[i].Freeze();
+                }
+                foreach (Point[] planePoints in relevantPointSet)
+                {
+                    for (int i = 0; i < relevantCount; i++)
+                    {
+                        if (double.IsInfinity(planePoints[i].X) || double.IsInfinity(planePoints[i].Y))
+                            continue;
+                        Ellipse ellipse = new Ellipse();
+                        canvas.Children.Add(ellipse);
+                        ellipse.Fill = brushes[i];
+                        ellipse.Width = pointSize;
+                        ellipse.Height = pointSize;
+                        Point canvasPoint = canvasCoordinates(planePoints[i]);
+                        Canvas.SetTop(ellipse, canvasPoint.Y);
+                        Canvas.SetLeft(ellipse, canvasPoint.X);
+
+                    }
+                }
+                {
+                    //wait for rendering to finish before releasing mouse
+                    canvas.Dispatcher.BeginInvoke(new Action(delegate { Mouse.OverrideCursor = Cursors.Arrow; }),
+                                                DispatcherPriority.ApplicationIdle);
+                }
             }
         }
         private double[] applyTransformToPoint(double[] point, double[][] transform)
@@ -384,6 +342,11 @@ namespace ParSurf
                     //move horizontal axis only up and down, verticals only right and left.
                     group.Children.Add(new TranslateTransform(isHorizontal ? 0 : dx / smoothing, isHorizontal ? dy / smoothing : 0));
                 }
+                if (element is Ellipse)
+                {
+                    Canvas.SetTop(element, Canvas.GetTop(element) + dy / smoothing);
+                    Canvas.SetLeft(element, Canvas.GetLeft(element) + dx / smoothing);
+                }
             }
         }
 
@@ -400,7 +363,8 @@ namespace ParSurf
             List<Color> chosenColors = colors.OrderBy(x => rnd.Next()).Take(originalPoints + transposedPoints).ToList();
             return delegate(int pointIndex, bool isTransposed)
             {
-                return chosenColors[isTransposed ? pointIndex + originalPoints : pointIndex];
+                //might be more plane point than the whole Colors list, so use modulus for this case.
+                return chosenColors[(isTransposed ? pointIndex + originalPoints : pointIndex) % chosenColors.Count];
             };
         }
 
@@ -410,13 +374,52 @@ namespace ParSurf
             return delegate(int pointIndex, bool isTransposed)
             {
                 Color relevantColor = isTransposed ? currentTransposedPointsColor : currentOriginalPointsColor;
-                //go from black to white, but don't choose actual black/white
-                float coefficient = (pointIndex + 1) / ((isTransposed ? transposedPoints : originalPoints) + (float)1);
-                relevantColor.ScR *= coefficient;
-                relevantColor.ScG *= coefficient;
-                relevantColor.ScB *= coefficient;
-                return relevantColor;
+                int relevantSize = isTransposed ? transposedPoints : originalPoints;
+                //convert to HSL
+                Tuple<double, double, double> hsv = ColorToHSV(relevantColor);
+                //now mess with the luminosity to get shades
+                Tuple<double,double,double> newHsv = new Tuple<double,double,double>(hsv.Item1,hsv.Item2,(float)(pointIndex + 1) / (relevantSize + 1));
+                //and back to RGB
+                Color newColor = ColorFromHSV(newHsv.Item1, newHsv.Item2, newHsv.Item3);
+                return newColor;
             };
+        }
+
+        public static Tuple<double,double,double> ColorToHSV(Color color)
+        {
+            int max = Math.Max(color.R, Math.Max(color.G, color.B));
+            int min = Math.Min(color.R, Math.Min(color.G, color.B));
+
+            System.Drawing.Color drawColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+            double hue = drawColor.GetHue();
+            double saturation = (max == 0) ? 0 : 1d - (1d * min / max);
+            double value = max / 255d;
+            return new Tuple<double, double, double> ( hue, saturation, value );
+        }
+
+        public static Color ColorFromHSV(double hue, double saturation, double value)
+        {
+            int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
+            double f = hue / 60 - Math.Floor(hue / 60);
+
+            value = value * 255;
+            int v = Convert.ToInt32(value);
+            int p = Convert.ToInt32(value * (1 - saturation));
+            int q = Convert.ToInt32(value * (1 - f * saturation));
+            int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
+
+            if (hi == 0)
+                return Color.FromArgb(255, (byte)v, (byte)t, (byte)p);
+            else if (hi == 1)
+                return Color.FromArgb(255, (byte)q, (byte)v, (byte)p);
+            else if (hi == 2)
+                return Color.FromArgb(255, (byte)p, (byte)v, (byte)t);
+            else if (hi == 3)
+                return Color.FromArgb(255, (byte)p, (byte)q, (byte)v);
+            else if (hi == 4)
+                return Color.FromArgb(255, (byte)t, (byte)p, (byte)v);
+            else
+                return Color.FromArgb(255, (byte)v, (byte)p, (byte)q);
         }
 
         internal static ColoringFunction getSolidColoringFunction(Color currentOriginalPointsColor, Color currentTransposedPointsColor)

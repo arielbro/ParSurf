@@ -25,13 +25,13 @@ namespace ParSurf
             : base(GraphicModes.Rn, dimension, surface,paramAsk)
         {
             InitializeComponent();
-            parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution);
-            renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution);
+            parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution, this);
+            renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution, this);
             canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, dimension, parallelTriangles,
                                                 settings.originalPLanePointsShown, settings.transposedPLanePointsShown, settings.pointSize);
             applyParallelColorScheme(settings.originalPlanePointsColor, settings.transposedPlanePointsColor,
                          settings.isPlanePointsColoringGradient, settings.isPlanePointsColoringArbitrary);
-            canvasManager.reDraw(currentTransform, parallelTriangles);
+//            canvasManager.reDraw(currentTransform, parallelTriangles);
             viewports = new Viewport3D[] { viewport };
             viewportManagers = new ViewPortGraphics[] { new ViewPortGraphics(viewport) };
             viewportsmDown = new bool[1];
@@ -51,7 +51,7 @@ namespace ParSurf
         {
             currentTransform = currentTrans;
             this.settings = settings;
-            reRender(ReRenderingModes.Both);
+//            reRender(ReRenderingModes.Both);
         }
         private void button1_Click(object sender, RoutedEventArgs e)
         {
@@ -93,14 +93,14 @@ namespace ParSurf
                 System.Windows.Media.Media3D.Transform3D trans = viewportManagers[0].getCurrentTransform();
                 viewportManagers[0].reset();
                 viewportManagers[0].generate_3d_axes(100);
-                renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution);
+                renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution, this);
                 viewportManagers[0].generate_viewport_object(renderTriangles, settings.renderingFrontColor, settings.renderingBackColor, settings.renderingOpacity);
                 viewportManagers[0].performTransform(ViewPortGraphics.convertNDTransformTo3D(currentTransform, currentAxes));
             }
             if (who == ReRenderingModes.Canvas || who == ReRenderingModes.Both)
             {
                 canvasManager.pointSize = settings.pointSize;
-                parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution);
+                parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution, this);
                 canvasManager.reDraw(currentTransform, parallelTriangles);
             }
 
