@@ -5,7 +5,7 @@
         WindowState="Maximized"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:ParSurf"
-        
+        Closed="mainWindow_Closing"
         SizeChanged="mainWindow_SizeChanged"
         VerticalAlignment="Stretch"
         HorizontalAlignment="Stretch"

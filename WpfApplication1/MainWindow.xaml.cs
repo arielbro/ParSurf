@@ -42,10 +42,45 @@ namespace ParSurf
         string[] previousFormulaeURanges;
         string[] previousFormulaevranges;
         private List<Surface> surfaces;
+       
         public MainWindow()
         {
             InitializeComponent();
+            
+            object[][] toLoad;
+            try
+            {
+                using (Stream stream = File.Open("LastTabs", FileMode.OpenOrCreate))
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+                    toLoad = (object[][])bin.Deserialize(stream);
+                }
+                for (int i = 0; i < toLoad.Length; i++)
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    CloseableTabItem newtab = new CloseableTabItem();
+                    newtab.SetHeader(new TextBlock { Text = ((Surface)toLoad[i][0]).name });
+                    Frame frame = new Frame();
+                    ((TabSettings)toLoad[i][2]).loadColors();
+                    switch (((Surface)toLoad[i][0]).dimension)
+                    {
+                        case 3:
+                            frame.Content = new Page3D(((Surface)toLoad[i][0]), ((double[][])toLoad[i][1]), ((TabSettings)toLoad[i][2]));
+                            break;
+                        case 4:
+                            frame.Content = new Page4D(((Surface)toLoad[i][0]), ((double[][])toLoad[i][1]), ((TabSettings)toLoad[i][2]));
+                            break;
+                        default:
+                            frame.Content = new PageND(((Surface)toLoad[i][0]), ((double[][])toLoad[i][1]), ((TabSettings)toLoad[i][2]));
+                            break;
+                    }
+                    newtab.Content = frame;
+                    tabControl1.Items.Add(newtab);
+                    newtab.IsSelected = true;
 
+                }
+            }
+            catch { }
             using (Stream stream = File.Open("Surfaces.bin", FileMode.Open))
             {
                 BinaryFormatter bin = new BinaryFormatter();
@@ -392,6 +427,7 @@ namespace ParSurf
                 object[] toSave = new object[3];
                 toSave[0] = ((GraphicsPage)((ContentControl)tab.Content).Content).surface;
                 toSave[1] = ((GraphicsPage)((ContentControl)tab.Content).Content).currentTransform;
+                ((GraphicsPage)((ContentControl)tab.Content).Content).settings.saveColors();
                 toSave[2] = ((GraphicsPage)((ContentControl)tab.Content).Content).settings;
                 using (Stream stream = File.Open(save.FileName, FileMode.Create))
                 {
@@ -404,6 +440,7 @@ namespace ParSurf
         {
             System.Windows.Forms.OpenFileDialog load = new System.Windows.Forms.OpenFileDialog();
             load.DefaultExt = ".tab";
+            load.Filter = "Tab Files (*.tab)|*.tab|All Files (*.*)|*.*";
             load.InitialDirectory = System.IO.Path.GetFullPath("/Tabs/");
             load.RestoreDirectory = true;
             if (load.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -419,6 +456,7 @@ namespace ParSurf
                 CloseableTabItem newtab = new CloseableTabItem();
                 newtab.SetHeader(new TextBlock { Text = ((Surface)toLoad[0]).name });
                 Frame frame = new Frame();
+                ((TabSettings)toLoad[2]).loadColors();
                 switch (((Surface)toLoad[0]).dimension)
                 {
                     case 3:
@@ -550,6 +588,30 @@ namespace ParSurf
         private void parallelPointsShownMenuItem_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void mainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            int hi;
+        }
+
+        private void mainWindow_Closing(object sender, EventArgs e)
+        {
+            object[][] toSave = new object[tabControl1.Items.Count][];
+            for (int i = 0; i < tabControl1.Items.Count; i++)
+            {
+                TabItem tab = (TabItem)tabControl1.Items[i];
+                toSave[i] = new object[3];
+                toSave[i][0] = ((GraphicsPage)((ContentControl)tab.Content).Content).surface;
+                toSave[i][1] = ((GraphicsPage)((ContentControl)tab.Content).Content).currentTransform;
+                ((GraphicsPage)((ContentControl)tab.Content).Content).settings.saveColors();
+                toSave[i][2] = ((GraphicsPage)((ContentControl)tab.Content).Content).settings;
+            }
+            using (Stream stream = File.Open("LastTabs", FileMode.Create))
+            {
+                BinaryFormatter bin = new BinaryFormatter();
+                bin.Serialize(stream, toSave);
+            }
         }
     }
 }

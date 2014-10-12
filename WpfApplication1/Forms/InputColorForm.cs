@@ -59,7 +59,7 @@ namespace ParSurf
         {
             System.Windows.Media.Color color = (brushPicker2.SelectedBrush as SolidColorBrush).Color;
             label2.BackColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
-            this.backColor = (brushPicker1.SelectedBrush as SolidColorBrush).Color;
+            this.backColor = (brushPicker2.SelectedBrush as SolidColorBrush).Color;
         }
 
     }
