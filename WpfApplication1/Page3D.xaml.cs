@@ -26,9 +26,9 @@ namespace ParSurf
         {
             Mouse.OverrideCursor = Cursors.Wait;
             InitializeComponent();
-            parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution, this);
-            renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution, this);
-            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 3, parallelTriangles,
+            //parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution, this);
+            //renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution, this);
+            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 3,
                                   settings.originalPLanePointsShown, settings.transposedPLanePointsShown, settings.pointSize);
             applyParallelColorScheme(settings.originalPlanePointsColor, settings.transposedPlanePointsColor, 
                                      settings.isPlanePointsColoringGradient, settings.isPlanePointsColoringArbitrary);
@@ -37,8 +37,8 @@ namespace ParSurf
             viewportManagers = new ViewPortGraphics[] { new ViewPortGraphics(viewport) };
             viewportsmDown = new bool[1];
             viewportsmLastPos = new Point[1];
-            viewportManagers[0].generate_3d_axes(100);
-            viewportManagers[0].generate_viewport_object(renderTriangles, settings.renderingFrontColor, settings.renderingBackColor, settings.renderingOpacity);
+            //viewportManagers[0].generate_3d_axes(100);
+            //viewportManagers[0].generate_viewport_object(renderTriangles, settings.renderingFrontColor, settings.renderingBackColor, settings.renderingOpacity);
             viewportsBorder = viewportBorder;
             base.canvas = this.canvas;
             base.canvasBorder = this.canvasBorder;

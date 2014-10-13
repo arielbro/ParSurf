@@ -25,9 +25,7 @@ namespace ParSurf
             : base(GraphicModes.Rn, dimension, surface,paramAsk)
         {
             InitializeComponent();
-            parallelTriangles = surface.triangulate(Properties.Settings.Default.parallelResolution, Properties.Settings.Default.parallelResolution, this);
-            renderTriangles = surface.triangulate(Properties.Settings.Default.renderResolution, Properties.Settings.Default.renderResolution, this);
-            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, dimension, parallelTriangles,
+            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, dimension,
                                                 settings.originalPLanePointsShown, settings.transposedPLanePointsShown, settings.pointSize);
             applyParallelColorScheme(settings.originalPlanePointsColor, settings.transposedPlanePointsColor,
                          settings.isPlanePointsColoringGradient, settings.isPlanePointsColoringArbitrary);
@@ -37,14 +35,10 @@ namespace ParSurf
             viewportsmDown = new bool[1];
             viewportsmLastPos = new Point[1];
             currentAxes = new int[] { 0, 1, 2 };
-            viewportManagers[0].generate_3d_axes(100);
-            viewportManagers[0].generate_viewport_object(ViewPortGraphics.projectNDTrianglesTo3D(renderTriangles, currentAxes),
-                                                         settings.renderingFrontColor, settings.renderingBackColor, settings.renderingOpacity);
             viewportsBorder = viewportBorder;
             base.canvas = this.canvas;
             base.canvasBorder = this.canvasBorder;
             base.viewportsBorder = this.viewportBorder;
-            this.renderTriangles = renderTriangles;
             intializeSizes();
         }
         public PageND(Surface surface,double[][] currentTrans, TabSettings settings) : this(surface,surface.dimension,false)
@@ -62,7 +56,7 @@ namespace ParSurf
                 requestedAxes[1] = int.Parse(textBox2.Text);
                 requestedAxes[2] = int.Parse(textBox3.Text);
             }
-            catch (Exception exception)
+            catch
             {
                 MessageBox.Show("Error parsing axes numbers. Input is required to be an integer");
                 return;
