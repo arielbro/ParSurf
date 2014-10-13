@@ -26,6 +26,7 @@ namespace ParSurf
         {
             Mouse.OverrideCursor = Cursors.Wait;
             InitializeComponent();
+
             parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution, this);
             renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution, this);
             canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 3, parallelTriangles,

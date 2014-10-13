@@ -784,7 +784,7 @@
                 <MenuItem Name="Save_Snapshot" Header="Save snapshot..." Click="CreateSaveBitmap"/>
             </MenuItem>
             <MenuItem Name ="MenuItem_new_shape" Header="New Surface" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <MenuItem Name="MenuItem_PointCloud" Header="From point cloud..." VerticalAlignment="Center"/>
+                <MenuItem Name="MenuItem_newPointCloudSurface" Header="From point cloud..." VerticalAlignment="Center" Click="newPointCloudSurface_Click"/>
                 <MenuItem Name="MenuItem_ImplicitEquation" Header="From implicit equation..." VerticalAlignment="Center"/>
                 <MenuItem Name="MenuItem_newParametricSurface" Header="From parametric equation..." Click="newParametricSurface_Click" VerticalAlignment="Center"/>
             </MenuItem>

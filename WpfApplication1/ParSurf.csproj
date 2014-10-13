@@ -97,6 +97,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\PropertyInfoToBrushConverter.cs" />
+    <Compile Include="Classes\Triangulation.cs" />
     <Compile Include="Classes\TabSettings.cs" />
     <Compile Include="Forms\InputColorForm.cs">
       <SubType>Form</SubType>
@@ -135,7 +136,6 @@
     <Compile Include="Controls\TabCloseButton.xaml.cs">
       <DependentUpon>TabCloseButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\TriangulationLibrary.cs" />
     <Compile Include="Controls\BrushPickerComboControl.xaml.cs">
       <DependentUpon>BrushPickerComboControl.xaml</DependentUpon>
     </Compile>

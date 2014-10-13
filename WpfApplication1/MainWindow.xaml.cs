@@ -36,12 +36,10 @@ namespace ParSurf
 
         public int parallelResolution;
         public int renderResolution;
-        ParametricSurface shape;
         string[] previousFormulae;
         string previousFormulaeName;
         string[] previousFormulaeURanges;
         string[] previousFormulaevranges;
-        private List<Surface> surfaces;
 
         public MainWindow()
         {
@@ -81,19 +79,24 @@ namespace ParSurf
                 }
             }
             catch { }
-            //using (Stream stream = File.Open("Surfaces.bin", FileMode.Open))
-            //{
-            //    BinaryFormatter bin = new BinaryFormatter();
-            //    surfaces = (List<Surface>)bin.Deserialize(stream);
-            //}
-            //foreach (Surface surf in surfaces)
-            //{
-            //    using (Stream stream = File.Open(System.IO.Path.GetFullPath("Surfaces")+"/"+surf.name+".surf", FileMode.Create))
-            //    {
-            //        BinaryFormatter bin = new BinaryFormatter();
-            //        bin.Serialize(stream, surf);
-            //    }
-            //}
+            List<Surface> surfaces;
+            using (Stream stream = File.Open("Surfaces.bin", FileMode.Open))
+            {
+                BinaryFormatter bin = new BinaryFormatter();
+                 surfaces = (List<Surface>)bin.Deserialize(stream);
+            }
+            foreach (Surface surf in surfaces)
+            {
+                IList<double[][]> triangles = surf.triangulate(
+                    50,50, this);
+                List<string> pointsList = new List<string>();
+                for (int i = 0; i < triangles.Count; i += 2)
+                {
+                    double[] point = triangles[i][0];
+                    pointsList.Add(point[0].ToString() + "," + point[1].ToString() + "," + point[2].ToString());
+                }
+                File.WriteAllLines(System.IO.Path.GetFullPath("Surfaces") + "/" + surf.name + ".csv", pointsList);
+            }
             //foreach (ParametricSurface surf in surfaces)
             //{
             //    surf.parameters.Remove("pi");
@@ -134,38 +137,10 @@ namespace ParSurf
             //    item.Click += parametric_select_item_checked;
             //    MenuItem_savedParametricSurface.Items.Add(item);
             //}
-            //not implemented yet
-            MenuItem_PointCloud.IsEnabled = false;
             MenuItem_ImplicitEquation.IsEnabled = false;
             parallelPointsShownMenuItem.IsEnabled = false;
 
             //Cursor = Cursors.Arrow;
-        }
-        private void parametric_select_item_checked(object sender, RoutedEventArgs e)
-        {
-            Mouse.OverrideCursor = Cursors.Wait;
-
-            CloseableTabItem newtab = new CloseableTabItem();
-            Surface surface = surfaces[int.Parse(((MenuItem)sender).Name.Replace("MenuItem_", ""))];
-            newtab.SetHeader(new TextBlock { Text = surface.name });
-            Frame frame = new Frame();
-            switch (surface.dimension)
-            {
-                case 3:
-                    frame.Content = new Page3D(surface);
-                    break;
-                case 4:
-                    frame.Content = new Page4D(surface);
-                    break;
-                default:
-                    frame.Content = new PageND(surface, surface.dimension);
-                    break;
-            }
-            newtab.Content = frame;
-            tabControl1.Items.Add(newtab);
-            newtab.IsSelected = true;
-            //force rendering of canvas before releasing mouse.
-            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle);
         }
         private void graphicSettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -336,7 +311,7 @@ namespace ParSurf
                     }
                 }
                 //create shape (note parameters will be queried again, if $ style parameters exist in formulae, replaced on GraphicPage creation)
-                shape = new ParametricSurface(form.name, form.dimension, expressionStrings, variableRangesStrings, expParams);
+                Surface shape = new ParametricSurface(form.name, form.dimension, expressionStrings, variableRangesStrings, expParams);
 
                 //uncheck all shapes items (including new, no point in it checked)
                 //foreach (Control item in MenuItem_parametric_shape.Items)
@@ -372,6 +347,51 @@ namespace ParSurf
             //force rendering of canvas before releasing mouse
             Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle, null);
         }
+        private void newPointCloudSurface_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog load = new System.Windows.Forms.OpenFileDialog();
+            load.DefaultExt = ".csv";
+            load.Filter = "CSV files (*.csv)|*.csv|All Files (*.*)|*.*";
+            load.InitialDirectory = System.IO.Path.GetFullPath("Surfaces");
+            if (!System.IO.Directory.Exists(load.InitialDirectory))
+                System.IO.Directory.CreateDirectory(load.InitialDirectory);
+            load.RestoreDirectory = true;
+            if (load.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                //change extention to make sure it's a CSV file (stackoverflow recommendation)
+                string[] lines = File.ReadAllLines(System.IO.Path.ChangeExtension(load.FileName, ".csv"));
+                List<double[]> points = new List<double[]>();
+                foreach (string line in lines)
+                {
+                    string[] splitted = line.Split(new char[] { ',', '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    try
+                    {
+                        if (splitted.Length != 3)
+                            throw new Exception();
+                        double[] point = new double[]{Double.Parse(splitted[0]), 
+                                                    Double.Parse(splitted[1]), Double.Parse(splitted[2])};
+                        points.Add(point);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Error parsing input file. Check the file is appropriately formatted (csv, each line defines a 3D point)");
+                    }
+                }
+                PointCloudSurface surface = new PointCloudSurface(load.SafeFileName.Split('.')[0], points);
+
+                Mouse.OverrideCursor = Cursors.Wait;
+                CloseableTabItem newtab = new CloseableTabItem();
+                newtab.SetHeader(new TextBlock { Text = surface.name });
+                Frame frame = new Frame();
+                frame.Content = new Page3D(surface);
+                newtab.Content = frame;
+                tabControl1.Items.Add(newtab);
+                newtab.IsSelected = true;
+            }
+            //force rendering of canvas before releasing mouse
+            Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle, null);
+        }
+
         private void mainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             double widthFactor = 1;
@@ -438,7 +458,7 @@ namespace ParSurf
             System.Windows.Forms.SaveFileDialog save = new System.Windows.Forms.SaveFileDialog();
             save.DefaultExt = ".tab";
             save.InitialDirectory = System.IO.Path.GetFullPath("Tabs");
-            if(!System.IO.Directory.Exists(save.InitialDirectory))
+            if (!System.IO.Directory.Exists(save.InitialDirectory))
                 System.IO.Directory.CreateDirectory(save.InitialDirectory);
             save.RestoreDirectory = true;
             if (save.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -656,14 +676,14 @@ namespace ParSurf
                                 transposedPoints.Add(new Tuple<int, int, int>(i, i + 1, i + 2));
                         if (sender == parallelPointsShownMenuItemAll)
                         {
-                            for(int i=0; i< currentPage.dimension -2 ;i++)
-                                for(int j=i+1; j<currentPage.dimension - 1; j++)
+                            for (int i = 0; i < currentPage.dimension - 2; i++)
+                                for (int j = i + 1; j < currentPage.dimension - 1; j++)
                                     for (int k = j + 1; k < currentPage.dimension; k++)
                                     {
                                         originalPoints.Add(new Tuple<int, int, int>(i, j, k));
                                         transposedPoints.Add(new Tuple<int, int, int>(i, j, k));
                                     }
-                                        
+
                         }
 
                         setUpParallelPointsShownMenuItems();
@@ -802,7 +822,7 @@ namespace ParSurf
             System.Windows.Forms.OpenFileDialog load = new System.Windows.Forms.OpenFileDialog();
             load.DefaultExt = ".surf";
             load.Filter = "Surface Files (*.surf)|*.surf|All Files (*.*)|*.*";
-            load.InitialDirectory = System.IO.Path.GetFullPath("Surface");
+            load.InitialDirectory = System.IO.Path.GetFullPath("Surfaces");
             if (!System.IO.Directory.Exists(load.InitialDirectory))
                 System.IO.Directory.CreateDirectory(load.InitialDirectory);
             load.RestoreDirectory = true;
@@ -828,7 +848,7 @@ namespace ParSurf
                         frame.Content = new Page4D(toLoad);
                         break;
                     default:
-                        frame.Content = new PageND(toLoad,toLoad.dimension);
+                        frame.Content = new PageND(toLoad, toLoad.dimension);
                         break;
                 }
                 newtab.Content = frame;
@@ -836,7 +856,7 @@ namespace ParSurf
                 newtab.IsSelected = true;
 
             }
-        }     
+        }
         private void CreateSaveBitmap(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.SaveFileDialog save = new System.Windows.Forms.SaveFileDialog();
@@ -861,7 +881,7 @@ namespace ParSurf
                 //JpegBitmapEncoder encoder = new JpegBitmapEncoder();
                 PngBitmapEncoder encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
-                using (FileStream file = File.Create(save.FileName+"Canvas.png"))
+                using (FileStream file = File.Create(save.FileName + "Canvas.png"))
                 {
                     encoder.Save(file);
                 }
@@ -874,7 +894,7 @@ namespace ParSurf
                         Clipboard.SetImage(bmp);
                         PngBitmapEncoder png = new PngBitmapEncoder();
                         png.Frames.Add(BitmapFrame.Create(bmp));
-                        using (Stream stm = File.Create(save.FileName + "3DView"+i+".png"))
+                        using (Stream stm = File.Create(save.FileName + "3DView" + i + ".png"))
                         {
                             png.Save(stm);
                         }

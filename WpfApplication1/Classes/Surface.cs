@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Windows.Threading;
 using System.Windows.Input;
 using System.Windows;
+using System.Windows.Media.Media3D;
 
 namespace ParSurf
 {
@@ -28,6 +29,26 @@ namespace ParSurf
     }
 
     [Serializable]
+    public class PointCloudSurface : Surface
+    {
+        public List<double[]> points;
+
+        public PointCloudSurface(string name, List<double[]> points) : base(name, 3)
+        {
+            this.name = name;
+            this.points = points;
+        }
+        public override IList<double[][]> triangulate(int usteps, int vsteps, UIElement caller)
+        {
+            caller.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Wait; }), DispatcherPriority.Send);
+            IList<double[][]> triangles = Triangulation.Triangle.convertTrianglesToListOfDoubleArrays(
+                Triangulation.Program.triangulateAlternative(Triangulation.Point.doubleArraysToPoints(points)));
+            caller.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle);
+            return triangles;
+        }
+    }
+
+    [Serializable]
     public class ParametricSurface : Surface
     {
         public Dictionary<string, double> parameters;
@@ -38,7 +59,8 @@ namespace ParSurf
         private IList<string> formulaeStrings;
 
         public ParametricSurface(string name, int dimension, IList<string> formulaeStrings,
-                                 IList<string> variableRangesStrings, Dictionary<string, double> parameters = null)
+                                 IList<string> variableRangesStrings,
+                                    Dictionary<string, double> parameters = null)
             : base(name, dimension)
         {
             this.parameters = parameters ?? new Dictionary<string, double>();
