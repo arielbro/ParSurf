@@ -79,64 +79,6 @@ namespace ParSurf
                 }
             }
             catch { }
-            List<Surface> surfaces;
-            using (Stream stream = File.Open("Surfaces.bin", FileMode.Open))
-            {
-                BinaryFormatter bin = new BinaryFormatter();
-                 surfaces = (List<Surface>)bin.Deserialize(stream);
-            }
-            foreach (Surface surf in surfaces)
-            {
-                IList<double[][]> triangles = surf.triangulate(
-                    50,50, this);
-                List<string> pointsList = new List<string>();
-                for (int i = 0; i < triangles.Count; i += 2)
-                {
-                    double[] point = triangles[i][0];
-                    pointsList.Add(point[0].ToString() + "," + point[1].ToString() + "," + point[2].ToString());
-                }
-                File.WriteAllLines(System.IO.Path.GetFullPath("Surfaces") + "/" + surf.name + ".csv", pointsList);
-            }
-            //foreach (ParametricSurface surf in surfaces)
-            //{
-            //    surf.parameters.Remove("pi");
-            //    surf.parameters.Remove("Pi");
-            //    surf.parameters.Remove("E");
-            //    surf.parameters.Remove("e");
-            //}
-            //surfaces = surfaces.OrderBy(surface => surface.name).ToList();
-            //using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
-            //{
-            //    BinaryFormatter bin = new BinaryFormatter();
-            //    bin.Serialize(stream, surfaces);
-            //}
-
-            //if (File.Exists("Surfaces.bin"))
-            //{
-            //    using (Stream stream = File.Open("Surfaces.bin", FileMode.Open))
-            //    {
-            //        BinaryFormatter bin = new BinaryFormatter();
-            //        surfaces = (List<Surface>)bin.Deserialize(stream);
-            //    }
-            //}
-            //else
-            //{
-            //    using (Stream stream = File.Open("Surfaces.bin", FileMode.Create))
-            //    {
-            //        surfaces = new List<Surface>();
-            //        BinaryFormatter bin = new BinaryFormatter();
-            //        bin.Serialize(stream, surfaces);
-            //    }
-
-            //}
-            //for (int i = 0; i < surfaces.Count; i++)
-            //{
-            //    MenuItem item = new MenuItem();
-            //    item.Header = surfaces[i].name;
-            //    item.Name = "MenuItem_" + i.ToString();
-            //    item.Click += parametric_select_item_checked;
-            //    MenuItem_savedParametricSurface.Items.Add(item);
-            //}
             MenuItem_ImplicitEquation.IsEnabled = false;
             parallelPointsShownMenuItem.IsEnabled = false;
 
