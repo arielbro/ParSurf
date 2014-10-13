@@ -24,9 +24,7 @@ namespace ParSurf
             : base(GraphicModes.R4, 4, surface, paramAsk)
         {
             InitializeComponent();
-            parallelTriangles = surface.triangulate(settings.parallelResolution, settings.parallelResolution, this);
-            renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution, this);
-            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, parallelTriangles, 
+            canvasManager = new CanvasGraphics(canvas, xCoordinateRange, yCoordinateRange, 4, 
                 settings.originalPLanePointsShown, settings.transposedPLanePointsShown,settings.pointSize);
             applyParallelColorScheme(settings.originalPlanePointsColor, settings.transposedPlanePointsColor,
                          settings.isPlanePointsColoringGradient, settings.isPlanePointsColoringArbitrary);
@@ -36,13 +34,6 @@ namespace ParSurf
                                                         new ViewPortGraphics(viewport3), new ViewPortGraphics(viewport4)};
             viewportsmDown = new bool[4];
             viewportsmLastPos = new Point[4];
-            for (int i = 0; i < 4; i++)
-            {
-                //project the triangles to the 
-                viewportManagers[i].generate_3d_axes(100);
-                viewportManagers[i].generate_viewport_object(ViewPortGraphics.project4DTrianglesTo3D(renderTriangles, i),
-                                                             settings.renderingFrontColor, settings.renderingBackColor, settings.renderingOpacity);
-            }
             base.canvas = this.canvas;
             base.canvasBorder = this.canvasBorder;
             base.viewportsBorder = this.viewportsBorder;

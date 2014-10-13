@@ -23,7 +23,7 @@ namespace ParSurf
         private Canvas canvas;
         private double xCoordinateRange;
         private double yCoordinateRange;
-        private double currentCanvasScale = 1;
+        private double currentCanvasScale;
         private BackgroundWorker bgWorker;
         private Point currentCanvasOrigin;
         public double pointSize;
@@ -35,16 +35,14 @@ namespace ParSurf
         public ColoringFunction coloringFunction;
 
         public CanvasGraphics(Canvas canvas, double xCoordinateRange, double yCoordinateRange,
-            int dimension, IList<double[][]> triangles, List<Tuple<int, int, int>> originalParallelPointsShown,
+            int dimension, List<Tuple<int, int, int>> originalParallelPointsShown,
                                                         List<Tuple<int, int, int>> transposedParallelPointsShown, double pointSize = 0.8)
         {
             this.pointSize = pointSize;
             this.canvas = canvas;
             this.xCoordinateRange = xCoordinateRange;
             this.yCoordinateRange = yCoordinateRange;
-            this.triangles = triangles;
             this.dimension = dimension;
-            this.triangles = triangles;
             this.originalParallelPointsShown = originalParallelPointsShown;
             this.transposedParallelPointsShown = transposedParallelPointsShown;
             parallelUniverse = new ParallelCoordinates(dimension);

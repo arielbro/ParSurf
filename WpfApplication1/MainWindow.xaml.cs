@@ -630,6 +630,7 @@ namespace ParSurf
                 currentFrontColor.ScA = (float)currentOpacity;
                 currentBackColor.ScA = (float)currentOpacity;
                 currentPage.applyRenderingColorScheme(currentFrontColor, currentBackColor);
+                currentPage.reRender(ReRenderingModes.Canvas);
             }
         }
 
@@ -794,10 +795,6 @@ namespace ParSurf
                                                 currentIsGradient, currentIsArbitrary);
             }
 
-        }
-        private void mainWindow_Closing(object sender, CancelEventArgs e)
-        {
-            int hi;
         }
         private void mainWindow_Closing(object sender, EventArgs e)
         {
