@@ -115,7 +115,7 @@ namespace ParSurf
             canvasBorder.Height = this.ActualHeight;
             viewportsBorder.Width = Math.Floor(this.ActualWidth / 2);
             viewportsBorder.Height = this.ActualHeight;
-            reRender(ReRenderingModes.Both);
+//            reRender(ReRenderingModes.Both);
             //force rendering to complete before releasing the mouse
             Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle);
         }
@@ -333,7 +333,8 @@ namespace ParSurf
         {
             double heightChangeFactor = e.NewSize.Height / e.PreviousSize.Height;
             double widthChangeFactor = e.NewSize.Width / e.PreviousSize.Width;
-            canvasManager.changeSize(widthChangeFactor, heightChangeFactor);
+            if(!Double.IsInfinity(heightChangeFactor) && !Double.IsInfinity(widthChangeFactor))
+                canvasManager.changeSize(widthChangeFactor, heightChangeFactor, currentTransform);
         }
         protected double[][] multiplyMatrices(double[][] leftMatrix, double[][] rightMatrix)
         {

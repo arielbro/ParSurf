@@ -785,7 +785,6 @@
             </MenuItem>
             <MenuItem Name ="MenuItem_new_shape" Header="New Surface" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <MenuItem Name="MenuItem_newPointCloudSurface" Header="From point cloud..." VerticalAlignment="Center" Click="newPointCloudSurface_Click"/>
-                <MenuItem Name="MenuItem_ImplicitEquation" Header="From implicit equation..." VerticalAlignment="Center"/>
                 <MenuItem Name="MenuItem_newParametricSurface" Header="From parametric equation..." Click="newParametricSurface_Click" VerticalAlignment="Center"/>
             </MenuItem>
             <MenuItem Header="Tab Settings">
@@ -818,10 +817,7 @@
                 <MenuItem Name="resetTransformationMenuItem" Header="Reset current surface transformation" Click="resetTransformationMenuItem_Click" IsEnabled="False"/>
                 <MenuItem Name="applyTransformationMenuItem" Header="Apply a transformation to the surface..." Click="applyTransformationMenuItem_Click"  IsEnabled="False"/>
             </MenuItem>
-            <MenuItem Header="help">
-                <MenuItem Header="About"/>
-                <MenuItem Header="Help"/>
-            </MenuItem>
+            <MenuItem Header="About" Click="aboutMenuItem_Click"/>
         </Menu>
         <DockPanel>
             <TabControl SelectedIndex="0" HorizontalAlignment="Stretch" Margin="0,25,0,0" Name="tabControl1" VerticalAlignment="Stretch" 

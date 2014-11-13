@@ -55,8 +55,11 @@ namespace ParSurf
         private Point canvasCoordinates(Point point)
         {
             //translate coordinates of a point to the corresponding coordinates on (or out of the) canvas.
-            double X = point.X * canvas.ActualWidth / (2 * xCoordinateRange) + canvas.ActualWidth / 2;
-            double Y = -point.Y * canvas.ActualHeight / (2 * yCoordinateRange) + canvas.ActualHeight / 2;
+            bool canvasHasNoSize = canvas.ActualHeight == 0;
+            double W = canvasHasNoSize ? 665 : canvas.ActualWidth;
+            double H = canvasHasNoSize ? 610 : canvas.ActualHeight;
+            double X = point.X * W / (2.0 * xCoordinateRange) + W / 2;
+            double Y = -point.Y * H / (2.0 * yCoordinateRange) + H / 2;
             return new Point(X, Y);
         }
         public void clearCanvasPoints()
@@ -160,6 +163,8 @@ namespace ParSurf
             int originalsCount = originalParallelPointsShown.Count;
             int transposedCount = transposedParallelPointsShown.Count;
             int totalCount = originalsCount + transposedCount;
+            //wait for canvas points to clear
+            canvas.Dispatcher.Invoke(new Action(delegate { }), DispatcherPriority.ApplicationIdle);
             foreach (bool isTransposedSet in new bool[] { false, true })
             {
                 List<Point[]> relevantPointSet = (isTransposedSet ? pointSets[1] : pointSets[0]);
@@ -184,7 +189,6 @@ namespace ParSurf
                         Point canvasPoint = canvasCoordinates(planePoints[i]);
                         Canvas.SetTop(ellipse, canvasPoint.Y);
                         Canvas.SetLeft(ellipse, canvasPoint.X);
-
                     }
                 }
                 {
@@ -225,25 +229,30 @@ namespace ParSurf
                 bgWorker.WorkerSupportsCancellation = true;
                 bgWorker.RunWorkerAsync(currentTransformThreadCopy);
             }
-            clearAxes();
-            drawAxes();
+            canvas.Dispatcher.Invoke(new Action(delegate { clearAxes(); }), DispatcherPriority.Normal);
+            canvas.Dispatcher.BeginInvoke(new Action(delegate { drawAxes(); }), DispatcherPriority.Normal);
         }
         public void stopRender()
         {
             bgWorker.CancelAsync();
         }
-        public void changeSize(double widthChangeFactor, double heightChangeFactor)
+        public void changeSize(double widthChangeFactor, double heightChangeFactor, double[][] currentTransformatnion=null)
         {
             if (widthChangeFactor == Double.PositiveInfinity)//on window creation (which triggers a changeSize with undefined factors).
             {
-                //unit matrix!
-                double[][] unit = new double[dimension + 1][];
-                for (int i = 0; i < dimension + 1; i++)
+                if (currentTransformatnion == null)
                 {
-                    unit[i] = new double[dimension + 1];
-                    unit[i][i] = 1;
+                    //unit matrix!
+                    double[][] unit = new double[dimension + 1][];
+                    for (int i = 0; i < dimension + 1; i++)
+                    {
+                        unit[i] = new double[dimension + 1];
+                        unit[i][i] = 1;
+                    }
+                    reDraw(unit, triangles);
+                    return;
                 }
-                reDraw(unit, triangles);
+                reDraw(currentTransformatnion, triangles);
                 return;
             }
             foreach (UIElement element in canvas.Children)

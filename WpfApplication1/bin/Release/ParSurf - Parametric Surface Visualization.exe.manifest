@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
-  <asmv1:assemblyIdentity name="ParSurf - Parametric Surface Visualization.exe" version="1.0.0.10" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="x86" type="win32" />
+  <asmv1:assemblyIdentity name="ParSurf - Parametric Surface Visualization.exe" version="1.0.0.16" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="x86" type="win32" />
   <application />
   <entryPoint>
     <assemblyIdentity name="ParSurf - Parametric Surface Visualization" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ParSurf - Parametric Surface Visualization.exe" size="142848">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ParSurf - Parametric Surface Visualization.exe" size="145920">
       <assemblyIdentity name="ParSurf - Parametric Surface Visualization" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>MPVUDLit1ZnlfhYRN2DCaNEoblE=</dsig:DigestValue>
+        <dsig:DigestValue>W4vkHyrpv8uYZUe9BILumzbdEc4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -84,6 +84,366 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>dDWz8/xAB4BxGGdL6rMvwVj2e2Q=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Catenoid to Helicoid transformation.csv" size="136640">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>MYG7q82zJturwaVK+KnzFGtzuNU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Catenoid to Helicoid transformation.surf" size="2761">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>PdCVcoZR01qIBWtpldwXMyEc+eU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Cone.csv" size="101236">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>U8be+jjqERHfW+PFWiSmiofRZFU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Cone.surf" size="2531">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>aC8ecctC8632NCempxY/4nARyLk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Cusped Cone.csv" size="128106">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>39E3DteX7iz7dmOV4KlxTfDvEsY=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Cusped Cone.surf" size="2267">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>nOkS9A4ht6IVfGnokanwmqVEV30=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Cylinder.csv" size="103550">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>nBiwQV3xGypQlJaKxJ43d+NNIYM=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Cylinder.surf" size="2592">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>ZXzo7YoezZrFgyYFIA5K6CMK5fs=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Dini's Surface.csv" size="139790">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>uOz6U7fE+jQhicj9k4bJyCvsUCw=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Dini's Surface.surf" size="2603">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>nFCYKBMrnlR+o+0iptg9bo9b5P4=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Doubly Pointed Hat.csv" size="134332">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>NVGhMV36naZ9WLoVdvZZ/preZTk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Doubly Pointed Hat.surf" size="2626">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>vLrLvzJO276lh2I0/9GZPsrIH00=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Ellipsoid.csv" size="135060">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>VMgzbxtSkEaop9lZ0TeNB+hIpt0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Ellipsoid.surf" size="2658">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>n2YfAFF3jUA/nrXtQcbYZgWSU/8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Flat Torus.csv" size="131650">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>XTIcGFlL7kUtW2D4LrD2mKLHFu0=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Flat Torus.surf" size="2610">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>/6KpQPubxXU6+ljsltZgPdt1/vM=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Gabriel's Horn Section.csv" size="104182">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>xS4nwduUbZ5Uv5Z09D+yWH6D/7Q=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Gabriel's Horn Section.surf" size="2557">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>jzEsbufYzbhY3X/MmidOavhqc64=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Klein Bottle - 4D Figure 8 Style.csv" size="134942">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>L5Wf9/KKS9zpiwb/fJnh04wPR80=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Klein Bottle - 4D Figure 8 Style.surf" size="2726">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>/PJCgyYLb2gEyOzESVvDL6tBWUI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Klein Bottle - 4D Flat Torus Style.csv" size="136060">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>hepTTJjE1Mo29E5kJKURBPSRpKE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Klein Bottle - 4D Flat Torus Style.surf" size="2825">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>PA0OI/AVdM/bLlZV2b8CqW0hosk=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Klein Bottle - Figure 8 Immersion.csv" size="134942">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>L5Wf9/KKS9zpiwb/fJnh04wPR80=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Klein Bottle - Figure 8 Immersion.surf" size="2716">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>I3Y7B9M6cWvl6NNol7oXIvnyC/k=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Klein Bottle - Standard Immersion.csv" size="136530">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>kgECQRynqfLK+ZaJDKEN8yfgrac=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Klein Bottle - Standard Immersion.surf" size="2748">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>O1fIfsGDp1YdvAncdTfBDYdtfDI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Möbius Strip.csv" size="132762">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>KjeOVEZuIshdHd18Em4i9OEwyLM=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Möbius Strip.surf" size="2645">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>SKpT/JHK7zBnwbq35KVDKSwE448=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Paper Ship.csv" size="134526">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>Yb4vFmiZVrIhlle/LdSjfmwLWDs=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Paper Ship.surf" size="2565">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>uVhlgpKUfz18We7vm2FlVzHk85U=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Plane Parallelogram By Two Vector.csv" size="38100">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>6stZuYKmP+GrFMxP5CGY//BrYgg=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Plane Parallelogram By Two Vector.surf" size="2688">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>6EV/gp8m95lB6P/XTockjDYK4hE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Roman Surface.csv" size="133741">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>JjUlArHKByJTgS3zZgBxZDEn4Uo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Roman Surface.surf" size="2628">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>2i/YydNOpH7t1PZTkua5xk/2ayg=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Seashell Surface.csv" size="134856">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>IOCPbIwhY4K7bqQfyWmLuC9/r74=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Seashell Surface.surf" size="2410">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>T3GsI4Qgwr3WB4j7UiNelI9ncqg=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Superformula Surfaces.csv" size="138740">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>y63wNtYJr6xQyyjEAoS1Mlpy450=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Superformula Surfaces.surf" size="3204">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>P9Ootz61O1EqGUx6DEyyug5FCds=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Torus.csv" size="135169">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>B2Gg48xpeZOdhxv/S6yhip5aeag=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Surfaces\Torus.surf" size="2613">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>Re45VCFnXHx1v1A49VH0ImUA0Z0=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

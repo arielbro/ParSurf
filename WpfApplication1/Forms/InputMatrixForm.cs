@@ -14,7 +14,7 @@ namespace ParSurf
     {
         int matrixDimension;
         TextBox textBox;
-        public double[][] result;
+        public Tuple<double[][],bool> result;
 
         public InputMatrixForm(int matrixDimension, double[][] currentMatrix = null)
         {
@@ -41,7 +41,7 @@ namespace ParSurf
                 {
                     for (int j = 0; j < currentMatrix.Length; j++)
                     {
-                        representation += string.Format("{0:0.##}", currentMatrix[i][j]);
+                        representation += string.Format("{0:0.####}", currentMatrix[i][j]);
                         if (j != currentMatrix.Length - 1)
                             representation += ",\t";
                     }
@@ -58,14 +58,15 @@ namespace ParSurf
         {
             try
             {
-                result = new double[matrixDimension][];
+                result = new Tuple<double[][],bool>(new double[matrixDimension][],checkBox1.Checked);
+
                 string[] splittedInput = textBox.Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                 if (splittedInput.Length != matrixDimension)
                     throw new Exception();
 
                 for (int i = 0; i < matrixDimension; i++)
                 {
-                    result[i] = new double[matrixDimension];
+                    result.Item1[i] = new double[matrixDimension];
                     string[] splittedLine = Regex.Replace(splittedInput[i], @"\s+", "").Split(
                                                           new string[]{","},StringSplitOptions.RemoveEmptyEntries);
                     if (splittedLine.Length != matrixDimension)
@@ -79,7 +80,7 @@ namespace ParSurf
                         exp.Parameters["pi"] = Math.PI;
                         exp.Parameters["e"] = Math.E;
                         exp.Parameters["E"] = Math.E;
-                        result[i][j] = Convert.ToDouble(exp.Evaluate());
+                        result.Item1[i][j] = Convert.ToDouble(exp.Evaluate());
                     }
                 }
                 this.DialogResult = DialogResult.OK;

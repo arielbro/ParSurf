@@ -34,6 +34,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -63,7 +64,7 @@
             // 
             this.panel1.AutoScroll = true;
             this.helpProvider1.SetHelpString(this.panel1, resources.GetString("panel1.HelpString"));
-            this.panel1.Location = new System.Drawing.Point(111, 74);
+            this.panel1.Location = new System.Drawing.Point(111, 67);
             this.panel1.Name = "panel1";
             this.helpProvider1.SetShowHelp(this.panel1, true);
             this.panel1.Size = new System.Drawing.Size(269, 140);
@@ -79,12 +80,23 @@
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(160, 213);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(171, 17);
+            this.checkBox1.TabIndex = 7;
+            this.checkBox1.Text = "Override current transformation";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // InputMatrixForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(490, 296);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.buttonOk);
@@ -108,6 +120,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.HelpProvider helpProvider1;
+        private System.Windows.Forms.CheckBox checkBox1;
 
     }
 }

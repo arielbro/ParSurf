@@ -32,18 +32,23 @@ namespace ParSurf
     public class PointCloudSurface : Surface
     {
         public List<double[]> points;
+        private IList<double[][]> triangles;
 
         public PointCloudSurface(string name, List<double[]> points) : base(name, 3)
         {
             this.name = name;
             this.points = points;
+            this.triangles = null;
         }
         public override IList<double[][]> triangulate(int usteps, int vsteps, UIElement caller)
         {
+            if (this.triangles != null)
+                return this.triangles;
             caller.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Wait; }), DispatcherPriority.Send);
             IList<double[][]> triangles = Triangulation.Triangle.convertTrianglesToListOfDoubleArrays(
                 Triangulation.Program.triangulateAlternative(Triangulation.Point.doubleArraysToPoints(points)));
             caller.Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.ApplicationIdle);
+            this.triangles = triangles;
             return triangles;
         }
     }
@@ -56,7 +61,7 @@ namespace ParSurf
         private IList<NCalc.Expression> formulae;
         //no need saving Expressions for those, because they will be compiled only once on triangulate
         private IList<string> variableRangesStrings;
-        private IList<string> formulaeStrings;
+        public IList<string> formulaeStrings;
 
         public ParametricSurface(string name, int dimension, IList<string> formulaeStrings,
                                  IList<string> variableRangesStrings,

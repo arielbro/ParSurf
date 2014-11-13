@@ -129,8 +129,7 @@
         MouseMove="canvasBorder_MouseMove"
         MouseUp="canvasBorder_MouseUp"
                 MouseWheel="border_MouseWheel">
-            <Canvas Background="White" Name="canvas" Grid.RowSpan="2" ClipToBounds="True"
-                    SizeChanged="canvas_SizeChanged"/>
+            <Canvas Background="White" Name="canvas" Grid.RowSpan="2" ClipToBounds="True" SizeChanged="canvas_SizeChanged"/>
         </Border>
     </Grid>
 </src:GraphicsPage>

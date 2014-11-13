@@ -28,8 +28,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ProductName>ParSurf - Parallel coordinates surface visualization</ProductName>
     <PublisherName>ARaK</PublisherName>
-    <ApplicationRevision>12</ApplicationRevision>
-    <ApplicationRevision>11</ApplicationRevision>
+    <ApplicationRevision>16</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -127,12 +126,6 @@
     <Compile Include="Page3D.xaml.cs">
       <DependentUpon>Page3D.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ParametersInputForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ParametersInputForm.Designer.cs">
-      <DependentUpon>ParametersInputForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ScrollableTabPanel.cs" />
     <Compile Include="Classes\ScrollBarConverters.cs" />
     <Compile Include="Controls\TabCloseButton.xaml.cs">
@@ -229,6 +222,126 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Content Include="Surfaces\Catenoid to Helicoid transformation.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Catenoid to Helicoid transformation.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Cone.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Cone.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Cusped Cone.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Cusped Cone.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Cylinder.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Cylinder.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Dini%27s Surface.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Dini%27s Surface.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Doubly Pointed Hat.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Doubly Pointed Hat.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Ellipsoid.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Ellipsoid.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Flat Torus.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Flat Torus.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Gabriel%27s Horn Section.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Gabriel%27s Horn Section.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Klein Bottle - 4D Figure 8 Style.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Klein Bottle - 4D Figure 8 Style.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Klein Bottle - 4D Flat Torus Style.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Klein Bottle - 4D Flat Torus Style.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Klein Bottle - Figure 8 Immersion.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Klein Bottle - Figure 8 Immersion.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Klein Bottle - Standard Immersion.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Klein Bottle - Standard Immersion.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Möbius Strip.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Möbius Strip.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Paper Ship.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Paper Ship.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Plane Parallelogram By Two Vector.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Plane Parallelogram By Two Vector.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Roman Surface.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Roman Surface.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Seashell Surface.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Seashell Surface.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Superformula Surfaces.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Superformula Surfaces.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Torus.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Surfaces\Torus.surf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="WpfApplication1_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -261,7 +374,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Snapshots\" />
-    <Folder Include="Surfaces\" />
     <Folder Include="Tabs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

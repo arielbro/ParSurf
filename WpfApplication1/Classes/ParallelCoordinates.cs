@@ -9,13 +9,14 @@ using W3b.Sine;
 
 namespace ParSurf
 {
-    class ParallelCoordinates
+    public class ParallelCoordinates
     {
         private int dimension;
         private double[] axesCoordinates;
         private List<double[]> points = new List<double[]>();
         private List<ParallelCoordinatesLine> lines = new List<ParallelCoordinatesLine>();
         private List<ParallelCoordinatesPlane> planes = new List<ParallelCoordinatesPlane>();
+        private int p;
 
         public ParallelCoordinates(int dimension)
         {
@@ -31,6 +32,7 @@ namespace ParSurf
             lines = new List<ParallelCoordinatesLine>(universe.lines);
             planes = new List<ParallelCoordinatesPlane>(universe.planes);
         }
+
         public double[] getAxesCoordinates()
         {
             double[] resArray = new double[dimension];
@@ -230,6 +232,43 @@ namespace ParSurf
             double c0 = c1 * p1.X + c2 * p1.Y + c3 * p1.Z;
             return new double[] { c1, c2, c3, c0 };
         }
+        public static Point planePointFromCoefficients3D(double[] coefficients, double offset = 0, int transposedAxes=0)
+        {
+            //transposedAxis ranges from 0 (none) to 3 (all axes)
+            double c1 = coefficients[0];
+            double c2 = coefficients[1];
+            double c3 = coefficients[2];
+            double c0 = coefficients[3];
+            double sumCoefs = c1 + c2 + c3;
+            if (sumCoefs == 0)
+                return new Point(Double.PositiveInfinity, Double.PositiveInfinity);
+            double xCoordUnnormalized = c2 + 2 * c3;
+            if (transposedAxes >= 1)
+                xCoordUnnormalized += 3 * c1;
+            if (transposedAxes >= 2)
+                xCoordUnnormalized += 3 * c2;
+            if (transposedAxes == 3)
+                xCoordUnnormalized += 3 * c3;
+            return new Point(xCoordUnnormalized / sumCoefs + offset, c0 / sumCoefs);
+        }
+        public static double[] coefficientsFromPlanePoints(Point p1, Point p2, double offset=0)
+        {
+            //given two plane points representing a plane (assume ATM that these are P_123 and P_123', which also means same height), 
+            //return the plane coefficients.
+            double height = p1.Y;
+            double c0DivSumCoefs = height;
+            double c1DivSumCoefs = (p2.X - p1.X) / 3;
+            double c2DivSumCoefs = ((2 * (p1.X-offset) + (p2.X-offset)) - 1) / 6;
+            double c3DivSumCoefs = 1 - c1DivSumCoefs - c2DivSumCoefs;
+            //Since they are invariant to scalar multiplication, assume the sum of the coefficients is 1.
+            return new double[] { c1DivSumCoefs, c2DivSumCoefs, c3DivSumCoefs, c0DivSumCoefs};
+        }
+        public static double[] normalizeToc0Equals1(double[] coefficients)
+        {
+            //given the coefficients of a plane equation, and assuming c0!=0, normalize it to a form where c0=1
+            return new double[] { coefficients[0] / coefficients[3], coefficients[1] / coefficients[3], 
+                                coefficients[2] / coefficients[3], 1 };
+        }
         public List<Point[]>[] getPlanePointsFromTriangles(double[][][] triangles, int dimension,
                        List<Tuple<int, int, int>> originalPlanePointsToCompute, List<Tuple<int, int, int>> transposedPLanePointsToCompute)
         {
@@ -249,30 +288,14 @@ namespace ParSurf
                 {
                     Tuple<int, int, int> indices = originalPlanePointsToCompute[i];
                     double[] coefficients = planeCoefficientsFromTriangle3D(triangleProjection(triangle, indices));
-                    double c1 = coefficients[0];
-                    double c2 = coefficients[1];
-                    double c3 = coefficients[2];
-                    double c0 = coefficients[3];
-                    double sumCoefs = c1 + c2 + c3;
-                    if (sumCoefs == 0)
-                        originalPoints[i] = new Point(Double.PositiveInfinity, Double.PositiveInfinity);
-                    else
-                        originalPoints[i] = new Point((c2 + 2 * c3) / sumCoefs + offset, c0 / sumCoefs);
+                    originalPoints[i] = planePointFromCoefficients3D(coefficients, offset, 0);
                 }
                 //warning - some code repretition...
                 for (int i = 0; i < transposedPLanePointsToCompute.Count; i++)
                 {
                     Tuple<int, int, int> indices = transposedPLanePointsToCompute[i];
                     double[] coefficients = planeCoefficientsFromTriangle3D(triangleProjection(triangle, indices));
-                    double c1 = coefficients[0];
-                    double c2 = coefficients[1];
-                    double c3 = coefficients[2];
-                    double c0 = coefficients[3];
-                    double sumCoefs = c1 + c2 + c3;
-                    if (sumCoefs == 0)
-                        transposedPoints[i] = new Point(Double.PositiveInfinity, Double.PositiveInfinity);
-                    else
-                        transposedPoints[i] = new Point((3 * c1 + c2 + 2 * c3) / sumCoefs + offset, c0 / sumCoefs);
+                    transposedPoints[i] = planePointFromCoefficients3D(coefficients, offset, 1);
                 }
                 globalOriginalPoints.Add(originalPoints);
                 globalTransposedPoints.Add(transposedPoints);
@@ -304,5 +327,6 @@ namespace ParSurf
             }
             return new List<Point>[] { originalPoints, transposedPoints };
         }
+    
     }
 }

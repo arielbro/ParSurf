@@ -21,7 +21,7 @@ namespace ParSurf
     [Serializable()]
     public partial class Page3D : GraphicsPage
     {
-        public Page3D(Surface surface, bool paramAsk = true)
+        public Page3D(Surface surface, bool paramAsk = true, bool tabLoad = false)
             : base(GraphicModes.R3, 3,surface, paramAsk)
         {
             Mouse.OverrideCursor = Cursors.Wait;
@@ -44,13 +44,25 @@ namespace ParSurf
             base.canvasBorder = this.canvasBorder;
             base.viewportsBorder = this.viewportBorder;
             intializeSizes();
+            if (!tabLoad)
+            {
+                //unit matrix!
+                double[][] unit = new double[dimension + 1][];
+                for (int i = 0; i < dimension + 1; i++)
+                {
+                    unit[i] = new double[dimension + 1];
+                    unit[i][i] = 1;
+                }
+                currentTransform = unit;
+                reRender(ReRenderingModes.Both);
+            }
             Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle);
         }
-        public Page3D(Surface surface,double[][] currentTrans, TabSettings settings) : this(surface,false)
+        public Page3D(Surface surface,double[][] currentTrans, TabSettings settings) : this(surface,false,true)
         {
             currentTransform = currentTrans;
             this.settings = settings;
-//            reRender(ReRenderingModes.Both);
+            reRender(ReRenderingModes.Both);
         }
         // reRendering objects after settings change. who = 0 vieport, who = 1 canvas, who = 2 both.
         public override void reRender(ReRenderingModes who = ReRenderingModes.Both)

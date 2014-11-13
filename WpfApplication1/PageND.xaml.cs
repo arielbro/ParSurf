@@ -21,7 +21,7 @@ namespace ParSurf
     public partial class PageND : GraphicsPage
     {
 
-        public PageND(Surface surface, int dimension, bool paramAsk = true)
+        public PageND(Surface surface, int dimension, bool paramAsk = true, bool tabLoad = false)
             : base(GraphicModes.Rn, dimension, surface,paramAsk)
         {
             InitializeComponent();
@@ -40,12 +40,24 @@ namespace ParSurf
             base.canvasBorder = this.canvasBorder;
             base.viewportsBorder = this.viewportBorder;
             intializeSizes();
+            if (!tabLoad)
+            {
+                //unit matrix!
+                double[][] unit = new double[dimension + 1][];
+                for (int i = 0; i < dimension + 1; i++)
+                {
+                    unit[i] = new double[dimension + 1];
+                    unit[i][i] = 1;
+                }
+                currentTransform = unit;
+                reRender(ReRenderingModes.Both);
+            }
         }
-        public PageND(Surface surface,double[][] currentTrans, TabSettings settings) : this(surface,surface.dimension,false)
+        public PageND(Surface surface,double[][] currentTrans, TabSettings settings) : this(surface,surface.dimension,false,true)
         {
             currentTransform = currentTrans;
             this.settings = settings;
-//            reRender(ReRenderingModes.Both);
+            reRender(ReRenderingModes.Both);
         }
         private void button1_Click(object sender, RoutedEventArgs e)
         {
@@ -84,11 +96,11 @@ namespace ParSurf
         {
             if (who == ReRenderingModes.Viewport || who == ReRenderingModes.Both)
             {
-                System.Windows.Media.Media3D.Transform3D trans = viewportManagers[0].getCurrentTransform();
                 viewportManagers[0].reset();
                 viewportManagers[0].generate_3d_axes(100);
                 renderTriangles = surface.triangulate(settings.renderResolution, settings.renderResolution, this);
-                viewportManagers[0].generate_viewport_object(renderTriangles, settings.renderingFrontColor, settings.renderingBackColor, settings.renderingOpacity);
+                viewportManagers[0].generate_viewport_object(ViewPortGraphics.projectNDTrianglesTo3D(renderTriangles, currentAxes),
+                                                             settings.renderingFrontColor, settings.renderingBackColor, settings.renderingOpacity);
                 viewportManagers[0].performTransform(ViewPortGraphics.convertNDTransformTo3D(currentTransform, currentAxes));
             }
             if (who == ReRenderingModes.Canvas || who == ReRenderingModes.Both)

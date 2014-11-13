@@ -79,7 +79,6 @@ namespace ParSurf
                 }
             }
             catch { }
-            MenuItem_ImplicitEquation.IsEnabled = false;
             parallelPointsShownMenuItem.IsEnabled = false;
 
             //Cursor = Cursors.Arrow;
@@ -162,6 +161,15 @@ namespace ParSurf
         private void newParametricSurface_Click(object sender, RoutedEventArgs e)
         {
             FormulaInputForm form = new FormulaInputForm();
+            //first try to see if current page hosts a parametric shape. If so, use its parameterization as default.
+            GraphicsPage currentPage = null;
+            foreach (TabItem temp in this.tabControl1.Items)
+            {
+                if (temp.IsSelected) { currentPage = ((Frame)(temp.Content)).Content as GraphicsPage; break; }
+            }
+            if (currentPage != null && currentPage.surface.GetType() == typeof(ParametricSurface))
+                previousFormulae = ((ParametricSurface)currentPage.surface).formulaeStrings.ToArray();
+            //Else, use the last parameterization entered, if one exists
             if (previousFormulae != null)
             {
                 form.setFormulas(previousFormulae, previousFormulaeName, previousFormulaeURanges, previousFormulaevranges);
@@ -319,21 +327,33 @@ namespace ParSurf
                         MessageBox.Show("Error parsing input file. Check the file is appropriately formatted (csv, each line defines a 3D point)");
                     }
                 }
-                PointCloudSurface surface = new PointCloudSurface(load.SafeFileName.Split('.')[0], points);
+                try
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    PointCloudSurface surface = new PointCloudSurface(load.SafeFileName.Split('.')[0], points);
+                    CloseableTabItem newtab = new CloseableTabItem();
+                    newtab.SetHeader(new TextBlock { Text = surface.name });
+                    Frame frame = new Frame();
+                    frame.Content = new Page3D(surface);
+                    newtab.Content = frame;
+                    tabControl1.Items.Add(newtab);
+                    newtab.IsSelected = true;
+                }
+                catch
+                {
+                    MessageBox.Show("Unfortunately, triangulation of the point cloud failed.\n For aiding in the software's improvement, we would appriciate if you send the csv file used to the software's authors.");
+                }
 
-                Mouse.OverrideCursor = Cursors.Wait;
-                CloseableTabItem newtab = new CloseableTabItem();
-                newtab.SetHeader(new TextBlock { Text = surface.name });
-                Frame frame = new Frame();
-                frame.Content = new Page3D(surface);
-                newtab.Content = frame;
-                tabControl1.Items.Add(newtab);
-                newtab.IsSelected = true;
             }
             //force rendering of canvas before releasing mouse
             Dispatcher.BeginInvoke(new Action(() => { Mouse.OverrideCursor = Cursors.Arrow; }), DispatcherPriority.SystemIdle, null);
         }
-
+        private void aboutMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("ParSurf - parallel coordinates surface visualization\n" +
+                            "By:\n" + "Ron Kirsch (ronkirsc@mail.tau.ac.il)\n" + "Kirill Savchenko (kirillsa@mail.tau.ac.il)\n" +
+                            "Ariel Brunner (arielbro@mail.tau.ac.il)");
+        }
         private void mainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             double widthFactor = 1;
@@ -518,8 +538,10 @@ namespace ParSurf
                     System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
                     if (formStatus != System.Windows.Forms.DialogResult.OK)
                         return;
-                    double[][] transformation = form.result;
-
+                    double[][] transformation = form.result.Item1;
+                    bool isReset = form.result.Item2;
+                    if (isReset)
+                        currentPage.resetTransformation();
                     currentPage.applyTransformation(transformation);
                     return;
                 }
@@ -560,7 +582,7 @@ namespace ParSurf
             else if (sender == colorSchemeTransperencyMenuItem)
             {
                 Dictionary<string, double> transparancyParameterDict = new Dictionary<string, double>();
-                transparancyParameterDict["opacity"] = Settings.Default.frontColor.A;
+                transparancyParameterDict["opacity"] = Settings.Default.frontColor.ScA;
                 InputNumberForm form = new InputNumberForm(transparancyParameterDict);
                 System.Windows.Forms.DialogResult formStatus = form.ShowDialog();
                 if (formStatus != System.Windows.Forms.DialogResult.OK)
@@ -572,7 +594,6 @@ namespace ParSurf
                 currentFrontColor.ScA = (float)currentOpacity;
                 currentBackColor.ScA = (float)currentOpacity;
                 currentPage.applyRenderingColorScheme(currentFrontColor, currentBackColor);
-                currentPage.reRender(ReRenderingModes.Canvas);
             }
         }
 
