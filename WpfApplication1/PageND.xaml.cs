@@ -64,9 +64,9 @@ namespace ParSurf
             int[] requestedAxes = new int[3];
             try
             {
-                requestedAxes[0] = int.Parse(textBox1.Text);
-                requestedAxes[1] = int.Parse(textBox2.Text);
-                requestedAxes[2] = int.Parse(textBox3.Text);
+                requestedAxes[0] = int.Parse(textBox1.Text) - 1;
+                requestedAxes[1] = int.Parse(textBox2.Text) - 1;
+                requestedAxes[2] = int.Parse(textBox3.Text) - 1;
             }
             catch
             {
@@ -76,7 +76,7 @@ namespace ParSurf
             foreach (int axisNumber in requestedAxes)
                 if (axisNumber < 0 || axisNumber > dimension - 1)
                 {
-                    MessageBox.Show("Error parsing axes numbers. Numbers should be in range 0-" + (dimension - 1).ToString());
+                    MessageBox.Show("Error parsing axes numbers. Numbers should be in range 1-" + (dimension).ToString());
                     return;
                 }
             if (requestedAxes[0] == requestedAxes[1] || requestedAxes[1] == requestedAxes[2] || requestedAxes[2] == requestedAxes[0])

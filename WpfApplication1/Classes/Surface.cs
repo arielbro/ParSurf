@@ -60,7 +60,7 @@ namespace ParSurf
         [NonSerialized]
         private IList<NCalc.Expression> formulae;
         //no need saving Expressions for those, because they will be compiled only once on triangulate
-        private IList<string> variableRangesStrings;
+        public IList<string> variableRangesStrings;
         public IList<string> formulaeStrings;
 
         public ParametricSurface(string name, int dimension, IList<string> formulaeStrings,

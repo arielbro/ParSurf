@@ -408,7 +408,7 @@ namespace ParSurf
                 coloringFunction = ParSurf.CanvasGraphics.getSolidColoringFunction(currentOriginalPointsColor,
                                                                                 currentTransposedPointsColor);
             canvasManager.coloringFunction = coloringFunction;
-            //reRender(ReRenderingModes.Canvas);
+            reRender(ReRenderingModes.Canvas);
         }
     }
 }

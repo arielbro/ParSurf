@@ -39,7 +39,7 @@ namespace ParSurf
         string[] previousFormulae;
         string previousFormulaeName;
         string[] previousFormulaeURanges;
-        string[] previousFormulaevranges;
+        string[] previousFormulaeVRanges;
 
         public MainWindow()
         {
@@ -168,11 +168,17 @@ namespace ParSurf
                 if (temp.IsSelected) { currentPage = ((Frame)(temp.Content)).Content as GraphicsPage; break; }
             }
             if (currentPage != null && currentPage.surface.GetType() == typeof(ParametricSurface))
+            {
                 previousFormulae = ((ParametricSurface)currentPage.surface).formulaeStrings.ToArray();
+                previousFormulaeURanges = new string[] { ((ParametricSurface)currentPage.surface).variableRangesStrings[0],
+                                                              ((ParametricSurface)currentPage.surface).variableRangesStrings[1]};
+                previousFormulaeVRanges = new string[] { ((ParametricSurface)currentPage.surface).variableRangesStrings[2],
+                                                              ((ParametricSurface)currentPage.surface).variableRangesStrings[3]};
+            }
             //Else, use the last parameterization entered, if one exists
             if (previousFormulae != null)
             {
-                form.setFormulas(previousFormulae, previousFormulaeName, previousFormulaeURanges, previousFormulaevranges);
+                form.setFormulas(previousFormulae, previousFormulaeName, previousFormulaeURanges, previousFormulaeVRanges);
             }
 
             System.Windows.Forms.DialogResult formStatus;// = form.ShowDialog();
@@ -181,7 +187,7 @@ namespace ParSurf
                 previousFormulae = (new List<String>(form.formulas)).ToArray();
                 previousFormulaeName = form.name;
                 previousFormulaeURanges = form.urange;
-                previousFormulaevranges = form.vrange;
+                previousFormulaeVRanges = form.vrange;
                 List<NCalc.Expression> expressions = new List<NCalc.Expression>();
                 Dictionary<string, double> expParams = new Dictionary<string, double>();
 

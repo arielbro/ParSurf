@@ -36,9 +36,9 @@
             </Viewport3D>
                 <Label Content="            ,          ," Height="35" Panel.ZIndex="1" HorizontalAlignment="Left" Margin="107,0" Name="label2" VerticalAlignment="Bottom" Width="187" FontSize="18" />
                 <Label Content="Axes indices:"  Name="label1" Width="162" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="18" Margin="19,0,0,0" Panel.ZIndex="1" />
-                <TextBox Height="21" HorizontalAlignment="Left" Margin="130,5" Name="textBox1" VerticalAlignment="Bottom" Width="47" TextAlignment="Center" Text="0" Panel.ZIndex="1" />
-                <TextBox Height="21" HorizontalAlignment="Left" Margin="192,5" Name="textBox2" VerticalAlignment="Bottom" Width="47" TextAlignment="Center" Text="1" Panel.ZIndex="1" />
-                <TextBox Height="21" HorizontalAlignment="Left" Margin="255,5" Name="textBox3" VerticalAlignment="Bottom" Width="47" TextAlignment="Center" Text="2" Panel.ZIndex="1"/>
+                <TextBox Height="21" HorizontalAlignment="Left" Margin="130,5" Name="textBox1" VerticalAlignment="Bottom" Width="47" TextAlignment="Center" Text="1" Panel.ZIndex="1" />
+                <TextBox Height="21" HorizontalAlignment="Left" Margin="192,5" Name="textBox2" VerticalAlignment="Bottom" Width="47" TextAlignment="Center" Text="2" Panel.ZIndex="1" />
+                <TextBox Height="21" HorizontalAlignment="Left" Margin="255,5" Name="textBox3" VerticalAlignment="Bottom" Width="47" TextAlignment="Center" Text="3" Panel.ZIndex="1"/>
                 <Button Content="Apply" Height="29" HorizontalAlignment="Left" Margin="310,0,0,0" Name="button1" VerticalAlignment="Bottom" Width="87" Click="button1_Click" Panel.ZIndex="1"/>
             </Grid>
         </Border>
