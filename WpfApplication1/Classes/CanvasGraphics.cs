@@ -56,8 +56,8 @@ namespace ParSurf
         {
             //translate coordinates of a point to the corresponding coordinates on (or out of the) canvas.
             bool canvasHasNoSize = canvas.ActualHeight == 0;
-            double W = canvasHasNoSize ? 665 : canvas.ActualWidth;
-            double H = canvasHasNoSize ? 610 : canvas.ActualHeight;
+            double W = canvasHasNoSize ? System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width * (665.0 / 1368) : canvas.ActualWidth;
+            double H = canvasHasNoSize ? System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height * (610.0 / 782) : canvas.ActualHeight;
             double X = point.X * W / (2.0 * xCoordinateRange) + W / 2;
             double Y = -point.Y * H / (2.0 * yCoordinateRange) + H / 2;
             return new Point(X, Y);
