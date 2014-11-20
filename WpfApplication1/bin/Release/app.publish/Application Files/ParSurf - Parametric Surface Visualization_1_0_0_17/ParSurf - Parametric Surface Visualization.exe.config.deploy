@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <configSections>
+        <sectionGroup name="userSettings" type="System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" >
+            <section name="ParSurf.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" allowExeDefinition="MachineToLocalUser" requirePermission="false" />
+        </sectionGroup>
+    </configSections>
+    <connectionStrings />
+    <userSettings>
+        <ParSurf.Properties.Settings>
+            <setting name="parallelResolution" serializeAs="String">
+                <value>80</value>
+            </setting>
+            <setting name="renderResolution" serializeAs="String">
+                <value>150</value>
+            </setting>
+            <setting name="pointSize" serializeAs="String">
+                <value>3</value>
+            </setting>
+            <setting name="backColor" serializeAs="String">
+                <value>#FFB22222</value>
+            </setting>
+            <setting name="renderingOpacity" serializeAs="String">
+                <value>1</value>
+            </setting>
+            <setting name="frontColor" serializeAs="String">
+                <value>#FFF0F8FF</value>
+            </setting>
+            <setting name="originalPlanePointsColor" serializeAs="String">
+                <value>#00FF0000</value>
+            </setting>
+            <setting name="transposedPlanePointsColor" serializeAs="String">
+                <value>#0000FF00</value>
+            </setting>
+            <setting name="isPlanePointsColoringGradient" serializeAs="String">
+                <value>True</value>
+            </setting>
+            <setting name="isPlanePointsColoringArbitrary" serializeAs="String">
+                <value>False</value>
+            </setting>
+        </ParSurf.Properties.Settings>
+    </userSettings>
+</configuration>

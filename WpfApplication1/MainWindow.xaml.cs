@@ -170,6 +170,9 @@ namespace ParSurf
             if (currentPage != null && currentPage.surface.GetType() == typeof(ParametricSurface))
             {
                 previousFormulae = ((ParametricSurface)currentPage.surface).formulaeStrings.ToArray();
+                foreach (string paramName in ((ParametricSurface)currentPage.surface).parameters.Keys)
+                    for (int i = 0;i<previousFormulae.Length;i++)
+                        previousFormulae[i] = previousFormulae[i].Replace(paramName, "$" + paramName);
                 previousFormulaeURanges = new string[] { ((ParametricSurface)currentPage.surface).variableRangesStrings[0],
                                                               ((ParametricSurface)currentPage.surface).variableRangesStrings[1]};
                 previousFormulaeVRanges = new string[] { ((ParametricSurface)currentPage.surface).variableRangesStrings[2],
